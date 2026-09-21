@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminale NSI - Lycée François Mauriac - Bordeaux</title>
+
+    <!-- Tailwind CSS pour les utilitaires de styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mkdocs: {
+                            header: '#37474f',
+                            headerDark: '#1e272c',
+                            tabBg: '#2c393f',
+                            bgLight: '#ffffff',
+                            bgDark: '#1a1f2c',
+                            textLight: '#363636',
+                            textDark: '#e0e0e0',
+                            admonitionBgLight: '#eef6ff',
+                            admonitionBgDark: '#1e293b',
+                            admonitionBorder: '#2196f3',
+                            admonitionTextLight: '#0d47a1',
+                            admonitionTextDark: '#93c5fd',
+                            link: '#3f51b5',
+                            linkHover: '#1a237e',
+                            linkDark: '#82b1ff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome pour la reproduction exacte des icônes MkDocs -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Police Roboto (standard MkDocs Material) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        /* Masquer la barre de défilement pour les onglets tout en gardant le scroll horizontal */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Style des liens admo */
+        .admo-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .admo-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-mkdocs-bgDark text-mkdocs-textLight dark:text-mkdocs-textDark min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- En-tête principal MkDocs -->
+    <header class="bg-mkdocs-header dark:bg-mkdocs-headerDark text-white sticky top-0 z-50 shadow-md">
+        <!-- Barre supérieure -->
+        <div class="max-w-7xl mx-auto px-4 h-12 flex items-center justify-between text-sm">
+            
+            <!-- Gauche: Logo / Bouton retour + Titre du site -->
+            <div class="flex items-center space-x-3 overflow-hidden">
+                <button class="p-1 hover:bg-black/20 rounded transition" title="Navigation">
+                    <i class="fa-solid font-bold fa-chevron-right text-xs bg-white text-mkdocs-header px-1.5 py-1 rounded-sm"></i>
+                </button>
+                <h1 class="font-bold text-base whitespace-nowrap overflow-hidden text-ellipsis">
+                    Terminale NSI - Lycée François Mauriac - Bordeaux
+                </h1>
+            </div>
+
+            <!-- Droite: Interrupteur de thème + Recherche + Widget GitHub -->
+            <div class="flex items-center space-x-3 md:space-x-4">
+                
+                <!-- Toggle Thème (Toggle Switch) -->
+                <button id="themeToggleBtn" onclick="toggleTheme()" class="flex items-center space-x-1 bg-black/20 hover:bg-black/30 px-2 py-1 rounded-full text-xs transition" title="Changer le thème">
+                    <i id="themeIcon" class="fa-regular fa-lightbulb text-yellow-300"></i>
+                </button>
+
+                <!-- Barre de Recherche -->
+                <div class="relative hidden sm:block">
+                    <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-300">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                    </div>
+                    <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Rechercher" 
+                        class="bg-black/20 focus:bg-white focus:text-gray-900 text-xs rounded-md pl-8 pr-3 py-1.5 w-36 md:w-56 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all placeholder-gray-300 focus:placeholder-gray-500">
+                    
+                    <!-- Résultats de recherche (Dropdown) -->
+                    <div id="searchResults" class="hidden absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 text-xs">
+                        <!-- Rempli dynamiquement en JS -->
+                    </div>
+                </div>
+
+                <!-- Widget GitHub (comme sur la capture) -->
+                <a href="https://github.com/glassus/terminale_nsi" target="_blank" class="flex items-center space-x-2 bg-black/20 hover:bg-black/30 px-2.5 py-1 rounded text-xs transition">
+                    <i class="fa-brands fa-github text-base"></i>
+                    <div class="hidden md:flex flex-col text-left text-[10px] leading-tight">
+                        <span class="font-semibold">glassus/terminale_nsi</span>
+                        <span class="text-gray-300 flex items-center space-x-2">
+                            <span><i class="fa-regular fa-star text-[9px]"></i> 63</span>
+                            <span><i class="fa-solid fa-code-fork text-[9px]"></i> 34</span>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Barre de Navigation par Onglets (Tabs) -->
+        <nav class="bg-mkdocs-header dark:bg-mkdocs-headerDark border-t border-white/10 px-4">
+            <div class="max-w-7xl mx-auto flex items-center space-x-1 overflow-x-auto no-scrollbar text-xs font-medium py-1">
+                <a href="#" class="px-3 py-1.5 rounded bg-white/10 text-white font-semibold whitespace-nowrap">Accueil</a>
+                <a href="#" class="px-3 py-1.5 rounded text-gray-200 hover:bg-white/10 hover:text-white whitespace-nowrap transition">T1 Structures de données</a>
+                <a href="#" class="px-3 py-1.5 rounded text-gray-200 hover:bg-white/10 hover:text-white whitespace-nowrap transition">T2 Programmation</a>
+                <a href="#" class="px-3 py-1.5 rounded text-gray-200 hover:bg-white/10 hover:text-white whitespace-nowrap transition">T3 Algorithmique</a>
+                <a href="#" class="px-3 py-1.5 rounded text-gray-200 hover:bg-white/10 hover:text-white whitespace-nowrap transition">T4 Base de données</a>
+                <a href="#" class="px-3 py-1.5 rounded text-gray-200 hover:bg-white/10 hover:text-white whitespace-nowrap transition">T5 Arch. matérielle</a>
+                <a href="#" class="px-3 py-1.5 rounded text-gray-200 hover:bg-white/10 hover:text-white whitespace-nowrap transition">Cours 1ère</a>
+                <a href="#" class="px-3 py-1.5 rounded text-gray-200 hover:bg-white/10 hover:text-white whitespace-nowrap transition">Algos <i class="fa-solid fa-heart text-red-400 text-[10px]"></i></a>
+                <a href="#" class="px-3 py-1.5 rounded text-gray-200 hover:bg-white/10 hover:text-white whitespace-nowrap transition">EP <i class="fa-solid fa-desktop text-[10px]"></i></a>
+                <a href="#" class="px-3 py-1.5 rounded text-gray-200 hover:bg-white/10 hover:text-white whitespace-nowrap transition">Bac <i class="fa-solid fa-pen text-[10px]"></i></a>
+                <a href="#" class="px-3 py-1.5 rounded text-gray-200 hover:bg-white/10 hover:text-white whitespace-nowrap transition">Divers</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Conteneur Principal -->
+    <div class="max-w-7xl mx-auto w-full flex-grow flex px-4 py-8 space-x-8">
+        
+        <!-- Sidebar Gauche (Fil d'ariane/Menu secondaire) -->
+        <aside class="w-48 hidden md:block flex-shrink-0 text-sm">
+            <div class="sticky top-24">
+                <a href="#" class="text-mkdocs-link dark:text-mkdocs-linkDark font-semibold border-l-2 border-blue-500 pl-3 py-1 block">
+                    Accueil
+                </a>
+            </div>
+        </aside>
+
+        <!-- Contenu de la page -->
+        <main class="flex-grow max-w-4xl">
+            
+            <!-- Titre principal -->
+            <h1 class="text-3xl font-normal mb-8 text-gray-700 dark:text-gray-100 border-b pb-2 border-gray-200 dark:border-gray-700">
+                Accueil
+            </h1>
+
+            <!-- Admonition (Bloc d'alerte MkDocs "Thème en cours d'étude") -->
+            <div class="rounded-sm border-l-4 border-mkdocs-admonitionBorder bg-mkdocs-admonitionBgLight dark:bg-mkdocs-admonitionBgDark shadow-sm mb-6 overflow-hidden border border-blue-100 dark:border-gray-800">
+                
+                <!-- En-tête de l'admonition -->
+                <div class="bg-blue-500/10 dark:bg-blue-900/30 px-4 py-2.5 flex items-center space-x-2 text-sm font-bold text-mkdocs-admonitionTextLight dark:text-mkdocs-admonitionTextDark border-b border-blue-100 dark:border-gray-800">
+                    <i class="fa-regular fa-pen-to-square text-base"></i>
+                    <span><i class="fa-solid fa-star text-amber-400"></i> Thème en cours d'étude <i class="fa-solid fa-star text-amber-400"></i></span>
+                </div>
+
+                <!-- Corps de l'admonition -->
+                <div class="p-4 text-sm text-gray-800 dark:text-gray-200">
+                    <ul class="list-disc list-inside space-y-2.5">
+                        <li>
+                            <a href="#" class="admo-link text-mkdocs-link dark:text-mkdocs-linkDark font-normal">
+                                TP d'introduction à la POO
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="admo-link text-mkdocs-link dark:text-mkdocs-linkDark font-normal">
+                                Programmation Orientée Objet
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="admo-link text-mkdocs-link dark:text-mkdocs-linkDark font-normal">
+                                Exercices POO
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Horodatage / Footer de page -->
+            <div class="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400 mt-6 pt-4 border-t border-gray-100 dark:border-gray-800">
+                <i class="fa-regular fa-clock"></i>
+                <span>9 septembre 2026</span>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Gestion du Mode Sombre / Mode Clair
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                icon.className = "fa-regular fa-lightbulb text-yellow-300";
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                icon.className = "fa-solid fa-moon text-blue-200";
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Base de données pour la recherche dynamique
+        const searchDatabase = [
+            { title: "TP d'introduction à la POO", category: "T2 Programmation", url: "#" },
+            { title: "Programmation Orientée Objet", category: "T2 Programmation", url: "#" },
+            { title: "Exercices POO", category: "T2 Programmation", url: "#" },
+            { title: "Structures de données : Listes, Piles, Files", category: "T1 Structures", url: "#" },
+            { title: "Algorithmes sur les arbres", category: "T3 Algorithmique", url: "#" },
+            { title: "Requêtes SQL basiques", category: "T4 Base de données", url: "#" }
+        ];
+
+        // Gestion de la recherche
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const resultsContainer = document.getElementById('searchResults');
+
+            if (query === '') {
+                resultsContainer.classList.add('hidden');
+                return;
+            }
+
+            const filtered = searchDatabase.filter(item => 
+                item.title.toLowerCase().includes(query) || 
+                item.category.toLowerCase().includes(query)
+            );
+
+            if (filtered.length > 0) {
+                resultsContainer.innerHTML = filtered.map(item => `
+                    <a href="${item.url}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        <div class="font-semibold text-blue-600 dark:text-blue-400">${item.title}</div>
+                        <div class="text-[10px] text-gray-500 dark:text-gray-400">${item.category}</div>
+                    </a>
+                `).join('');
+            } else {
+                resultsContainer.innerHTML = `
+                    <div class="px-4 py-2 text-gray-500 dark:text-gray-400">Aucun résultat trouvé</div>
+                `;
+            }
+
+            resultsContainer.classList.remove('hidden');
+        }
+
+        // Fermer les résultats de recherche en cliquant ailleurs
+        document.addEventListener('click', (e) => {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
