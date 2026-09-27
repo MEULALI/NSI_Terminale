@@ -1,0 +1,357 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POO</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#programmation-orientée-objet">Programmation orientée objet</a>
+<ul>
+<li><a href="#introduction">0. Introduction:</a></li>
+<li><a href="#des-objets-déjà-autour-de-nous">1. Des objets déjà autour de nous</a></li>
+<li><a href="#créer--son-propre-objet--sa-propre-classe">2. Créer  son propre objet  sa propre classe:</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="programmation-orientée-objet">Programmation orientée objet</h1>
+<p><em>abrégée par POO en français, OOP en anglais (ne pas confondre)</em></p>
+<p><img src="https://www.mathexien.com/NSITale/assets/images/POO_html.png" alt="image"></p>
+<h2 id="introduction">0. Introduction:</h2>
+<p>La POO est un  <strong>paradigme</strong>  de programmation, au même titre que la programmation impérative (que nous pratiquons déjà) ou la programmation fonctionnelle (qui sera évoquée cette année en Terminale), ou encore d’autres paradigmes (la liste est longue).<br>
+Un paradigme de programmation pourrait se définir comme une  <em>philosophie</em>  dans la manière de programmer : c’est un parti-pris revendiqué dans la manière d’aborder le problème à résoudre. Une fois cette décision prise, des outils spécifiques au paradigme choisi sont utilisés.</p>
+<p>Métaphore</p>
+<p>Imaginons 3 menuisiers qui ont pour mission de fabriquer chacun un meuble.</p>
+<ul>
+<li>Le premier pourra décider d’utiliser du collé-pointé : il assemblera les morceaux de bois en les collant puis utilisera des pointes. Ses outils seront le marteau et le pistolet à colle.</li>
+<li>Le deuxième pourra décider de visser les morceaux de bois entre eux : son outil principal sera une visseuse.</li>
+<li>Le troisième pourra décider de faire de l’assemblage par  <a href="https://www.fraise-defonceuse.fr/tenon-mortaise-defonceuse/">tenons et mortaises</a>  : son outil principal sera une défonceuse.</li>
+</ul>
+<p>Pour la réalisation de sa mission, chaque menuisier utilise un paradigme différent. Qui utilise la meilleure méthode ? Cette question n’a pas vraiment de réponse : certaines méthodes sont plus rapides que d’autres, d’autres plus robustes, d’autres plus esthétiques…<br>
+Et pourquoi ne pas mélanger les paradigmes ? Rien n’interdit d’utiliser des pointes ET des vis dans la fabrication d’un meuble.</p>
+<p>La Programmation Orientée Objet sera (surtout à notre niveau) mélangée avec de la programmation impérative, de la programmation fonctionnelle… d’ailleurs vous avez déjà manipulé des objets sans le savoir :</p>
+<h2 id="des-objets-déjà-autour-de-nous">1. Des objets déjà autour de nous</h2>
+<pre><code>`
+
+&gt;&gt;&gt; m = [4,5,2]
+    &gt;&gt;&gt; type(m)
+    list` 
+</code></pre>
+<p><code>m</code>  est une liste, ou plus précisément un  <strong>objet</strong>  de type  <code>list</code>. Et en tant qu’objet de type  <code>list</code>, il est possible de lui appliquer certaines fonctions prédéfinies (qu’on appelera  <strong>méthodes</strong>) :</p>
+<p><code>&gt;&gt;&gt; m.reverse()</code></p>
+<p>La syntaxe utilisée (le . après le nom de l’objet) est spécifique à la POO. Chaque fois que vous voyez cela, c’est que vous êtes en train de manipuler des objets.<br>
+Mais qu’a donc fait cette méthode  <code>reverse()</code>  ?</p>
+<p><code>&gt;&gt;&gt; m [2, 5, 4]</code></p>
+<p>Nous ne sommes pas surpris par ce résultat car la personne qui a programmé la méthode  <code>reverse()</code>  lui a donné un nom explicite.<br>
+Comment a-t-elle programmé cette inversion des valeurs de la liste ? Nous n’en savons rien et cela ne nous intéresse pas. Nous sommes juste  <strong>utilisateurs</strong>  de cette méthode. L’objet de type  <code>list</code>  nous a été livré avec sa méthode  <code>reverse()</code>  (et bien d’autres choses) et nous n’avons pas à démonter la boîte pour en observer les engrenages : on parle de principe d’<strong>encapsulation</strong>.</p>
+<p>On peut obtenir la liste de toutes les fonctions disponibles pour un objet de type  <code>list</code>, par la fonction  <code>dir</code>  :</p>
+<pre><code>`&gt;&gt;&gt; dir(m)
+['__add__',
+'__class__',
+'__contains__',
+'__delattr__',
+...
+'clear',
+'copy',
+'count',
+'extend',
+'index',
+'insert',
+'pop',
+'remove',
+'reverse',
+'sort']` 
+</code></pre>
+<p>Les méthodes encadrées par un double underscore __ sont des méthodes  <strong>privées</strong>, a priori non destinées à l’utilisateur. Les méthodes  <strong>publiques</strong>, utilisables pour chaque objet de type  <code>list</code>, sont donc  <code>append</code>,  <code>clear</code>, …</p>
+<p>Comment savoir ce que font les méthodes ? Si elles ont été correctement codées (et elles l’ont été), elles possèdent une  <em>docstring</em>, accessible par :</p>
+<pre><code> `&gt;&gt;&gt; help(m.append)
+
+Help on built-in function append:
+
+append(object, /) method of builtins.list instance
+    Append object to the end of the list.
+
+&gt;&gt;&gt; help(m.reverse)__doc__
+Help on built-in function reverse:
+
+reverse() method of builtins.list instance
+    Reverse *IN PLACE*.` 
+</code></pre>
+<h2 id="créer--son-propre-objet--sa-propre-classe">2. Créer  son propre objet  sa propre classe:</h2>
+<h3 id="vocabulaire--classe-objet-instance-de-classe">2.1 Vocabulaire : classe, objet, instance de classe:</h3>
+<p>Jusqu’ici nous avons employé uniquement le mot «objet». Il convient maintenant d’être plus précis.</p>
+<ul>
+<li>On désignera par  <strong>classe</strong>  la structure de données définissant une catégorie générique d’objets. Dans le monde animal,  <em>chat</em>  est une classe (nommée en réalité  <em>félidé</em>  ).</li>
+<li>Chaque élement de la classe  <em>chat</em>  va se distinguer par des caractéristiques : un âge, une couleur de pelage, un surnom… (on appelera ces caractéristiques des  <strong>attributs</strong>) et des fonctionnalités, comme la  <strong>méthode</strong>  <code>attrape_souris</code>.</li>
+<li>Lorsqu’on désigne un chat en particulier, on désigne alors un  <strong>objet</strong>  (bien réel) qui est une  <strong>instance</strong>  de la  <strong>classe</strong>  (abstraite)  <em>chat</em>.</li>
+</ul>
+<p>Par exemple, l’<strong>objet</strong>  <a href="https://fr.wikipedia.org/wiki/Larry_(chat)">Larry</a>  est une  <strong>instance</strong>  de la  <strong>classe</strong>  <em>chat</em>  .</p>
+<p>D’après Wikipedia,</p>
+<pre><code>`larry.pelage = "blanc et tabby"
+larry.surnom = "Chief Mouser to the Cabinet Office"` 
+</code></pre>
+<p>Toujours d’après Wikipedia, la méthode  <code>larry.attrape_souris</code>  est plutôt efficace.</p>
+<h3 id="création-dune-classe">2.2 Création d’une classe</h3>
+<h4 id="mauvaise-manière-minimale">2.2.1 (mauvaise) manière minimale:</h4>
+<p>Créons une classe «voiture». Il suffit d’écrire :</p>
+<pre><code>`class  Voiture :
+    pass   #pass, car pour l'instant il n'y a rien dans la déclaration de la classe (et c'est mal)` 
+</code></pre>
+<p>La classe  <code>Voiture</code>  est créée.<br>
+Notez que par convention, le nom d’une classe commence toujours par une majuscule.<br>
+Pour créer une instance de cette classe, on écrit :</p>
+<pre><code>`&gt;&gt;&gt; titine = Voiture()` 
+</code></pre>
+<p><code>titine</code>  est un objet, instance de la classe  <code>Voiture</code>.</p>
+<pre><code>`&gt;&gt;&gt; type(titine)
+__main__.Voiture` 
+</code></pre>
+<p>On peut alors donner des attributs à cette instance :</p>
+<p>`</p>
+<pre><code>&gt;&gt;&gt; titine.annee = 2018
+&gt;&gt;&gt; titine.couleur = "verte"
+&gt;&gt;&gt; titine.vitesse_max = 162` 
+</code></pre>
+<p>Mais arrêtons-là cette mauvaise méthode. Si on désire créer une classe «voiture», c’est pour créer un concept générique de voiture et d’en spécifier des caractéristiques communes : l’année, la couleur, la vitesse maximale…</p>
+<p>L’idée est donc qu’à la création (on dira plutôt à la  <strong>construction</strong>) de chaque objet voiture, on va lui spécifier directement ses attributs :</p>
+<h4 id="bonne-manière--la-méthode-constructeur">2.2.2    (bonne) manière : la méthode constructeur</h4>
+<p>La  <strong>méthode constructeur</strong>, toujours appelée  <code>__init__()</code>, est une méthode (une «def») qui sera automatiquement appelée à la création de l’objet. Elle va donc le doter de tous les attributs de sa classe.</p>
+<pre><code>`class  Voiture :
+    def  __init__(self, annee, coul, vmax) :
+        self.annee = annee
+        self.couleur = coul
+        self.vitesse_max = vmax
+        self.age = 2025 - self.annee` 
+</code></pre>
+<ul>
+<li>le mot-clé  <code>self</code>, omniprésent en POO (d’autres langages utilisent  <code>this</code>),  <strong>fait référence à l’objet lui-même</strong>, qui est en train d’être construit.</li>
+<li>pour construire l’objet, 3 paramètres seront nécessaires :  <code>annee</code>,  <code>coul</code>  et  <code>vmax</code>. Ils donneront respectivement leur valeur aux attributs  <code>annee</code>,  <code>couleur</code>  et  <code>vitesse_max</code>.</li>
+<li>dans cet exemple, les noms  <code>coul</code>  et  <code>vmax</code>  ont été utilisés pour abréger  <code>couleur</code>  et  <code>vitesse_max</code>, mais il est recommandé de garder les mêmes noms, même si ce n’est pas du tout obligatoire.</li>
+</ul>
+<p>Construisons donc notre première voiture !</p>
+<pre><code>`&gt;&gt;&gt; mon_bolide = Voiture(2012, "rouge", 190)` 
+
+`&gt;&gt;&gt; type(mon_bolide)
+__main__.Voiture` 
+</code></pre>
+<p><code>mon_bolide</code>  possède 4 attributs :</p>
+<ul>
+<li>
+<p><code>annee</code>,  <code>couleur</code>  et  <code>vitesse_max</code>  ont été donnés par l’utilisateur lors de la création.</p>
+</li>
+<li>
+<p><code>age</code>  s’est créé «tout seul» par l’instruction :<br>
+<code>self.age = 2025 - self.annee</code></p>
+<pre><code> &gt;&gt;&gt; mon_bolide.annee
+2012
+&gt;&gt;&gt; mon_bolide.couleur
+'rouge'
+&gt;&gt;&gt; mon_bolide.vitesse_max
+190
+&gt;&gt;&gt; mon_bolide.age
+13
+</code></pre>
+</li>
+</ul>
+<p>Bien sûr, on peut créer une autre voiture en suivant le même principe :</p>
+<pre><code>`&gt;&gt;&gt; batmobile = Voiture(2036, "noire", 325)
+&gt;&gt;&gt; batmobile.couleur
+'noire'` 
+</code></pre>
+<p>Exercice 1</p>
+<p>Créer une classe  <code>Point</code>  permettant de créer un objet  <code>A</code>  , dont on récupèrera l’abscisse par la variable  <code>A.x</code>  et l’ordonnée par  <code>A.y</code>.</p>
+<p>Exemple d’utilisation de la classe</p>
+<pre><code>`&gt;&gt;&gt; A = Point(3, 5)
+&gt;&gt;&gt; A.x
+3
+&gt;&gt;&gt; A.y
+5` 
+</code></pre>
+<p>Correction</p>
+<pre><code>`class  Point :
+    def  __init__(self, x, y):
+        self.x = x
+        self.y = y` 
+</code></pre>
+<h4 id="créer-une-méthode-pour-notre-objet">2.2.4 Créer une méthode pour notre objet[</h4>
+<pre><code>`class  Voiture :
+    def  __init__(self, annee, coul, vmax) :
+        self.annee = annee
+        self.couleur = coul
+        self.vitesse_max = vmax
+        self.age = 2025 - self.annee
+
+    def  petite_annonce(self) :
+        print("À vendre voiture", self.couleur, "de", self.annee,\
+             ", vitesse maximale", self.vitesse_max, "km/h.")` 
+</code></pre>
+<p>Remarque : le symbole  <code>\</code>  est utilisé ici pour couper une ligne trop longue.</p>
+<pre><code>`&gt;&gt;&gt; batmobile = Voiture(2036, "noire", 325)
+&gt;&gt;&gt; batmobile.petite_annonce()
+À vendre voiture noire de 2036 , vitesse maximale 325 km/h.` 
+</code></pre>
+<p>Nous aurions pu (ou dû) en profiter pour écrire une docstring pour notre méthode  <code>petite_annonce()</code>  :</p>
+<pre><code>`class  Voiture :
+    def  __init__(self, annee, coul, vmax) :
+        self.annee = annee
+        self.couleur = coul
+        self.vitesse_max = vmax
+        self.age = 2025 - self.annee
+
+    def  petite_annonce(self) :
+  """ Rédige automatiquement une petite annonce concernant le véhicule"""
+        print("À vendre voiture", self.couleur, "de", self.annee,\
+             ", vitesse maximale", self.vitesse_max, "km/h.")` 
+
+`&gt;&gt;&gt; batmobile = Voiture(2036, "noire", 325)
+&gt;&gt;&gt; help(batmobile.petite_annonce)
+Help on method petite_annonce in module __main__:
+</code></pre>
+<p>petite_annonce() method of <strong>main</strong>.Voiture instance<br>
+Rédige automatiquement une petite annonce concernant le véhicule`</p>
+<p>Que donne la commande  <code>dir</code>  pour notre objet ?</p>
+<p>`</p>
+<pre><code>dir(batmobile)` 
+
+`['__class__',
+ '__delattr__',
+ '__dict__',
+ '__dir__',
+ '__doc__',
+ '__eq__',
+ '__format__',
+ '__ge__',
+ '__getattribute__',
+ '__gt__',
+ '__hash__',
+ '__init__',
+ '__init_subclass__',
+ '__le__',
+ '__lt__',
+ '__module__',
+ '__ne__',
+ '__new__',
+ '__reduce__',
+ '__reduce_ex__',
+ '__repr__',
+ '__setattr__',
+ '__sizeof__',
+ '__str__',
+ '__subclasshook__',
+ '__weakref__',
+ 'age',
+ 'annee',
+ 'couleur',
+ 'petite_annonce',
+ 'vitesse_max']` 
+</code></pre>
+<p>On y retrouve donc à la fois les 4 attributs et l’unique méthode que nous avons créés pour notre objet.</p>
+<p>Exercice 2</p>
+<p>Reprendre la classe de l’exercice précédent et rajouter une méthode  <code>distance()</code>  qui renvoie la distance du point par rapport à l’origine du repère (dans un repère orthonormé).</p>
+<p>Exemple d’utilisation de la classe</p>
+<pre><code>`&gt;&gt;&gt; A = Point(3, 5)
+&gt;&gt;&gt; A.distance()
+5.830951894845301` 
+</code></pre>
+<h3 id="compléments">3. Compléments</h3>
+<h4 id="hors-programme--la-méthode--__repr__">3.1 Hors-Programme : la méthode  <code>__repr__()</code></h4>
+<p>La méthode  <code>__repr__()</code>  (les doubles underscores traduisent le fait que la méthode est  <em>privée</em>) peut redéfinir la manière dont l’objet doit s’afficher lors qu’on le passe en paramètre à la fonction  <code>print()</code>, ou simplement lorsqu’on demande sa valeur en console.</p>
+<p>Observons comment s’affiche un objet de type  <code>Fraction</code>  lorsque rien n’a été spécifié sur son affichage.</p>
+<pre><code>`class  Fraction:
+    def  __init__(self, num, den):
+        self.numerateur = num
+        self.denominateur = den` 
+
+`&gt;&gt;&gt; a = Fraction(3,4)
+&gt;&gt;&gt; print(a)
+ &lt;__main__.Fraction object at 0x7f470445c828&gt;` 
+</code></pre>
+<p>C’est un peu décevant. Rajoutons donc une méthode  <code>__repr__()</code>  .</p>
+<pre><code>`class  Fraction:
+    def  __init__(self, num, den):
+        self.numerateur = num
+        self.denominateur = den
+
+    def  __repr__(self):
+        return str(self.numerateur) + "/" + str(self.denominateur)` 
+
+`&gt;&gt;&gt; a = Fraction(3, 4)
+&gt;&gt;&gt; print(a)
+  3/4
+&gt;&gt;&gt; a
+  3/4` 
+</code></pre>
+<p>Ce qui est nettement plus agréable !</p>
+<p>Exercice 3</p>
+<p>Modifier la méthode  <code>__repr__</code>  afin de n’afficher que le numérateur dans le cas où le dénominateur vaut 1.</p>
+<h4 id="lencapsulation-poussée-à-bout--les--getters--et-les--setters">3.2 L’encapsulation poussée à bout : les  <code>getters</code>  et les  <code>setters</code></h4>
+<p>Imaginons la classe suivante :</p>
+<pre><code>`class  Joueur :
+    def  __init__(self, nom, club, age):
+        self.nom = nom
+        self.club = club
+        self.age = age` 
+</code></pre>
+<p>Instancions le joueur Nans Ducuing</p>
+<pre><code>`&gt;&gt;&gt; nducuing = Joueur("Nans DUCUING", "UBB", 34)` 
+</code></pre>
+<h5 id="les--setters">3.2.1 Les  <code>setters</code></h5>
+<p>Supposons maintenant que ce joueur change de club, pour aller de l’UBB à Perpignan.</p>
+<p>Il serait naturel de faire ceci :</p>
+<pre><code>`&gt;&gt;&gt; nducuing.club = "Perpignan"` 
+</code></pre>
+<p>Cela marche bien, mais… C’est contraire à l’esprit de la Programmation Orientée Objet. Ce paradigme milite pour une encapsulation des objets, qui interdisent le plus possible l’accès direct à leurs attributs.</p>
+<p>Comment faire alors ? En proposant une méthode dont l’unique travail est d’aller effectuer une modification sur l’attribut :</p>
+<pre><code>`class  Joueur :
+    def  __init__(self, nom, club, age):
+        self.nom = nom
+        self.club = club
+        self.age = age
+
+    def  mutation(self, nouveau_club):
+        self.club = nouveau_club` 
+</code></pre>
+<p>Le changement de club se fera maintenant par l’appel :</p>
+<pre><code>`&gt;&gt;&gt; nducuing.mutation("Perpignan")` 
+</code></pre>
+<p>Ce type de méthode s’appelle un  <code>setter</code>.</p>
+<h5 id="les--getters">3.2.2 Les  <code>getters</code>:</h5>
+<p>Nous avons vu qu’aller modifier directement un attribut était défendu… mais peut-on simplement aller le  <em>consulter</em>  ?</p>
+<p>Là encore, le concept d’encapsulation -poussé à l’extrême- peut nous l’interdire.</p>
+<p>Mais si  <code>nducuing.club</code>  est interdit, comment savoir dans quel club joue notre joueur préféré ?</p>
+<p>Une fois de plus, en construisant une méthode qui va nous renvoyer l’état actuel de son attribut  <code>club</code>  :</p>
+<pre><code>`class  Joueur :
+    def  __init__(self, nom, club, age):
+        self.nom = nom
+        self.club = club
+        self.age = age
+
+    def  mutation(self, nouveau_club):
+        self.club = nouveau_club
+
+    def  get_club(self):
+        return self.club` 
+</code></pre>
+<p>L’accès à l’attribut  <code>club</code>  de notre instance se fera donc maintenant par :</p>
+<pre><code>`&gt;&gt;&gt; nducuing.get_club()` 
+</code></pre>
+<p>Ce type de méthode s’appelle un  <code>getter</code>.</p>
+<hr>
+
+    </div>
+  </div>
+</body>
+
+</html>
