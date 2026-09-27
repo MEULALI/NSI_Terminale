@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>exercicesPOOT</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#exercices-poo">Exercices POO</a>
+<ul>
+<li><a href="#exercice-1">Exercice 1</a></li>
+<li><a href="#exercice-2">Exercice 2</a></li>
+<li><a href="#exercice-3">Exercice 3</a></li>
+<li><a href="#exercice-4">Exercice 4</a></li>
+<li><a href="#exercice-5">Exercice 5</a></li>
+<li><a href="#exercice6">Exercice6:</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="exercices-poo">Exercices POO</h1>
+<h2 id="exercice-1">Exercice 1</h2>
+<p><strong>Q1.</strong> Écrire une classe <code>Eleve</code> qui contiendra les attributs <code>nom</code>, <code>classe</code> et <code>note</code>.</p>
+<p><strong>Q2.</strong> Instancier trois élèves de cette classe.</p>
+<p>Correction</p>
+<p><strong>Q3.</strong> Écrire une fonction <code>compare</code> qui prend en paramètres deux élèves <code>eleve1</code> et <code>eleve2</code> qui renvoie le nom de l’élève ayant la meilleure note (on ne traitera pas à part le cas d’égalité).</p>
+<p>Correction</p>
+<p>Exemple d’utilisation de la classe</p>
+<p>`</p>
+<pre><code>&gt;&gt;&gt; riri = Eleve(“Henri”, “TG2”, 12)
+
+&gt; &gt; &gt; fifi = Eleve(“Philippe”, “TG6”, 15)  
+&gt; &gt; &gt; loulou = Eleve(“Louis”, “TG1”, 8)  
+&gt; &gt; &gt; compare(riri, fifi)  
+&gt; &gt; &gt; ‘Philippe’`
+</code></pre>
+<h2 id="exercice-2">Exercice 2</h2>
+<p>Écrire une classe <code>TriangleRect</code> qui contiendra les attributs <code>cote1</code>, <code>cote2</code> et <code>hypotenuse</code>.</p>
+<p>La méthode constructeur ne prendra en paramètres que <code>cote1</code> et <code>cote2</code>, l’attribut <code>hypotenuse</code> se calculera automatiquement.</p>
+<p>Exemple d’utilisation de la classe</p>
+<pre><code>`&gt;&gt;&gt; mon_triangle = TriangleRect(3,4)
+
+&gt; &gt; &gt; mon_triangle.cote1  
+&gt; &gt; &gt; 3
+&gt; 
+&gt; &gt; &gt; mon_triangle.cote2  
+&gt; &gt; &gt; 4
+&gt; 
+&gt; &gt; &gt; mon_triangle.hypotenuse  
+&gt; &gt; &gt; 5.0`
+</code></pre>
+<p>Correction</p>
+<h2 id="exercice-3">Exercice 3</h2>
+<p><strong>Q1.</strong> Écrire une classe <code>Chrono</code> qui contiendra les attributs <code>heures</code>, <code>minutes</code> et <code>secondes</code>.</p>
+<p>Correction</p>
+<p><strong>Q2.</strong> Doter la classe d’une méthode <code>affiche</code> qui affichera le temps <code>t</code>.</p>
+<p>Correction</p>
+<p><strong>Q3.</strong> Doter la classe d’une méthode <code>avance</code> qui prend en paramètre un temps <code>s</code> en secondes et qui fait avancer le temps <code>t</code> de <code>s</code> secondes.</p>
+<p>Correction</p>
+<p>Exemple d’utilisation de la classe</p>
+<pre><code>`&gt;&gt;&gt; t = Chrono(17, 25, 38)
+
+&gt; &gt; &gt; t.heures  
+&gt; &gt; &gt; 17
+&gt; 
+&gt; &gt; &gt; t.minutes  
+&gt; &gt; &gt; 25
+&gt; 
+&gt; &gt; &gt; t.secondes  
+&gt; &gt; &gt; 38
+&gt; 
+&gt; &gt; &gt; t.affiche()  
+&gt; &gt; &gt; ‘Il est 17 heures, 25 minutes et 38 secondes’
+&gt; 
+&gt; &gt; &gt; t.avance(27)  
+&gt; &gt; &gt; t.affiche()  
+&gt; &gt; &gt; ‘Il est 17 heures, 26 minutes et 5 secondes’`
+</code></pre>
+<p>Aide</p>
+<p>On pourra utiliser les opérateurs :</p>
+<ul>
+<li><code>%</code>, qui calcule le reste d’une division euclidienne.</li>
+<li><code>//</code>, qui calcule le quotient d’une division euclidienne.</li>
+</ul>
+<h2 id="exercice-4">Exercice 4</h2>
+<p>Écrire une classe <code>Player</code> qui :</p>
+<ul>
+<li>ne prendra aucun argument lors de son instanciation.</li>
+<li>affectera à chaque objet créé un attribut <code>energie</code> valant 3 par défaut.</li>
+<li>affectera à chaque objet créé un attribut <code>alive</code> valant <code>True</code> par défaut.</li>
+<li>fournira à chaque objet une méthode <code>blessure</code> qui diminue l’attribut <code>energie</code> de 1.</li>
+<li>fournira à chaque objet une méthode <code>soin</code> qui augmente l’attribut <code>energie</code> de 1.</li>
+<li>si l’attribut <code>energie</code> passe à 0, l’attribut <code>alive</code> doit passer à <code>False</code> et ne doit plus pouvoir évoluer.</li>
+</ul>
+<p>Exemple d’utilisation de la classe</p>
+<pre><code>`&gt;&gt;&gt; mario = Player()
+
+&gt; &gt; &gt; mario.energie  
+&gt; &gt; &gt; 3
+&gt; 
+&gt; &gt; &gt; mario.soin()  
+&gt; &gt; &gt; mario.energie  
+&gt; &gt; &gt; 4
+&gt; 
+&gt; &gt; &gt; mario.blessure()  
+&gt; &gt; &gt; mario.blessure()  
+&gt; &gt; &gt; mario.blessure()  
+&gt; &gt; &gt; mario.alive  
+&gt; &gt; &gt; True
+&gt; 
+&gt; &gt; &gt; mario.blessure()  
+&gt; &gt; &gt; mario.alive  
+&gt; &gt; &gt; False
+&gt; 
+&gt; &gt; &gt; mario.soin()  
+&gt; &gt; &gt; mario.alive  
+&gt; &gt; &gt; False
+&gt; 
+&gt; &gt; &gt; mario.energie  
+&gt; &gt; &gt; 0`
+</code></pre>
+<h2 id="exercice-5">Exercice 5</h2>
+<p>Créer une classe <code>CompteBancaire</code> dont la méthode constructeur recevra en paramètres :</p>
+<ul>
+<li>un attribut <code>titulaire</code> stockant le nom du propriétaire.</li>
+<li>un attribut <code>solde</code> contenant le solde disponible sur le compte.</li>
+</ul>
+<p>Cette classe contiendra deux méthodes <code>retrait()</code> et <code>depot()</code> qui permettront de retirer ou de déposer de l’argent sur le compte.</p>
+<p><strong>Exemple d’utilisation de la classe</strong></p>
+<pre><code>&gt;&gt;&gt; compteGL = CompteBancaire("G.Lassus", 1000)
+&gt;&gt;&gt; compteGL.retrait(50)
+Vous avez retiré 50 euros
+Solde actuel du compte : 950 euros
+&gt;&gt;&gt; compteGL.retrait(40000)
+Retrait impossible
+&gt;&gt;&gt; compteGL.depot(10000000)
+Vous avez déposé 10000000 euros
+Solde actuel du compte : 10000950 euros
+</code></pre>
+<h2 id="exercice6">Exercice6:</h2>
+<p>Jeu de LaserGame en POO</p>
+<p>D’après 2022, Métropole, J1, Ex. 5, par</p>
+<p>Les participants à un jeu de LaserGame sont répartis en équipes et s’affrontent dans ce jeu de tir, revêtus d’une veste à capteurs et munis d’une arme factice émettant des infrarouges.</p>
+<p>Les ordinateurs embarqués dans ces vestes utilisent la programmation orientée objet pour modéliser les joueurs. La classe <code>Joueur</code> est définie comme suit :</p>
+<p>🐍 Script Python</p>
+<pre><code>`class  Joueur:
+    def  __init__(self, pseudo, identifiant, equipe):
+        " Appelle le constructeur et initialise "
+        self.pseudo = pseudo
+        self.equipe = equipe
+        self.id = identifiant
+        self.nb_de_tirs_emis = 0
+        self.liste_id_tirs_recus = []
+        self.est_actif = True
+
+    def  tire(self):
+        " Méthode déclenchée par l'appui sur la gâchette "
+        if self.est_actif:
+            self.nb_de_tirs_emis += 1
+    
+    def  est_determine(self):
+        " Le joueur réalise-t-il un grand nombre de tirs ? "
+        return self.nb_de_tirs_emis &gt; 500  # Un booléen est renvoyé.
+
+    def  subit_un_tir(self, id_recu):
+        " Méthode déclenchée par les capteurs de la veste "
+        if self.est_actif:
+            self.est_actif = False
+            self.liste_id_tirs_recus.append(id_recu)` 
+</code></pre>
+<p><strong>1.</strong> Parmi les instructions suivantes, recopier celle qui permet de déclarer un objet <code>joueur_1</code>, instance de la classe <code>Joueur</code>, correspondant à un joueur dont le pseudo est <code>"Sniper"</code>, dont l’identifiant est <code>319</code> et qui est intégré à l’équipe <code>"A"</code> :</p>
+<ul>
+<li><strong>Instruction 1</strong> : <code>joueur_1 = ["Sniper", 319, "A"]</code></li>
+<li><strong>Instruction 2</strong> : <code>joueur_1 = new Joueur["Sniper", 319, "A"]</code></li>
+<li><strong>Instruction 3</strong> : <code>joueur_1 = Joueur("Sniper", 319, "A")</code></li>
+<li><strong>Instruction 4</strong> : <code>joueur_1 = Joueur{"pseudo":"Sniper", "id":319, "equipe":"A"}</code></li>
+</ul>
+<p><strong>2.</strong> La méthode <code>subit_un_tir</code> réalise les actions suivantes :</p>
+<p>Lorsqu’un joueur actif subit un tir capté par sa veste, l’identifiant du tireur est ajouté à l’attribut <code>liste_id_tirs_recus</code> et l’attribut <code>est_actif</code> prend la valeur <code>False</code> (le joueur est désactivé). Il doit alors revenir à son camp de base pour être de nouveau actif.</p>
+<p><strong>2.a.</strong> Écrire la méthode <code>redevenir_actif</code> qui rend à nouveau le joueur actif uniquement s’il était précédemment désactivé.</p>
+<p><strong>2.b.</strong> Écrire la méthode <code>nb_de_tirs_recus</code> qui renvoie le nombre de tirs reçus par un joueur en utilisant son attribut <code>liste_id_tirs_recus</code>.</p>
+<p><strong>3.</strong> Lorsque la partie est terminée, les participants rejoignent leur camp de base respectif où un ordinateur, qui utilise la classe <code>Base</code>, récupère les données.</p>
+<p>La classe <code>Base</code> est définie par :</p>
+<ul>
+<li>ses attributs :
+<ul>
+<li><code>equipe</code> : nom de l’équipe (<code>str</code>), par exemple, <code>"A"</code>,</li>
+<li><code>liste_des_id_de_l_equipe</code> qui correspond à la liste (<code>list</code>) des identifiants connus des joueurs de l’équipe,</li>
+<li><code>score</code> : score (<code>int</code>) de l’équipe, dont la valeur initiale est 1000 ;</li>
+</ul>
+</li>
+<li>ses méthodes :
+<ul>
+<li><code>est_un_id_allie</code> qui détermine si l’identifiant passé en paramètre est un identifiant d’un joueur de l’équipe, en renvoyant un booléen,</li>
+<li><code>decremente_score</code> qui diminue l’attribut <code>score</code> du nombre passé en paramètre,</li>
+<li><code>collecte_information</code> qui récupère les statistiques d’un participant passé en paramètre (instance de la classe <code>Joueur</code>) pour calculer le score de l’équipe.</li>
+</ul>
+</li>
+</ul>
+<p>🐍 Script Python</p>
+<pre><code>`def  collecte_information(self, participant):
+    if participant.equipe == self.equipe :  # test 1
+        for id in participant.liste_id_tirs_recus:
+            if self.est_un_id_allie(id):    # test 2
+                self.decremente_score(20)
+            else:
+                self.decremente_score(10)` 
+</code></pre>
+<p><strong>3.a.</strong> Indiquer le numéro du test (test 1 ou test 2) qui permet de vérifier qu’en fin de partie un participant égaré n’a pas rejoint par erreur la base adverse.</p>
+<p><strong>3.b.</strong> Décrire comment varie quantitativement le score de la base lorsqu’un joueur de cette équipe a été touché par le tir d’un coéquipier.</p>
+<p>On souhaite accorder à la base un bonus de 40 points pour chaque joueur particulièrement déterminé (qui réalise un grand nombre de tirs).</p>
+<p><strong>4.</strong> Recopier et compléter, en utilisant les méthodes des classes <code>Joueur</code> et <code>Base</code>, les 2 lignes de codes suivantes qu’il faut ajouter à la fin de la méthode <code>collecte_information</code> :</p>
+<p>🐍 Script Python</p>
+<pre><code>`...             # si le participant réalise un grand nombre de tirs
+        ...         # le score de la Base augmente de 40` 
+</code></pre>
+
+    </div>
+  </div>
+</body>
+
+</html>
