@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>importbib</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li>
+<ul>
+<li><a href="#importer-des-bibliothèques-python">Importer des bibliothèques Python</a></li>
+<li><a href="#trouver-installer-et-utiliser-des-bibliothèques">Trouver, installer et utiliser des bibliothèques</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h2 id="importer-des-bibliothèques-python">Importer des bibliothèques Python</h2>
+<p>Une bibliothèque Python contient un ensemble de fonctions et parfois de variables. Lorsque l’on importe une bibliothèque simplement :</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">import</span> turtle
+</code></pre>
+<p>Ces objets sont accessibles par la <strong>notation pointée</strong> <code>bibliothèque.var</code> ou <code>bibliothèque.fonction(..)</code> :</p>
+<pre class=" language-python"><code class="prism  language-python">turtle<span class="token punctuation">.</span>forward<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+turtle<span class="token punctuation">.</span>left<span class="token punctuation">(</span><span class="token number">45</span><span class="token punctuation">)</span>
+</code></pre>
+<p>On peut utiliser directement les fonctions de la bibliothèque telles que <code>forward</code> et <code>left</code> en les important explicitement :</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">from</span> turtle <span class="token keyword">import</span> forward<span class="token punctuation">,</span> left
+forward<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+left<span class="token punctuation">(</span><span class="token number">45</span><span class="token punctuation">)</span>
+</code></pre>
+<p>On peut aussi importer tous les noms de la bibliothèque avec l’instruction suivante :</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">from</span> turtle <span class="token keyword">import</span> <span class="token operator">*</span>
+</code></pre>
+<p>Cependant cette forme n’est <strong>pas recommandée</strong>, même si nous l’avons beaucoup utilisée jusqu’à présent, par simplicité. En effet, on ne sait pas quels noms sont importés, et on risque de créer des conflits avec les noms utilisés dans le programme :</p>
+<pre class=" language-python"><code class="prism  language-python">pi <span class="token operator">=</span> <span class="token number">0.5</span>  <span class="token comment"># probabilité de l'événement</span>
+<span class="token keyword">from</span> math <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>pi<span class="token punctuation">)</span>  <span class="token comment"># affiche 3.141592653589793 car math définit aussi "pi"</span>
+</code></pre>
+<p>Enfin, on peut <strong>renommer</strong> les bibliothèques et les objets importés, ce qui est utile en cas de conflit de nom ou pour utiliser des noms plus courts ou plus appropriés :</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">import</span> turtle <span class="token keyword">as</span> t
+t<span class="token punctuation">.</span>forward<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+t<span class="token punctuation">.</span>left<span class="token punctuation">(</span><span class="token number">45</span><span class="token punctuation">)</span>
+
+<span class="token keyword">from</span> turtle <span class="token keyword">import</span> forward <span class="token keyword">as</span> avance<span class="token punctuation">,</span> left <span class="token keyword">as</span> gauche
+avance<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+gauche<span class="token punctuation">(</span><span class="token number">45</span><span class="token punctuation">)</span>
+</code></pre>
+<hr>
+<h2 id="trouver-installer-et-utiliser-des-bibliothèques">Trouver, installer et utiliser des bibliothèques</h2>
+<p>De nombreuses bibliothèques sont <strong>pré-installées</strong> avec Python. On peut aussi trouver des bibliothèques Python en effectuant une recherche sur le Web. Deux sites très utilisés ont chacun leur propre moteur de recherche : <strong>PyPI</strong> (Python Package Index, <a href="https://pypi.org">pypi.org</a>) et <strong>Anaconda</strong> (<a href="https://anaconda.org">anaconda.org</a>).</p>
+<p>Les bibliothèques sont en général documentées sur le Web. Elles sont également documentées par les <strong>docstrings</strong> de leurs fonctions. Cette documentation est accessible depuis une session Python interactive avec la fonction <code>help</code> :</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">import</span> turtle <span class="token keyword">as</span> t
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">help</span><span class="token punctuation">(</span>t<span class="token punctuation">.</span>forward<span class="token punctuation">)</span>
+Help on function forward <span class="token keyword">in</span> module turtle<span class="token punctuation">:</span>
+forward<span class="token punctuation">(</span>distance<span class="token punctuation">)</span>
+    Move the turtle forward by the specified distance
+</code></pre>
+
+    </div>
+  </div>
+</body>
+
+</html>
