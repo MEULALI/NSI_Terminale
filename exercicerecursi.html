@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>exercicerecursi</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#exercices">Exercices:</a>
+<ul>
+<li><a href="#exercice-1">Exercice 1</a></li>
+<li><a href="#exercice-2-">Exercice 2 :</a></li>
+<li><a href="#exercice-3">Exercice 3</a></li>
+<li><a href="#exercice-4">Exercice 4</a></li>
+<li><a href="#exercice-5">Exercice 5</a></li>
+<li><a href="#exercice-6">Exercice 6</a></li>
+<li><a href="#exercice-7">Exercice 7</a></li>
+<li><a href="#exercice-8">Exercice 8</a></li>
+<li><a href="#exercice-9">Exercice 9</a></li>
+<li><a href="#exercice-10">Exercice 10</a></li>
+<li><a href="#exercice-11">Exercice 11</a></li>
+<li><a href="#exercice-12">Exercice 12</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="exercices">Exercices:</h1>
+<h2 id="exercice-1">Exercice 1</h2>
+<p>Écrire une fonction récursive <code>puissance</code> qui prend en paramètres deux nombres <code>x</code> et <code>n</code> qui renvoie le nombre</p>
+<h2 id="exercice-2-">Exercice 2 :</h2>
+<p>On rappelle que le PGCD (plus grand diviseur commun de deux nombres) vérifie la propriété suivante : si la division euclidienne de par s’écrit , alors .</p>
+<p>Cette propriété est à la base de l’algorithme d’Euclide</p>
+<p>Exemple : , donc</p>
+<p>Écrire une fonction récursive <code>pgcd</code> qui prend en paramètres deux nombres <code>a</code> et <code>b</code> et qui renvoie leur PGCD.</p>
+<h2 id="exercice-3">Exercice 3</h2>
+<p>La <a href="https://fr.wikipedia.org/wiki/Conjecture_de_Syracuse">conjecture de Syracuse</a> (ou de Collatz) postule ceci :</p>
+<p><em>Prenons un nombre : si est pair, on le divise par 2, sinon on le multiplie par 3 puis on ajoute 1. On recommence cette opération tant que possible. Au bout d’un certain temps, on finira toujours par tomber sur le nombre 1.</em></p>
+<p><strong>Q1.</strong> Écrire une fonction récursive <code>syracuse</code> qui prend en paramètres une entier <code>n</code> et qui écrivant tous les termes de la suite de Syracuse commençant à <code>n</code> , et s’arrêtant (on l’espère…) à la valeur 1.</p>
+<p><strong>Q2.</strong> On appelle «temps de vol» le nombre d’étapes nécessaires avant de retomber sur 1. Modifier la fonction précédente afin qu’elle affiche le temps de vol pour tout nombre <code>n</code>.</p>
+<h2 id="exercice-4">Exercice 4</h2>
+<p>Reproduire le dessin suivant, à l’aide du module <code>turtle</code>.</p>
+<p><code>turtle</code> est un hommage au langage LOGO inventé par <a href="https://fr.wikipedia.org/wiki/Seymour_Papert">Seymour Papert</a> au MIT à la fin des années 60.</p>
+<p><img src="https://glassus.github.io/terminale_nsi/T2_Programmation/2.2_Recursivite/data/carres_turtle.png" alt=""></p>
+<h2 id="exercice-5">Exercice 5</h2>
+<p>Proposer une nouvelle fonction récursive <code>puissance_mod</code> qui prend en paramètres deux nombres <code>x</code> et <code>n</code> et qui renvoie le nombre . Pour optimiser la fonction déjà construite à l’exercice 1, utiliser le fait que :</p>
+<ul>
+<li>si est pair,</li>
+<li>sinon</li>
+</ul>
+<h2 id="exercice-6">Exercice 6</h2>
+<p>Écrire un algorithme récursif <code>dicho_recursive</code> qui prend en paramètres une liste <strong>triée</strong> (par ordre croissant) <code>lst</code> et une valeur <code>val</code> et qui renvoie un booléen indiquant la présence ou non de la valeur <code>val</code> dans une liste <code>lst</code>.</p>
+<p><em>Exemple d’utilisation :</em></p>
+<pre class=" language-python"><code class="prism  language-python">`<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> lst <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">9</span><span class="token punctuation">,</span><span class="token number">11</span><span class="token punctuation">,</span><span class="token number">15</span><span class="token punctuation">,</span><span class="token number">16</span><span class="token punctuation">,</span><span class="token number">18</span><span class="token punctuation">,</span><span class="token number">19</span><span class="token punctuation">]</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> dicho_recursive<span class="token punctuation">(</span>lst<span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span>
+<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">18</span><span class="token punctuation">,</span> <span class="token number">19</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">18</span><span class="token punctuation">,</span> <span class="token number">19</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">18</span><span class="token punctuation">,</span> <span class="token number">19</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">]</span>
+<span class="token boolean">True</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> dicho_recursive<span class="token punctuation">(</span>lst<span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span>
+<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">18</span><span class="token punctuation">,</span> <span class="token number">19</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span>
+<span class="token boolean">False</span>` 
+</code></pre>
+<p><em>Aide :</em></p>
+<p>Les techniques de <em>slicing</em> (hors-programme) permettent de couper une liste en deux :</p>
+<pre class=" language-python"><code class="prism  language-python">`<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> lst <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">17</span><span class="token punctuation">,</span> <span class="token number">18</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">22</span><span class="token punctuation">]</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> lst<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">3</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">]</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> lst<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token number">17</span><span class="token punctuation">,</span> <span class="token number">18</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">22</span><span class="token punctuation">]</span>` 
+
+</code></pre>
+<h2 id="exercice-7">Exercice 7</h2>
+<p>On considère le jeu des <strong>Tours de Hanoï</strong>. Le but est de faire passer toutes les assiettes de A vers C, sachant qu’une assiette ne peut être déposée que sur une assiette de diamètre inférieur.<img src="https://glassus.github.io/terminale_nsi/T2_Programmation/2.2_Recursivite/data/hanoi0.png" alt=""></p>
+<p>Une version jouable en ligne peut être trouvée <a href="https://www.mathsisfun.com/games/towerofhanoi.html">ici</a>.</p>
+<ol>
+<li>S’entraîner et essayer d’établir une stratégie de victoire.</li>
+<li>Observer les images ci-dessous :<img src="https://glassus.github.io/terminale_nsi/T2_Programmation/2.2_Recursivite/data/hanoi1.png" alt=""><img src="https://glassus.github.io/terminale_nsi/T2_Programmation/2.2_Recursivite/data/hanoi2.png" alt=""><img src="https://glassus.github.io/terminale_nsi/T2_Programmation/2.2_Recursivite/data/hanoi3.png" alt=""><img src="https://glassus.github.io/terminale_nsi/T2_Programmation/2.2_Recursivite/data/hanoi4.png" alt=""></li>
+</ol>
+<p>Écrire une fonction récursive <code>hanoi(n, depart, inter, arrivee)</code> qui donnera la suite d’instructions (sous la forme " A vers C") pour faire passer une pile de taille n de <code>depart</code> vers <code>arrivee</code> en prenant <code>inter</code> comme intermédiaire.</p>
+<h2 id="exercice-8">Exercice 8</h2>
+<p>Cet exercice a pour objectif le tracé du flocon de Von Koch.<img src="https://glassus.github.io/terminale_nsi/T2_Programmation/2.2_Recursivite/data/floc.png" alt=""></p>
+<p>Les fractales</p>
+<p>Ce flocon est une structure <a href="https://fr.wikipedia.org/wiki/Fractale">fractale</a>, au même titre que le superbe <a href="https://mandelbrot.site/">ensemble de Mandelbrot</a>, dont vous pouvez trouver une implémentation en Pygame <a href="https://glassus.github.io/terminale_nsi/T2_Programmation/2.2_Recursivite/data/mandelbrot_pygame.py">ici</a>.</p>
+<p>L’idée est de répéter de manière récursive la transformation ci-dessous : chaque segment de longueur <code>l</code> donne naissance à 4 segments de longueur <code>l/3</code>, en construisant une pointe de triangle équilatéral sur le deuxième tiers du segment.</p>
+<p><img src="https://glassus.github.io/terminale_nsi/T2_Programmation/2.2_Recursivite/data/ex2.png" alt=""></p>
+<p><strong>Q1.</strong> Créer une fonction récursive <code>floc(n, l)</code> qui trace à une «profondeur» <code>n</code> un segment de longueur <code>l</code>.<img src="https://glassus.github.io/terminale_nsi/T2_Programmation/2.2_Recursivite/data/ex3b.png" alt=""><strong>Indications</strong></p>
+<ul>
+<li>l’instruction de tracé n’a lieu que quand <code>n</code> vaut 0.</li>
+<li>l’étape <code>n</code> fait 4 appels successifs à l’étape <code>n-1</code>.</li>
+</ul>
+<p><strong>Q2.</strong> Créer une fonction <code>triangle(n, l)</code> qui trace le flocon complet.</p>
+<h2 id="exercice-9">Exercice 9</h2>
+<ol>
+<li>[Exercice 43.2 de la BNS 2025]</li>
+</ol>
+<p><img src="https://glassus.github.io/terminale_nsi/T2_Programmation/2.2_Recursivite/data/diffusion.png" alt="image"></p>
+<h2 id="exercice-10">Exercice 10</h2>
+<p>Exercice 4 du sujet [Amérique du Nord J1 2022]</p>
+<h2 id="exercice-11">Exercice 11</h2>
+<p>Exercice 1 du sujet [Centres Étrangers J2 2022]</p>
+<h2 id="exercice-12">Exercice 12</h2>
+<p>Exercice 1 du [sujet Amérique du Nord J2 2024]</p>
+
+    </div>
+  </div>
+</body>
+
+</html>
