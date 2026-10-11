@@ -1,0 +1,402 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pile</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#structures-de-données">Structures de données</a>
+<ul>
+<li><a href="#interface-et-implémentation">1. Interface et implémentation</a></li>
+<li><a href="#les-listes">2. Les listes</a></li>
+<li><a href="#les-piles">3. Les Piles</a></li>
+<li><a href="#liste-fifo-les-files">4. Liste FIFO (les files)</a></li>
+<li><a href="#les-dictionnaire">5. Les dictionnaire</a></li>
+<li><a href="#lessentiel">6. L’essentiel:</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="structures-de-données">Structures de données</h1>
+<h2 id="interface-et-implémentation">1. Interface et implémentation</h2>
+<p>Le langage Python dispose, comme tous les langages de haut niveau, d’un ensemble de types de base et de types structurés vus dans le programme de Première : nombres, chaînes de caractères, tuples, tableaux, dictionnaires. Ces types sont des briques de base qui permettent de créer des structures de données plus complexes. Pour définir ces structures de données, on utilise des <strong>types abstraits de données</strong>.</p>
+<p>Un type abstrait est caractérisé par une <strong>interface</strong> de programmation, c’est-à-dire un ensemble d’opérations qui permettent de manipuler les données de ce type. On distingue :</p>
+<ul>
+<li>les <strong>constructeurs</strong>, qui permettent de créer une nouvelle structure de données ;</li>
+<li>les <strong>opérateurs</strong>, qui permettent de modifier la structure de données, par exemple en ajoutant ou retirant des données ;</li>
+<li>les <strong>accesseurs</strong>, qui donnent de l’information sur la structure de données, comme son nombre d’éléments ;</li>
+<li>les <strong>itérateurs</strong>, qui permettent d’énumérer les éléments de la structure de données.</li>
+</ul>
+<p>Spécifier un type abstrait, c’est définir son interface, sans préjuger de la façon dont ses opérations seront implémentées. Implémenter un type abstrait, c’est fournir le code de ces opérations en utilisant des types existants. Plusieurs implémentations peuvent répondre à la même spécification. Le programmeur peut alors choisir celle qui lui convient le mieux. Certaines implémentations peuvent être plus ou moins rapides, plus ou moins économes en mémoire ou plus ou moins adaptées à des données de grande taille.</p>
+<p>En séparant la spécification de l’implémentation, il est plus facile de diviser le travail des programmeurs et d’organiser la structure générale du programme. Certains types abstraits très souvent utilisés, comme ceux présentés dans ce chapitre, sont également disponibles dans des bibliothèques logicielles. Il suffit alors de connaître leur interface pour les utiliser, sans avoir à entrer dans les détails de leur implémentation.</p>
+<p>Les quatre types abstraits présentés dans ce chapitre sont utilisés très fréquemment dans toutes sortes de programmes. Ils servent aussi de base à d’autres types abstraits. Nous verrons ainsi qu’une file peut être implémentée avec deux piles, elles-mêmes implémentées par des listes, ou qu’un dictionnaire peut être implémenté avec des listes.</p>
+<p>Les implémentations présentées dans ce chapitre utilisent un style de programmation <strong>fonctionnelle</strong> : les opérations sont des fonctions qui prennent la structure de données en paramètre et, pour les constructeurs et opérateurs, retournent la structure résultant de l’opération. Le chapitre suivant présentera des implémentations utilisant un style de programmation par objets.</p>
+<blockquote>
+<p><strong>NOTE</strong> : Un type abstrait est un <em>type</em> car il définit les opérations possibles sur la structure de données. Il est <em>abstrait</em> car on ne détaille pas son implémentation.</p>
+</blockquote>
+<blockquote>
+<p><strong>NOTE</strong> : On utilise souvent le terme de <em>structure de données abstraite</em> à la place de type abstrait. Les types structurés du langage sont souvent appelés <em>structures de données concrètes</em> ou <em>types concrets</em>.</p>
+</blockquote>
+<h2 id="les-listes">2. Les listes</h2>
+<p>Une liste est une <strong>séquence ordonnée</strong> d’éléments. Son interface minimale est la suivante :</p>
+<ul>
+<li><code>creer_liste()</code> : constructeur qui retourne une liste vide ;</li>
+<li><code>liste_vide(l)</code> : accesseur qui retourne Vrai si la liste <code>l</code> est vide ;</li>
+<li><code>inserer(l, e)</code> : opérateur qui insère <code>e</code> en tête de liste et retourne la nouvelle liste ;</li>
+<li><code>tete(l)</code> : accesseur qui retourne l’élément en tête de liste (si celle-ci n’est pas vide) ;</li>
+<li><code>queue(l)</code> : accesseur qui retourne la liste privée de son premier élément (si la liste n’est pas vide) ;</li>
+<li><code>elements_liste(l)</code> : itérateur qui retourne un tableau contenant les éléments de la liste, que l’on peut ensuite énumérer avec une boucle <code>for</code>.</li>
+</ul>
+<h3 id="implémentation-par-des-tuples">2.1. Implémentation par des tuples</h3>
+<p>On peut implémenter une liste en Python en utilisant des tuples. Comme les tuples Python sont immuables, la liste elle-même sera immuable, ce qui peut être intéressant dans certains cas.</p>
+<p>Une liste est représentée par un tuple <code>(tete, queue)</code> où <code>tete</code> est le premier élément de la liste et <code>queue</code> est le reste de la liste, qui est elle-même une liste (donc un tuple).</p>
+<p>L’implémentation est très simple :</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">creer_liste</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token comment"># la liste vide est le tuple vide</span>
+
+<span class="token keyword">def</span> <span class="token function">liste_vide</span><span class="token punctuation">(</span>liste<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> liste <span class="token keyword">is</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token comment"># la liste est vide si c'est le tuple vide</span>
+
+<span class="token keyword">def</span> <span class="token function">inserer</span><span class="token punctuation">(</span>liste<span class="token punctuation">,</span> element<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>element<span class="token punctuation">,</span> liste<span class="token punctuation">)</span>    <span class="token comment"># nouvelle liste = tuple avec l'élément en tête</span>
+
+<span class="token keyword">def</span> <span class="token function">tete</span><span class="token punctuation">(</span>liste<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">assert</span> <span class="token operator">not</span> liste_vide<span class="token punctuation">(</span>liste<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"tete : liste vide !"</span>
+    element<span class="token punctuation">,</span> _ <span class="token operator">=</span> liste    <span class="token comment"># la tête de liste est le 1er élément du tuple</span>
+    <span class="token keyword">return</span> element
+
+<span class="token keyword">def</span> <span class="token function">queue</span><span class="token punctuation">(</span>liste<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">assert</span> <span class="token operator">not</span> liste_vide<span class="token punctuation">(</span>liste<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"queue : liste vide !"</span>
+    _<span class="token punctuation">,</span> reste <span class="token operator">=</span> liste    <span class="token comment"># la queue de liste est le 2e élément du tuple</span>
+    <span class="token keyword">return</span> reste
+
+<span class="token keyword">def</span> <span class="token function">elements_liste</span><span class="token punctuation">(</span>liste<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    res <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>    <span class="token comment"># le tableau résultat</span>
+    <span class="token keyword">while</span> liste <span class="token keyword">is</span> <span class="token operator">not</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>    <span class="token comment"># à chaque itération :</span>
+        tete<span class="token punctuation">,</span> liste <span class="token operator">=</span> liste    <span class="token comment"># extraire l'élément et la nouvelle liste</span>
+        res<span class="token punctuation">.</span>append<span class="token punctuation">(</span>tete<span class="token punctuation">)</span>    <span class="token comment"># ajouter l'élément au résultat</span>
+    <span class="token keyword">return</span> res    <span class="token comment"># retourner le résultat</span>
+On peut utiliser la liste de la manière suivante <span class="token punctuation">:</span>
+
+```python
+
+liste <span class="token operator">=</span> creer_liste<span class="token punctuation">(</span><span class="token punctuation">)</span>
+liste <span class="token operator">=</span> inserer<span class="token punctuation">(</span>liste<span class="token punctuation">,</span> <span class="token string">"Alice"</span><span class="token punctuation">)</span>
+liste <span class="token operator">=</span> inserer<span class="token punctuation">(</span>liste<span class="token punctuation">,</span> <span class="token string">"Bob"</span><span class="token punctuation">)</span>
+liste <span class="token operator">=</span> inserer<span class="token punctuation">(</span>liste<span class="token punctuation">,</span> <span class="token string">"Charlie"</span><span class="token punctuation">)</span>
+elem <span class="token operator">=</span> tete<span class="token punctuation">(</span>liste<span class="token punctuation">)</span>       <span class="token comment"># elem vaut "Charlie"</span>
+reste <span class="token operator">=</span> queue<span class="token punctuation">(</span>liste<span class="token punctuation">)</span>     <span class="token comment"># reste est la liste ("Bob", "Alice")</span>
+liste_vide<span class="token punctuation">(</span>liste<span class="token punctuation">)</span>        <span class="token comment"># False</span>
+<span class="token keyword">for</span> e <span class="token keyword">in</span> elements_liste<span class="token punctuation">(</span>liste<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span>    <span class="token comment"># Charlie Bob Alice</span>
+</code></pre>
+<p>L’état de la liste après la ligne 4 est <code>("Charlie", ("Bob", ("Alice", ())))</code>. Conventionnellement, on représente les listes par une chaîne de maillons reliés par des flèches :<br>
+liste image</p>
+<h3 id="implémentation-par-un-tableau">2.2. Implémentation par un tableau</h3>
+<p>Une autre implémentation possible d’une liste consiste à utiliser un tableau. La liste est alors représentée par un tuple constitué du tableau et du nombre d’éléments de la liste. La représentation de la liste de l’exemple précédent avec un tableau de taille 5 est alors la suivante :</p>
+<p><code>liste = (["Charlie", "Bob", "Alice", None, None], 3)</code></p>
+<p>Le tableau ayant une taille fixe, il faut prévoir que la capacité de la liste est limitée à la taille du tableau. Il est aussi possible de créer un tableau plus grand et d’y recopier la liste lorsque nécessaire. Dans ce cas, on peut vouloir recopier la liste dans un tableau plus petit lorsque la taille de la liste devient trop petite.</p>
+<blockquote>
+<p><strong>NOTE</strong> Les tableaux Python sont en réalité des listes puisqu’ils sont extensibles avec la méthode <code>append</code>.</p>
+</blockquote>
+<h3 id="étendre-linterface">2.3. Étendre l’interface</h3>
+<p>On peut enrichir l’interface d’une liste de plusieurs opérations :</p>
+<ul>
+<li>
+<p><code>taille(l)</code> : accesseur qui retourne le nombre d’éléments de la liste ;</p>
+</li>
+<li>
+<p><code>ième(l, i)</code> : accesseur qui retourne le <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.65952em; vertical-align: 0em;"></span><span class="mord mathnormal">i</span></span></span></span></span>-ème élément de la liste ;</p>
+</li>
+<li>
+<p><code>ajouter_fin(l, e)</code> : opérateur qui ajoute <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">e</span></span></span></span></span> à la fin de la liste ;</p>
+</li>
+<li>
+<p><code>insérer_ième(l, i, e)</code> : opérateur qui insère l’élément <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">e</span></span></span></span></span> en <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.65952em; vertical-align: 0em;"></span><span class="mord mathnormal">i</span></span></span></span></span>-ème position ;</p>
+</li>
+<li>
+<p><code>remplacer(l, i, e)</code> : opérateur qui remplace le <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.65952em; vertical-align: 0em;"></span><span class="mord mathnormal">i</span></span></span></span></span>-ème élément par <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">e</span></span></span></span></span> ;</p>
+</li>
+<li>
+<p><code>supprimer_ième(l, i)</code> : opérateur qui supprime le <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.65952em; vertical-align: 0em;"></span><span class="mord mathnormal">i</span></span></span></span></span>-ème élément de la liste.</p>
+</li>
+</ul>
+<p>Dans l’implémentation avec les tuples, les opérateurs ci-dessus sont coûteux à réaliser car les tuples sont immuables et il faut donc créer une nouvelle liste complète.</p>
+<h2 id="les-piles">3. Les Piles</h2>
+<p>Une <strong>pile</strong> est un ensemble ordonné d’éléments qui se comporte comme une pile d’assiettes : on peut ajouter une assiette sur la pile ou prendre l’assiette sur le dessus de la pile.</p>
+<p>Son interface minimale est la suivante :</p>
+<ul>
+<li>
+<p><code>creer_pile()</code> : constructeur qui retourne une pile vide ;</p>
+</li>
+<li>
+<p><code>pile_vide(p)</code> : accesseur qui retourne Vrai si la pile <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.625em; vertical-align: -0.19444em;"></span><span class="mord mathnormal">p</span></span></span></span></span> est vide ;</p>
+</li>
+<li>
+<p><code>empiler(p, e)</code> : opérateur qui ajoute <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">e</span></span></span></span></span> au sommet de la pile <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.625em; vertical-align: -0.19444em;"></span><span class="mord mathnormal">p</span></span></span></span></span> ;</p>
+</li>
+<li>
+<p><code>dépiler(p)</code> : opérateur qui retire l’élément en sommet de pile (si elle n’est pas vide) et retourne la nouvelle pile ;</p>
+</li>
+<li>
+<p><code>sommet(p)</code> : accesseur qui retourne le sommet de la pile (si elle n’est pas vide) ;</p>
+</li>
+<li>
+<p><code>elements_pile(p)</code> : itérateur qui énumère les éléments de la pile.</p>
+</li>
+</ul>
+<h3 id="implémentation-par-une-liste">3.1. Implémentation par une liste</h3>
+<p>Une liste permet d’implémenter une pile de façon quasiment immédiate puisque les opérations <code>insérer()</code>, <code>tête()</code> et <code>queue()</code> correspondent respectivement à <code>empiler()</code>, <code>sommet()</code> et <code>dépiler()</code>.</p>
+<h3 id="implémentation-par-un-tableau-1">3.2. Implémentation par un tableau</h3>
+<p>Une autre implémentation consiste à utiliser un tableau. De façon similaire à l’implémentation d’une liste par un tableau, on utilise un tuple contenant le tableau lui-même et le nombre d’éléments dans la pile, qui est aussi l’indice auquel sera ajouté le prochain élément.</p>
+<p>Comme un tableau a une taille limitée, on spécifie la capacité maximale de la pile à sa création et une opération d’accès pour tester si la pile est pleine :</p>
+<ul>
+<li>
+<p><code>creer_pile(n)</code> : constructeur qui retourne une pile vide, de capacité <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">n</span></span></span></span></span> éléments ;</p>
+</li>
+<li>
+<p><code>pile_pleine(p)</code> : accesseur qui retourne Vrai si la pile <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.625em; vertical-align: -0.19444em;"></span><span class="mord mathnormal">p</span></span></span></span></span> est pleine.</p>
+</li>
+</ul>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">creer_pile</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># une pile vide est un tuple formé d'un tableau de n éléments et d'une taille de 0</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token boolean">None</span><span class="token punctuation">]</span> <span class="token operator">*</span> n<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">pile_vide</span><span class="token punctuation">(</span>pile<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    t<span class="token punctuation">,</span> top <span class="token operator">=</span> pile
+    <span class="token keyword">return</span> top <span class="token operator">==</span> <span class="token number">0</span>  <span class="token comment"># la pile est vide si sa taille est 0</span>
+
+<span class="token keyword">def</span> <span class="token function">pile_pleine</span><span class="token punctuation">(</span>pile<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    t<span class="token punctuation">,</span> top <span class="token operator">=</span> pile
+    <span class="token keyword">return</span> top <span class="token operator">==</span> <span class="token builtin">len</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span>  <span class="token comment"># la pile est pleine si sa taille atteint sa capacité</span>
+
+<span class="token keyword">def</span> <span class="token function">empiler</span><span class="token punctuation">(</span>pile<span class="token punctuation">,</span> element<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">assert</span> <span class="token operator">not</span> pile_pleine<span class="token punctuation">(</span>pile<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"empiler : pile pleine !"</span>
+    t<span class="token punctuation">,</span> top <span class="token operator">=</span> pile
+    t<span class="token punctuation">[</span>top<span class="token punctuation">]</span> <span class="token operator">=</span> element  <span class="token comment"># on ajoute l'élément au bout du tableau</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>t<span class="token punctuation">,</span> top <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># on retourne la nouvelle pile</span>
+
+<span class="token keyword">def</span> <span class="token function">depiler</span><span class="token punctuation">(</span>pile<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">assert</span> <span class="token operator">not</span> pile_vide<span class="token punctuation">(</span>pile<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"depiler : pile vide !"</span>
+    t<span class="token punctuation">,</span> top <span class="token operator">=</span> pile
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>t<span class="token punctuation">,</span> top <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># on retourne la nouvelle pile</span>
+
+<span class="token keyword">def</span> <span class="token function">sommet</span><span class="token punctuation">(</span>pile<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">assert</span> <span class="token operator">not</span> pile_vide<span class="token punctuation">(</span>pile<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"sommet : pile vide !"</span>
+    t<span class="token punctuation">,</span> top <span class="token operator">=</span> pile
+    <span class="token keyword">return</span> t<span class="token punctuation">[</span>top <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span>  <span class="token comment"># Le sommet est en dessous de l'indice top</span>
+
+<span class="token keyword">def</span> <span class="token function">elements_pile</span><span class="token punctuation">(</span>pile<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    res <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>  <span class="token comment"># le tableau résultat</span>
+    t<span class="token punctuation">,</span> top <span class="token operator">=</span> pile  <span class="token comment"># récupérer le tableau et la taille</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>top<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># on parcourt du sommet vers la base (i va de top à 1)</span>
+        res<span class="token punctuation">.</span>append<span class="token punctuation">(</span>t<span class="token punctuation">[</span>i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> res  <span class="token comment"># on retourne le tableau résultat</span>
+
+</code></pre>
+<blockquote>
+<p><strong>NOTE</strong> Comme pour l’implémentation d’une liste par un tableau, on peut lever cette contrainte en recopiant la pile dans un tableau plus grand lorsqu’elle est pleine.</p>
+</blockquote>
+<blockquote>
+<p><strong>NOTE</strong> Cette implémentation utilise un tableau <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.61508em; vertical-align: 0em;"></span><span class="mord mathnormal">t</span></span></span></span></span> dont on modifie le contenu, ce qui peut créer des problèmes d’aliasing (exercice 22). Pour les éviter, il faut toujours affecter la valeur de retour d’un opérateur qui modifie la structure de données à la même variable que celle passée en paramètre, par exemple : <code>p = depiler(p)</code>.</p>
+</blockquote>
+<p>On peut utiliser la pile de la manière suivante :</p>
+<pre class=" language-python"><code class="prism  language-python">pile <span class="token operator">=</span> creer_pile<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+pile <span class="token operator">=</span> empiler<span class="token punctuation">(</span>pile<span class="token punctuation">,</span> <span class="token string">"Alice"</span><span class="token punctuation">)</span>
+pile <span class="token operator">=</span> empiler<span class="token punctuation">(</span>pile<span class="token punctuation">,</span> <span class="token string">"Bob"</span><span class="token punctuation">)</span>
+pile <span class="token operator">=</span> empiler<span class="token punctuation">(</span>pile<span class="token punctuation">,</span> <span class="token string">"Charlie"</span><span class="token punctuation">)</span>
+elem <span class="token operator">=</span> sommet<span class="token punctuation">(</span>pile<span class="token punctuation">)</span>           <span class="token comment"># elem vaut "Charlie"</span>
+pile <span class="token operator">=</span> depiler<span class="token punctuation">(</span>pile<span class="token punctuation">)</span>          <span class="token comment"># la pile a 2 éléments</span>
+pile_vide<span class="token punctuation">(</span>pile<span class="token punctuation">)</span>              <span class="token comment"># False</span>
+<span class="token keyword">for</span> e <span class="token keyword">in</span> elements_pile<span class="token punctuation">(</span>pile<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span>                  <span class="token comment"># Bob Alice</span>
+
+</code></pre>
+<blockquote>
+<p><strong>NOTE</strong> La différence entre une liste et une pile est que l’on ne définit pas d’opérateurs supplémentaires tels que <code>insérer_ième</code> ou <code>remplacer</code>.</p>
+</blockquote>
+<blockquote>
+<p><strong>NOTE</strong> Après l’appel à <code>depiler</code> (dernière étape), <code>"Charlie"</code> est toujours dans le tableau mais ne fait plus partie de la pile. Il sera écrasé par le prochain <code>empiler</code>.</p>
+</blockquote>
+<p>L’état du tableau représentant la pile après chacune des lignes 1 à 4 et après la ligne 6 est le suivant :</p>
+<ul>
+<li>
+<p><strong>Ligne 1 :</strong>  <code>top = 0</code>  <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span>  <code>[None, None, ...]</code></p>
+</li>
+<li>
+<p><strong>Ligne 2 :</strong>  <code>top = 1</code>  <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span>  <code>["Alice", None, ...]</code></p>
+</li>
+<li>
+<p><strong>Ligne 3 :</strong>  <code>top = 2</code>  <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span>  <code>["Alice", "Bob", None, ...]</code></p>
+</li>
+<li>
+<p><strong>Ligne 4 :</strong>  <code>top = 3</code>  <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span>  <code>["Alice", "Bob", "Charlie", None, ...]</code></p>
+</li>
+<li>
+<p><strong>Ligne 6 :</strong>  <code>top = 2</code>  <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span>  <code>["Alice", "Bob", "Charlie", None, ...]</code>  <em>(Charlie est conservé en mémoire tampon mais le sommet logique est remis à l’indice 2)</em></p>
+</li>
+<li>
+<p>image de la pile</p>
+</li>
+</ul>
+<h2 id="liste-fifo-les-files">4. Liste FIFO (les files)</h2>
+<p>Une <strong>file</strong> est un ensemble ordonné d’éléments qui se comporte comme une file d’attente : un nouvel arrivant se met à la fin de la file, tandis que la prochaine personne servie est celle en tête de file.</p>
+<p>La différence avec une pile est que :</p>
+<ul>
+<li>dans une <strong>pile</strong>, le dernier arrivé est le premier servi — on parle d’une liste <strong>LIFO</strong> : <em>Last In, First Out</em> ;</li>
+<li>dans une <strong>file</strong>, le premier arrivé est le premier servi — on parle d’une liste <strong>FIFO</strong> : <em>First In, First Out</em>.</li>
+</ul>
+<p>L’interface minimale d’une file est la suivante :</p>
+<ul>
+<li><code>creer_file()</code> : constructeur qui retourne une file vide ;</li>
+<li><code>file_vide(f)</code> : accesseur qui retourne Vrai si la file <code>f</code> est vide ;</li>
+<li><code>enfiler(f, e)</code> : opérateur qui ajoute <code>e</code> à la fin de la file <code>f</code> ;</li>
+<li><code>defiler(f)</code> : opérateur qui retire l’élément en début de file (si elle n’est pas vide) ;</li>
+<li><code>tete_file(f)</code> : accesseur qui retourne le premier élément de la file (si elle n’est pas vide) ;</li>
+<li><code>elements_file(f)</code> : itérateur qui énumère les éléments de la file.</li>
+</ul>
+<h3 id="implémentation-par-un-tableau-2">4.1. Implémentation par un tableau</h3>
+<p>Comme la pile et la liste, on peut implémenter une file avec un tableau, en lui donnant une capacité limitée. Comme pour la pile, on représente la file par un tuple <code>(tableau, taille)</code> et on ajoute les éléments à l’indice <code>taille</code> (sauf si le tableau est plein). Contrairement à la pile, on doit retirer les éléments <strong>au début</strong> du tableau.</p>
+<p>Une solution simple est de <strong>décaler</strong> les éléments du tableau :</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">defiler</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">assert</span> <span class="token operator">not</span> file_vide<span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"defiler : file vide !"</span>
+    t<span class="token punctuation">,</span> taille <span class="token operator">=</span> <span class="token builtin">file</span>
+    taille <span class="token operator">-=</span> <span class="token number">1</span>    <span class="token comment"># la file a un élément de moins</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>taille<span class="token punctuation">)</span><span class="token punctuation">:</span>    <span class="token comment"># on décale les éléments d'un cran vers la gauche</span>
+        t<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> t<span class="token punctuation">[</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>t<span class="token punctuation">,</span> taille<span class="token punctuation">)</span>    <span class="token comment"># on retourne la nouvelle file</span>
+</code></pre>
+<!-- Ins&#233;rer ici l'illustration : la file avant et apr&#232;s le d&#233;calage des &#233;l&#233;ments (fl&#232;ches bleues = copie des &#233;l&#233;ments) -->  
+<blockquote>
+<p><strong>NOTE</strong> : Comme pour l’implémentation de la pile par un tableau, il faut soit prévoir une capacité maximale, soit recopier le tableau dans un tableau plus grand lorsque la file est pleine.</p>
+</blockquote>
+<blockquote>
+<p><strong>NOTE</strong> : Après le décalage, le dernier élément (« Charlie ») est répété deux fois, mais seule la première occurrence appartient à la file.</p>
+</blockquote>
+<h3 id="implémentation-par-un-tableau-circulaire">4.2. Implémentation par un tableau circulaire</h3>
+<p>L’implémentation précédente est <strong>coûteuse</strong> si la file est grande puisqu’à chaque retrait, il faut recopier tous les éléments restants. Une implémentation plus efficace consiste à considérer le tableau comme un <strong>anneau</strong> dont la file occupe les éléments de l’indice <code>debut</code> à l’indice <code>fin - 1</code>.</p>
+<p>On ajoute les éléments à l’indice <code>fin</code>, comme pour une pile, mais lorsqu’on arrive à la fin du tableau, on continue à remplir <strong>au début</strong> (si le tableau n’est pas plein). Similairement, on retire les éléments à l’indice <code>debut</code>, et lorsque celui-ci arrive à la fin du tableau, on le replace au début.</p>
+<p>Ainsi, après plusieurs ajouts et retraits, les éléments de la file occupent la fin du tableau puis le début de celui-ci, comme illustré ci-dessous (les éléments verts appartiennent à la file : <code>e1</code>, <code>e2</code>, <code>e3</code>, <code>e4</code>) :</p>
+<!-- Ins&#233;rer ici l'illustration : le tableau sous sa forme habituelle (gauche) et sous forme d'anneau (droite) pour illustrer le terme &#171; tableau circulaire &#187; -->  
+<h3 id="implémentation-par-deux-piles">4.3. Implémentation par deux piles</h3>
+<p>Une autre implémentation d’une file consiste à utiliser <strong>deux piles</strong>, <code>entree</code> et <code>sortie</code> :</p>
+<ul>
+<li>on ajoute les éléments sur la pile <code>entree</code> ;</li>
+<li>on les retire de la pile <code>sortie</code> ;</li>
+<li>si la pile <code>sortie</code> est vide, on y transfère les éléments de la pile <code>entree</code>.</li>
+</ul>
+<p>L’illustration ci-dessous montre les deux piles au départ, puis après avoir ajouté Alice, Bob et Charlie, puis avoir retiré la tête de file (Alice) — ce qui a provoqué le transfert de la pile d’entrée vers la pile de sortie — et enfin après l’arrivée de Denise. On voit qu’à toutes les étapes, les éléments sont dans l’ordre de leur arrivée.</p>
+<!-- Ins&#233;rer ici l'illustration : les deux piles aux diff&#233;rentes &#233;tapes -->  
+<p>L’avantage de cette méthode est que si l’on utilise l’implémentation des piles <code>entree</code> et <code>sortie</code> par des tuples, on obtient une file <strong>sans limitation de capacité</strong>.</p>
+<h2 id="les-dictionnaire">5. Les dictionnaire</h2>
+<p>Un <strong>dictionnaire</strong> associe des <strong>clés</strong> à des <strong>valeurs</strong>, de même qu’un dictionnaire français-anglais, par exemple, associe à chaque mot sa traduction.</p>
+<p>L’interface minimale d’un dictionnaire est la suivante :</p>
+<ul>
+<li><code>creer_dico()</code> : constructeur qui retourne un dictionnaire vide ;</li>
+<li><code>ajouter(d, cle, valeur)</code> : opérateur qui ajoute <code>cle</code> au dictionnaire et l’associe à <code>valeur</code> ;</li>
+<li><code>valeur_cle(d, cle)</code> : accesseur qui retourne la valeur associée à <code>cle</code>, si elle est présente ;</li>
+<li><code>cles_dico(d)</code> : itérateur qui énumère les clés du dictionnaire.</li>
+</ul>
+<p>Le langage Python fournit directement le type structuré <code>dict</code> qui implémente un dictionnaire :</p>
+<ul>
+<li><code>creer_dico()</code> : <code>d = dict()</code> ou <code>d = {}</code></li>
+<li><code>ajouter(d, cle, valeur)</code> : <code>d[cle] = valeur</code></li>
+<li><code>valeur_cle(d, cle)</code> : <code>d[cle]</code></li>
+<li><code>cles_dico(d)</code> : <code>for cle in d:</code></li>
+</ul>
+<p>Il n’y a donc pas d’intérêt particulier à fournir une autre implémentation, sauf éventuellement dans des cas particuliers où les performances ne seraient pas satisfaisantes.</p>
+<h3 id="implémentation-par-une-liste-1">5.1. Implémentation par une liste</h3>
+<p>Hormis l’utilisation directe du <code>dict</code> Python, une implémentation simple consiste à créer une <strong>liste de tuples</strong> <code>(cle, valeur)</code>. L’ajout d’une nouvelle entrée se fait au début et la recherche d’une clé se fait en parcourant la liste.</p>
+<p>Cette méthode est <strong>peu efficace</strong> lorsque la taille du dictionnaire augmente. Elle peut être améliorée s’il existe un ordre sur les clés, en utilisant un tableau classé par ordre croissant de clé et une <strong>recherche dichotomique</strong>.</p>
+<p>L’implémentation est laissée à titre d’<strong>exercices (n° 12 et 33)</strong>.</p>
+<h3 id="implémentation-par-une-table-de-hachage">5.2. Implémentation par une table de hachage</h3>
+<p>Une implémentation plus efficace consiste à utiliser un tableau et à transformer la clé en un <strong>indice</strong> dans le tableau grâce à une <strong>fonction de hachage</strong>. Par exemple, si l’on considère des clés qui sont des chaînes de caractères, une fonction de hachage peut consister à ajouter les codes de chaque caractère, modulo la taille du tableau :</p>
+<pre class=" language-python"><code class="prism  language-python">HTAILLE <span class="token operator">=</span> <span class="token number">189</span>    <span class="token comment"># taille des tables de hachage</span>
+
+<span class="token keyword">def</span> <span class="token function">hachage</span><span class="token punctuation">(</span>cle<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    code <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> car <span class="token keyword">in</span> cle<span class="token punctuation">:</span>
+        code <span class="token operator">+=</span> <span class="token builtin">ord</span><span class="token punctuation">(</span>car<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> code <span class="token operator">%</span> HTAILLE
+</code></pre>
+<p>Cela permet de trouver <strong>directement</strong> l’emplacement d’une clé dans le tableau, sans avoir besoin de le parcourir. Il suffit alors de stocker la valeur associée à la clé à cet indice du tableau.</p>
+<p>Cependant, il est possible que deux clés différentes aient le même code de hachage. On appelle cela une <strong>collision</strong>. Il existe plusieurs méthodes pour traiter les collisions.</p>
+<p>La méthode illustrée ci-dessous consiste à stocker dans chaque élément de la table, <code>t[h]</code>, une <strong>liste des paires</strong> <code>(cle, valeur)</code> qui ont même code de hachage <code>h</code>. Une implémentation est la suivante :</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">creer_dico</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token punctuation">[</span><span class="token boolean">None</span><span class="token punctuation">]</span> <span class="token operator">*</span> HTAILLE    <span class="token comment"># tableau de HTAILLE éléments</span>
+
+<span class="token keyword">def</span> <span class="token function">ajouter_cle</span><span class="token punctuation">(</span>dico<span class="token punctuation">,</span> cle<span class="token punctuation">,</span> valeur<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    h <span class="token operator">=</span> hachage<span class="token punctuation">(</span>cle<span class="token punctuation">)</span>    <span class="token comment"># calculer le code de hachage de la clé</span>
+    <span class="token keyword">if</span> dico<span class="token punctuation">[</span>h<span class="token punctuation">]</span> <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>    <span class="token comment"># si l'entrée du dictionnaire est vide</span>
+        dico<span class="token punctuation">[</span>h<span class="token punctuation">]</span> <span class="token operator">=</span> creer_liste<span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token comment"># l'initialiser avec une liste vide</span>
+    <span class="token comment"># insérer la paire (cle, valeur) en tête de la liste des collisions</span>
+    dico<span class="token punctuation">[</span>h<span class="token punctuation">]</span> <span class="token operator">=</span> inserer<span class="token punctuation">(</span>dico<span class="token punctuation">[</span>h<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>cle<span class="token punctuation">,</span> valeur<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> dico
+
+<span class="token keyword">def</span> <span class="token function">valeur_cle</span><span class="token punctuation">(</span>dico<span class="token punctuation">,</span> cle<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    h <span class="token operator">=</span> hachage<span class="token punctuation">(</span>cle<span class="token punctuation">)</span>    <span class="token comment"># calculer le code de hachage de la clé</span>
+    <span class="token keyword">if</span> dico<span class="token punctuation">[</span>h<span class="token punctuation">]</span> <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>    <span class="token comment"># si l'entrée du dictionnaire est vide</span>
+        <span class="token keyword">return</span> <span class="token boolean">None</span>    <span class="token comment"># None indique que la clé n'est pas présente</span>
+    <span class="token keyword">for</span> c<span class="token punctuation">,</span> v <span class="token keyword">in</span> elements_liste<span class="token punctuation">(</span>dico<span class="token punctuation">[</span>h<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>    <span class="token comment"># parcourir la liste des collisions</span>
+        <span class="token keyword">if</span> cle <span class="token operator">==</span> c<span class="token punctuation">:</span>    <span class="token comment"># si la clé correspond</span>
+            <span class="token keyword">return</span> v    <span class="token comment"># retourner la valeur</span>
+    <span class="token keyword">return</span> <span class="token boolean">None</span>    <span class="token comment"># sinon la clé n'est pas dans le dictionnaire</span>
+
+<span class="token keyword">def</span> <span class="token function">cles_dico</span><span class="token punctuation">(</span>dico<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    t <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>    <span class="token comment"># tableau des clés</span>
+    <span class="token keyword">for</span> liste <span class="token keyword">in</span> dico<span class="token punctuation">:</span>    <span class="token comment"># pour chaque élément du tableau</span>
+        <span class="token keyword">if</span> liste <span class="token keyword">is</span> <span class="token operator">not</span> <span class="token boolean">None</span><span class="token punctuation">:</span>    <span class="token comment"># s'il n'est pas vide</span>
+            <span class="token keyword">for</span> cle<span class="token punctuation">,</span> _ <span class="token keyword">in</span> elements_liste<span class="token punctuation">(</span>liste<span class="token punctuation">)</span><span class="token punctuation">:</span>    <span class="token comment"># parcourir les collisions</span>
+                t<span class="token punctuation">.</span>append<span class="token punctuation">(</span>cle<span class="token punctuation">)</span>    <span class="token comment"># ajouter la clé</span>
+    <span class="token keyword">return</span> t    <span class="token comment"># retourner le tableau des clés</span>
+</code></pre>
+<p>On peut utiliser le dictionnaire de la manière suivante :</p>
+<pre class=" language-python"><code class="prism  language-python">dico <span class="token operator">=</span> creer_dico<span class="token punctuation">(</span><span class="token punctuation">)</span>
+dico <span class="token operator">=</span> ajouter_cle<span class="token punctuation">(</span>dico<span class="token punctuation">,</span> <span class="token string">"Alice"</span><span class="token punctuation">,</span> <span class="token number">1234</span><span class="token punctuation">)</span>
+dico <span class="token operator">=</span> ajouter_cle<span class="token punctuation">(</span>dico<span class="token punctuation">,</span> <span class="token string">"Bob"</span><span class="token punctuation">,</span> <span class="token number">246</span><span class="token punctuation">)</span>
+dico <span class="token operator">=</span> ajouter_cle<span class="token punctuation">(</span>dico<span class="token punctuation">,</span> <span class="token string">"Charlie"</span><span class="token punctuation">,</span> <span class="token number">357</span><span class="token punctuation">)</span>
+
+valeur_cle<span class="token punctuation">(</span>dico<span class="token punctuation">,</span> <span class="token string">"Bob"</span><span class="token punctuation">)</span>     <span class="token comment"># 246</span>
+valeur_cle<span class="token punctuation">(</span>dico<span class="token punctuation">,</span> <span class="token string">"Danny"</span><span class="token punctuation">)</span>   <span class="token comment"># None car la clé n'est pas dans dico</span>
+
+<span class="token keyword">for</span> cle <span class="token keyword">in</span> cles_dico<span class="token punctuation">(</span>dico<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>cle<span class="token punctuation">,</span> valeur_cle<span class="token punctuation">(</span>dico<span class="token punctuation">,</span> cle<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment"># "Bob" 246, "Alice" 1234, "Charlie" 357</span>
+</code></pre>
+<p>image ici</p>
+<blockquote>
+<p><strong>NOTE</strong> : Une bonne fonction de hachage doit <strong>minimiser les risques de collisions</strong>. Celle qui est utilisée ici n’est pas de très bonne qualité. Il existe de nombreuses autres fonctions de hachage que nous ne détaillons pas ici.</p>
+</blockquote>
+<h3 id="étendre-linterface-1">5.3. Étendre l’interface</h3>
+<p>On peut étendre l’interface d’un dictionnaire en autorisant le changement d’une valeur associée à une clé et le retrait d’une clé :</p>
+<ul>
+<li><code>cle_presente(d, cle)</code> : accesseur qui retourne Vrai si la clé est dans le dictionnaire ;</li>
+<li><code>changer_valeur(d, cle, valeur)</code> : opérateur qui remplace la valeur de la clé, si elle existe ;</li>
+<li><code>retirer_cle(d, cle)</code> : opérateur qui retire la clé du dictionnaire, si elle existe.</li>
+</ul>
+<p>En Python, ces opérations sont directement accessibles :</p>
+<ul>
+<li><code>cle_presente(d, cle)</code> : <code>cle in d</code></li>
+<li><code>changer_valeur(d, cle, valeur)</code> : <code>d[cle] = valeur</code></li>
+<li><code>retirer_cle(d, cle)</code> : <code>del d[cle]</code></li>
+</ul>
+<p>Dans l’implémentation par table de hachage illustrée plus haut, comme les listes de collisions sont <strong>immuables</strong>, il faut recréer la nouvelle liste de collisions après avoir changé la valeur ou retiré la clé.</p>
+<h2 id="lessentiel">6. L’essentiel:</h2>
+
+    </div>
+  </div>
+</body>
+
+</html>
