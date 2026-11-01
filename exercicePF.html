@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>exercicePF</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#exercices">Exercices:</a>
+<ul>
+<li><a href="#exercice-1">Exercice 1:</a></li>
+<li><a href="#exercice-2">Exercice 2:</a></li>
+<li><a href="#exercice-3">Exercice 3</a></li>
+<li><a href="#exercice-6-calculatrice-polonaise-inverse">Exercice 6: calculatrice polonaise inverse</a></li>
+<li><a href="#exercice-7">Exercice 7</a></li>
+<li><a href="#exercice-8">Exercice 8</a></li>
+<li><a href="#exercice-9-files-dattente">Exercice 9: files d’attente</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="exercices">Exercices:</h1>
+<p>Dans les deux exercices qui suivent, quelle que soit l’implémentation de la pile, le code suivant:</p>
+<pre class=" language-python"><code class="prism  language-python">`p <span class="token operator">=</span> Pile<span class="token punctuation">(</span><span class="token punctuation">)</span>
+p<span class="token punctuation">.</span>empiler<span class="token punctuation">(</span><span class="token string">"prems"</span><span class="token punctuation">)</span>
+p<span class="token punctuation">.</span>empiler<span class="token punctuation">(</span><span class="token string">"deuz"</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>depiler<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+p<span class="token punctuation">.</span>empiler<span class="token punctuation">(</span><span class="token string">"troiz"</span><span class="token punctuation">)</span>
+<span class="token keyword">while</span> <span class="token operator">not</span> p<span class="token punctuation">.</span>est_vide<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>depiler<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>` 
+</code></pre>
+<p>doit afficher:</p>
+<pre class=" language-python"><code class="prism  language-python">`deuz
+troiz
+prems` 
+</code></pre>
+<h2 id="exercice-1">Exercice 1:</h2>
+<p><strong>Avec une liste de Python</strong></p>
+<p>Implémenter une classe <code>Pile</code> contenant les méthodes <code>est_vide</code>, <code>empiler</code> et <code>depiler</code> à l’aide des méthodes natives sur les listes de Python.</p>
+<h2 id="exercice-2">Exercice 2:</h2>
+<p><strong>Avec une liste chaînée</strong></p>
+<p>Implémenter une classe <code>Pile</code> contenant les méthodes <code>est_vide</code>, <code>empiler</code> et <code>depiler</code> à l’aide d’une liste chaînée:</p>
+<ul>
+<li>empiler un nouvel élément revient à ajouter un élément en tête de liste;</li>
+<li>dépiler un élément revient à supprimer l’élément de tête.</li>
+</ul>
+<p>La classe <code>Pile</code> contient ainsi un seul attribut <code>contenu</code> associé à la liste chaînée contenant les éléments de la pile.</p>
+<h2 id="exercice-3">Exercice 3</h2>
+<p>Implémenter une classe <code>File</code> contenant les méthodes <code>est_vide</code>, <code>enfiler</code> et <code>defiler</code> à l’aide des méthodes natives sur les listes de Python (consulter l’aide sur la méthode <code>pop</code>).</p>
+<p>Liste Python</p>
+<p>Pour une file en revanche, le type <code>list</code> de Python ne fournit pas une bonne implémentation d’une file, car la suppression en début de liste ne se fait pas en temps constant mais en temps linéaire : il faut décaler les éléments un à un.</p>
+<h2 id="exercice-6-calculatrice-polonaise-inverse">Exercice 6: calculatrice polonaise inverse</h2>
+<p>L’écriture polonaise inverse des expressions arithmétiques place l’opérateur après ses opérandes. Cette notation ne nécessite aucune parenthèse ni aucune règle de priorité.</p>
+<p>Ainsi l’expression polonaise inverse décrite par la chaîne de caractères: <code>'1 2 3 * + 4 *'</code> désigne l’expression traditionnellement notée  (1+2*3)*4 .</p>
+<p>Écrire une fonction <code>eval_pol_inv</code> prenant en paramètre une chaîne de caractères représentant une expression en notation polonaise inverse composée d’additions et de multiplications de nombres entiers et renvoyant la valeur de cette expression. On supposera que les éléments de l’expression sont séparés par des espaces.</p>
+<p>Attention: cette fonction ne doit pas renvoyer de résultat (ou <code>None</code>) si l’expression est mal écrite.</p>
+<p><strong>Quelques tests:</strong></p>
+<pre class=" language-python"><code class="prism  language-python">`<span class="token keyword">assert</span> eval_pol_inv<span class="token punctuation">(</span><span class="token string">'2 1 7 + 5 * +'</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">42</span>
+<span class="token keyword">assert</span> eval_pol_inv<span class="token punctuation">(</span><span class="token string">'1 + 2'</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token boolean">None</span>` 
+</code></pre>
+<h2 id="exercice-7">Exercice 7</h2>
+<p>Dans cet exercice, on utilise une classe <code>Pile</code> implémentée avec une liste de Python et possédant ses quatre éléments d’interface usuels:</p>
+<ul>
+<li>Un constructeur qui permet de créer une pile vide, représentée par <code>[]</code> ;</li>
+<li>La méthode <code>est_vide()</code> qui renvoie <code>True</code> si l’objet est une pile ne contenant aucun élément, et <code>False</code> sinon ;</li>
+<li>La méthode <code>empiler</code> qui prend un objet quelconque en paramètre et ajoute cet objet au sommet de la pile. Dans la représentation de la pile dans la console, cet objet apparaît à droite des autres éléments de la pile ;</li>
+<li>La méthode <code>depiler</code> qui renvoie l’objet présent au sommet de la pile et le retire de la pile.</li>
+</ul>
+<p><strong>Exemples:</strong></p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> mapile <span class="token operator">=</span> Pile<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> mapile<span class="token punctuation">.</span>empiler<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> mapile
+<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> mapile<span class="token punctuation">.</span>empiler<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> mapile<span class="token punctuation">.</span>empiler<span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> mapile
+<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">]</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> mapile<span class="token punctuation">.</span>depiler<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token number">50</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> mapile
+<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span>` 
+</code></pre>
+<ol>
+<li>La méthode <code>est_triee</code> ci-dessous renvoie <code>True</code> si, en dépilant tous les éléments un par un , ils sont traités dans l’ordre croissant, et <code>False</code> sinon. Compléter les lignes 6 et 8.</li>
+</ol>
+<pre class=" language-python"><code class="prism  language-python">    `<span class="token keyword">def</span>  est_triee<span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> <span class="token operator">not</span> self<span class="token punctuation">.</span>est_vide<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+            e1 <span class="token operator">=</span> self<span class="token punctuation">.</span>depiler<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">while</span> <span class="token operator">not</span> self<span class="token punctuation">.</span>est_vide<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                e2 <span class="token operator">=</span> self<span class="token punctuation">.</span>depiler<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token keyword">if</span> e1 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> e2 <span class="token punctuation">:</span>
+                    <span class="token keyword">return</span> <span class="token boolean">False</span>
+                e1 <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>` 
+</code></pre>
+<ol start="2">
+<li>
+<p>On crée dans la console la pile <code>A</code> représentée par <code>[1, 2, 3, 4]</code>.</p>
+<p><strong>a.</strong> Donner la valeur renvoyée par l’appel <code>A.est_triee()</code>.</p>
+<p><strong>b.</strong> Donner le contenu de la pile <code>A</code> après l’exécution de cette instruction.</p>
+</li>
+<li>
+<p>On souhaite maintenant écrire le code d’une méthode <code>depileMax</code> d’une pile non vide ne contenant que des nombres entiers et renvoyant le plus grand élément de cette pile en le retirant de la pile.</p>
+<p>Après l’exécution de <code>p.depileMax()</code>, le nombre d’éléments de la pile <code>p</code> diminue donc de 1.</p>
+<p>Compléter les lignes 9 et 11 :</p>
+</li>
+</ol>
+<pre class=" language-python"><code class="prism  language-python">   `<span class="token keyword">def</span>  depileMax<span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+       <span class="token keyword">assert</span> <span class="token operator">not</span> self<span class="token punctuation">.</span>est_vide<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"Pile vide"</span>
+       q <span class="token operator">=</span> Pile<span class="token punctuation">(</span><span class="token punctuation">)</span>
+       maxi <span class="token operator">=</span> self<span class="token punctuation">.</span>depiler<span class="token punctuation">(</span><span class="token punctuation">)</span>
+       <span class="token keyword">while</span> <span class="token operator">not</span> self<span class="token punctuation">.</span>est_vide<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+           elt <span class="token operator">=</span> self<span class="token punctuation">.</span>depiler<span class="token punctuation">(</span><span class="token punctuation">)</span>
+           <span class="token keyword">if</span> maxi <span class="token operator">&lt;</span> elt <span class="token punctuation">:</span>
+               q<span class="token punctuation">.</span>empiler<span class="token punctuation">(</span>maxi<span class="token punctuation">)</span>
+               maxi <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+           <span class="token keyword">else</span> <span class="token punctuation">:</span>
+               <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+       <span class="token keyword">while</span> <span class="token operator">not</span> q<span class="token punctuation">.</span>est_vide<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+           self<span class="token punctuation">.</span>empiler<span class="token punctuation">(</span>q<span class="token punctuation">.</span>depiler<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+       <span class="token keyword">return</span> maxi` 
+</code></pre>
+<ol start="4">
+<li>
+<p>On crée la pile <code>B</code> représentée par <code>[9, -7, 8, 12, 4]</code> et on effectue l’appel <code>B.depileMax()</code>.</p>
+<p><strong>a.</strong> Donner le contenu des piles <code>B</code> et <code>q</code> à la fin de chaque itération de la boucle <code>while</code> de la ligne 5.</p>
+<p><strong>b.</strong> Donner le contenu des piles <code>B</code> et <code>q</code> avant l’exécution de la ligne 14.</p>
+<p><strong>c.</strong> Donner un exemple de pile qui montre que l’ordre des éléments restants n’est pas préservé après l’exécution de <code>depileMax</code>.</p>
+</li>
+<li>
+<p>On donne le code de la fonction <code>traite</code> pile())</p>
+</li>
+</ol>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">traite</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    q <span class="token operator">=</span> Pile<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">while</span> <span class="token operator">not</span> self<span class="token punctuation">.</span>est_vide<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        q<span class="token punctuation">.</span>empile<span class="token punctuation">(</span>self<span class="token punctuation">.</span>depile_max<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">while</span> <span class="token operator">not</span> q<span class="token punctuation">.</span>est_vide<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>empile<span class="token punctuation">(</span>q<span class="token punctuation">.</span>depile<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p><strong>a.</strong> Donner les contenus successifs des piles <code>B</code> et <code>q</code></p>
+<pre><code>-   avant la ligne 3,
+-   avant la ligne 5,
+-   à la fin de l'exécution de la fonction `traite`
+</code></pre>
+<p>lorsque la fonction <code>traite</code> est appelée avec la pile <code>B</code> contenant <code>[1, 6, 4, 3, 7, 2]</code>.</p>
+<p><strong>b.</strong> Expliquer le traitement effectué par cette fonction.</p>
+<h2 id="exercice-8">Exercice 8</h2>
+<blockquote>
+<p>D’après 2022, Centres étrangers, J1, Ex. 2</p>
+</blockquote>
+<p>Un supermarché met en place un système de passage automatique en caisse. Un client scanne les articles à l’aide d’un scanner de code-barres au fur et à mesure qu’il les ajoute dans son panier.</p>
+<p>Les articles s’enregistrent alors dans une structure de données. La structure de données utilisée est une file définie par la classe <code>Panier</code>, avec les primitives habituelles sur la structure de file.</p>
+<p>Pour faciliter la lecture, le code de la classe <code>Panier</code> n’est pas écrit.</p>
+<pre class=" language-python"><code class="prism  language-python">`<span class="token keyword">class</span>  <span class="token class-name">Panier</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span>  <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token string">"Initialise la file comme une file vide."</span>
+
+    <span class="token keyword">def</span>  <span class="token function">est_vide</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token string">"Renvoie True si la file est vide, False sinon."</span>
+
+    <span class="token keyword">def</span>  <span class="token function">enfile</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token string">"Ajoute l'élément e en dernière position de la file, ne renvoie rien."</span>
+
+    <span class="token keyword">def</span>  <span class="token function">defile</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token string">"Retire le premier élément de la file et le renvoie."</span>
+</code></pre>
+<p>Les articles sont représentés par des tuples <code>(code_barre, designation, prix, horaire_scan)</code> où</p>
+<ul>
+<li><code>code_barre</code> est un nombre entier identifiant l’article ;</li>
+<li><code>designation</code> est une chaine de caractères qui pourra être affichée sur le ticket de caisse ;</li>
+<li><code>prix</code> est un nombre décimal donnant le prix d’une unité de cet article ;</li>
+<li><code>horaire_scan</code> est un nombre entier de secondes permettant de connaitre l’heure où l’article a été scanné.</li>
+</ul>
+<p>Le panier d’un client sera donc représenté par une file contenant les articles scannés.</p>
+<ol>
+<li>
+<p>On souhaite ajouter un article dont le tuple est le suivant <code>(31002, "café noir", 1.50, 50525)</code>.</p>
+<p>Écrire le code utilisant une des quatre méthodes ci-dessus permettant d’ajouter l’article à l’objet de classe <code>Panier</code> appelé <code>panier_1</code>.</p>
+</li>
+<li>
+<p>On souhaite définir une méthode <code>remplir</code> de paramètre <code>panier_temp</code> dans la classe <code>Panier</code> permettant de transférer vers la file tout le contenu d’un autre panier <code>panier_temp</code> qui est aussi un objet de type <code>Panier</code>. Recopier et compléter le code de la méthode <code>remplir</code>.</p>
+</li>
+</ol>
+<pre class=" language-python"><code class="prism  language-python">    `<span class="token keyword">def</span>  remplir<span class="token punctuation">(</span>self<span class="token punctuation">,</span> panier_temp<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">while</span> <span class="token operator">not</span> panier_temp<span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">:</span>
+            article <span class="token operator">=</span> panier_temp<span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            self<span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">(</span>article<span class="token punctuation">)</span>` 
+</code></pre>
+<ol start="3">
+<li>
+<p>Pour que le client puisse connaitre à tout moment le montant de son panier, on souhaite ajouter une méthode <code>prix_total</code> (sans paramètres) à la classe <code>Panier</code> qui renvoie la somme des prix de tous les articles présents dans le panier.</p>
+<p>Écrire le code de la méthode <code>prix_total</code>.</p>
+</li>
+</ol>
+<p>Attention, après l’appel de cette méthode, le panier devra toujours contenir ses articles.</p>
+<ol start="4">
+<li>
+<p>Le magasin souhaite connaitre pour chaque client la durée du passage en caisse. Cette durée sera obtenue en faisant la différence entre le champ <code>horaire_scan</code> du dernier article scanné et le champ <code>horaire_scan</code> du premier article scanné dans le panier du client. Un panier vide renverra une durée égale à <code>None</code>. On pourra accepter que le panier soit vide après l’appel de cette méthode.</p>
+<p>Écrire une méthode <code>duree_passage_en_caisse</code> de la classe <code>Panier</code> qui renvoie cette durée.</p>
+</li>
+</ol>
+<h2 id="exercice-9-files-dattente">Exercice 9: files d’attente</h2>
+<p>Dans cet exercice, on se propose d’évaluer le temps d’attente de clients à des guichets, en comparant la solution d’une unique file d’attente et la solution d’une file d’attente par guichet.</p>
+<p>Pour cela, on modélise le temps par une variable globale, qui est incrémentée à chaque tour de boucle. Lorsqu’un nouveau client arrive, il est placé dans une file sous la forme d’un entier égal à la valeur de l’horloge, c’est-à-dire égal à son heure d’arrivée. Lorsqu’un client est servi, c’est-à-dire lorsqu’il sort de sa file d’attente, on obtient son temps d’attente en faisant la soustraction de la valeur courante de l’horloge et de la valeur qui vient d’être retirée de la file.</p>
+<p>L’idée est de faire tourner une telle simulation relativement longtemps, tout en totalisant le nombre de clients servis et le temps d’attente cumulé sur tous les clients. Le rapport de ces deux quantités nous donne le temps d’attente moyen. On peut alors comparer plusieurs stratégies (une ou plusieurs files, choix d’une file au hasard quand il y en a plusieurs, choix de la file où il y a le moins de clients, etc.).</p>
+<p>On se donne un nombre N de guichets (par exemple, N = 5). Pour simuler la disponibilité d’un guichet, on peut se donner un tableau d’entiers <code>dispo</code> de taille N. La valeur de <code>dispo[i]</code> indique le nombre de tours d’hor loge où le guichet <code>i</code> sera occupé. En particulier, lorsque cette valeur vaut 0, cela veut dire que le guichet est libre et peut donc servir un nouveau client. Lorsqu’un client est servi par le guichet 1, on choisit un temps de traitement pour ce client, au hasard entre 0 et N, et on l’affecte à <code>dispo[i]</code>.</p>
+<p>À chaque tour d’horloge, on réalise deux opérations:</p>
+<ul>
+<li>on fait apparaître un nouveau client;</li>
+<li>pour chaque guichet <code>i</code>:
+<ul>
+<li>s’il est disponible, il sert un nouveau client (pris dans sa propre file ou dans l’unique file, selon le modèle), le cas échéant;</li>
+<li>sinon, on décrémente <code>dispo[i]</code>.</li>
+</ul>
+</li>
+</ul>
+<p>Écrire un programme qui effectue une telle simulation, sur 100 tours d’horloge, et affiche au final le temps d’attente moyen. Comparer avec différentes stratégies.</p>
+
+    </div>
+  </div>
+</body>
+
+</html>
