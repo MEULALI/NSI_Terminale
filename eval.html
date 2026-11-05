@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Évaluation NSI - Récursivité</title>
+  <style>
+    /* Styles généraux et mise en page type feuille A4 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: #e2e8f0;
+      color: #1e293b;
+      padding: 30px 15px;
+      line-height: 1.5;
+    }
+
+    .page-container {
+      max-width: 850px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Cartouche d'évaluation */
+    .eval-header {
+      border: 2px solid #0f172a;
+      border-radius: 6px;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+
+    .eval-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 16px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .eval-top-bar .discipline {
+      background-color: #2563eb;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .eval-body {
+      padding: 14px 16px;
+      border-bottom: 1px solid #cbd5e1;
+    }
+
+    .eval-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0f172a;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .eval-meta {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #475569;
+      background-color: #f1f5f9;
+      padding: 6px 12px;
+      border-radius: 4px;
+    }
+
+    .eval-student-bar {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px;
+      padding: 12px 16px;
+      align-items: center;
+    }
+
+    .field-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .field-input {
+      border: 1px dashed #94a3b8;
+      border-radius: 4px;
+      height: 32px;
+      background-color: #fafafa;
+    }
+
+    .grade-box {
+      border: 2px solid #0f172a;
+      border-radius: 4px;
+      padding: 4px;
+      text-align: center;
+    }
+
+    .grade-box .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .grade-box .score {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .eval-instructions {
+      padding: 8px 16px;
+      background-color: #f8fafc;
+      border-top: 1px solid #cbd5e1;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    /* Contenu du sujet */
+    h1 {
+      font-size: 1.4rem;
+      color: #0f172a;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 5px;
+    }
+
+    h4 {
+      font-size: 1.1rem;
+      color: #1e293b;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    pre {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.85rem;
+      margin-bottom: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+
+    /* Style d'impression pour PDF ou papier */
+    @media print {
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .page-container {
+        box-shadow: none;
+        padding: 0;
+      }
+      .eval-header {
+        border-color: #000000;
+      }
+      .eval-top-bar {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border-bottom: 2px solid #000000;
+      }
+      .eval-top-bar .discipline {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 1px solid #000000;
+      }
+      th {
+        background-color: #e2e8f0 !important;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-container">
+    <!-- En-tête / Cartouche -->
+    <header class="eval-header">
+      <div class="eval-top-bar">
+        <span>École Internationale de Carthage | Année 2026-2027</span>
+        <span class="discipline">NSI</span>
+      </div>
+
+      <div class="eval-body">
+        <h2 class="eval-title">Évaluation Sommative : Récursivité</h2>
+        <div class="eval-meta">
+          <span><strong>Niveau :</strong> Terminale NSI</span>
+          <span><strong>Durée :</strong> 55 min</span>
+          <span><strong>Calculatrice :</strong> Interdite</span>
+          <span><strong>Date :</strong> __ / __ / 2026</span>
+        </div>
+      </div>
+
+      <div class="eval-student-bar">
+        <div class="field-box">
+          <label>NOM & Prénom :</label>
+          <div class="field-input"></div>
+        </div>
+        <div class="field-box">
+          <label>Classe / Groupe :</label>
+          <div class="field-input"></div>
+        </div>
+        <div class="grade-box">
+          <div class="label">Note</div>
+          <div class="score">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / 10</div>
+        </div>
+      </div>
+
+      <div class="eval-instructions">
+        <strong>Consignes :</strong> La clarté de la rédaction et la qualité du code Python (nommage, indentation, typage) seront prises en compte.
+      </div>
+    </header>
+
+    <!-- Corps du sujet -->
+    <main>
+      <h1>Exercices1:</h1>
+      <p><em>Cet exercice porte sur la récursivité.</em></p>
+      <p>Au rugby, une équipe peut marquer, pour simplifier :</p>
+      <ul>
+        <li>soit 3 points (pénalité) ;</li>
+        <li>soit 5 points (essai non transformé) ;</li>
+        <li>soit 7 points (essai transformé).</li>
+      </ul>
+
+      <h4 id="partie-a">Partie A</h4>
+      <p>On souhaite savoir s’il est possible d’obtenir un score donné avec uniquement des pénalités, c’est-à-dire avec une succession de « coups » à 3 points.</p>
+      
+      <ol>
+        <li>Écrire une fonction <code>possible_avec_penalites_seules</code> qui prend en paramètre un score et qui renvoie <code>True</code> si le score passé en paramètre peut être marqué uniquement avec des pénalités.</li>
+      </ol>
+
+      <p>Exemple :</p>
+      <pre><code>>>> possible_avec_penalites_seules(15)
+True
+>>> possible_avec_penalites_seules(10)
+False</code></pre>
+
+      <ol start="2">
+        <li>Recopier et compléter le tableau suivant qui précise, pour les scores de 0 à 10, les évolutions du score menant à un total donné et le nombre de façons différentes d’obtenir ce total. Par exemple, pour obtenir un score de 8, en partant de 0, il y a 2 possibilités :</li>
+      </ol>
+
+      <table>
+        <thead>
+          <tr>
+            <th>score</th>
+            <th>liste des solutions</th>
+            <th>nombre de solutions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>[0]</td><td>1</td></tr>
+          <tr><td>1</td><td>[]</td><td>0</td></tr>
+          <tr><td>2</td><td></td><td></td></tr>
+          <tr><td>3</td><td></td><td></td></tr>
+          <tr><td>4</td><td></td><td></td></tr>
+          <tr><td>5</td><td></td><td></td></tr>
+          <tr><td>6</td><td></td><td></td></tr>
+          <tr><td>7</td><td></td><td></td></tr>
+          <tr><td>8</td><td>[0, 5, 8], [0, 3, 8]</td><td>2</td></tr>
+          <tr><td>9</td><td></td><td>1</td></tr>
+          <tr><td>10</td><td>[0, 3, 10], …</td><td>3</td></tr>
+        </tbody>
+      </table>
+
+      <ul>
+        <li>soit l’équipe marque un essai non transformé, atteignant 5 points, puis une pénalité, atteignant 8 points ;</li>
+        <li>soit l’équipe marque une pénalité, atteignant 3 points, puis un essai non transformé, atteignant 8 points.</li>
+      </ul>
+
+      <p>En notant <em>f</em>(<em>n</em>) le nombre de possibilités d’obtenir le score <em>n</em>, on admet que pour <em>n</em> &gt; 6 on a la relation suivante :</p>
+      <p><em>f</em>(<em>n</em>) = <em>f</em>(<em>n</em> − 3) + <em>f</em>(<em>n</em> − 5) + <em>f</em>(<em>n</em> − 7)</p>
+
+      <ol start="3">
+        <li>Vérifier cette relation pour <em>n</em> = 10 à l’aide du tableau établi à la question 2.</li>
+      </ol>
+
+      <p>On veut écrire une fonction récursive <code>nb_solutions</code>, qui prend en paramètre un entier positif quelconque correspondant à un score, et qui renvoie le nombre de façons d’obtenir ce score donné.</p>
+
+      <ol start="4">
+        <li>Déterminer tous les cas de base, pour chaque entier <em>n</em> de 0 à 6, de cette fonction récursive.</li>
+        <li>Écrire la fonction récursive <code>nb_solutions</code>, qui prend en paramètre un entier positif quelconque correspondant à un score, et qui renvoie le nombre de possibilités d’obtenir ce score donné.</li>
+        <li>Lors de l’appel de <code>nb_solutions(score)</code>, on se rend compte que le nombre d’appels récursifs augmente très rapidement lorsque score augmente. Nommer une méthode algorithmique optimisant le nombre d’appels récursifs.</li>
+      </ol>
+
+      <p>On veut écrire une fonction récursive <code>solutions_possibles</code>, qui prend en paramètre un entier positif quelconque correspondant à un score, et qui renvoie la liste composée de toutes les listes représentant les possibilités d’obtenir ce score. Par exemple :</p>
+      
+      <pre><code>>>> solutions_possibles(8)
+[[0, 5, 8], [0, 3, 8]]</code></pre>
+
+      <ol start="7">
+        <li>Déterminer quelles lignes du tableau permettent de construire rapidement la liste renvoyée par l’appel <code>solutions_possibles(11)</code>.</li>
+        <li>Recopier et compléter la fonction <code>solutions_possibles</code> suivante :</li>
+      </ol>
+
+      <pre><code>def solutions_possibles(score):
+    if score &lt; 0:
+        resultat = []
+    elif score == 0:
+        resultat = ...
+    else:
+        resultat = []
+        for coup in [..., 5, ...]:
+            liste = solutions_possibles(score - coup)
+            for solution in liste:
+                solution.append(...)
+            resultat.append(...)
+    return resultat</code></pre>
+    </main>
+  </div>
+
+</body>
+</html>
