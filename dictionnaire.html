@@ -1,0 +1,672 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dictionnaire</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+  <style>
+    /* ==========================================================
+       Design Global & Réinitialisation
+       ========================================================== */
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --primary-light: #dbeafe;
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-600: #475569;
+      --slate-400: #94a3b8;
+      --slate-100: #f1f5f9;
+      --bg-color: #eef2f7;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --code-bg: #0f172a;
+      --code-text: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--slate-800);
+      line-height: 1.7;
+      padding: 40px 20px;
+    }
+
+    /* ==========================================================
+         Conteneur Principal (Effet Fiche / Page)
+       ========================================================== */
+    .page-container {
+      max-width: 960px;
+      margin: 0 auto;
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px -12px rgba(15, 23, 42, 0.12),
+                  0 4px 12px -6px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    /* ==========================================================
+         Bandeau d'en-tête (page de garde)
+       ========================================================== */
+    header.doc-header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #3b82f6 100%);
+      color: #ffffff;
+      padding: 44px 48px 36px;
+      border-bottom: 4px solid #f59e0b;
+    }
+
+    header.doc-header .doc-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    header.doc-header .tag {
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #e0eaff;
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    header.doc-header h1 {
+      color: #ffffff;
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin: 0 0 8px;
+      border: none;
+      padding: 0;
+      letter-spacing: -0.5px;
+    }
+
+    header.doc-header .doc-subtitle {
+      font-size: 1.05rem;
+      color: #cfe0ff;
+      margin-bottom: 22px;
+    }
+
+    header.doc-header .doc-authors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 24px;
+      font-size: 0.95rem;
+      color: #e8eeff;
+    }
+
+    header.doc-header .doc-authors strong {
+      color: #fbbf24;
+    }
+
+    /* ==========================================================
+         Sommaire
+       ========================================================== */
+    nav.toc {
+      background: var(--slate-100);
+      border-bottom: 1px solid var(--border-color);
+      padding: 20px 48px;
+    }
+
+    nav.toc h2 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--slate-600);
+      margin: 0 0 10px;
+      border: none;
+      padding: 0;
+    }
+
+    nav.toc ul {
+      list-style: none;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 8px;
+    }
+
+    nav.toc a {
+      display: inline-block;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 6px 14px;
+      transition: all 0.15s ease;
+    }
+
+    nav.toc a:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    /* ==========================================================
+         Corps du document
+       ========================================================== */
+    main {
+      padding: 40px 48px 48px;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      color: var(--slate-900);
+      margin: 40px 0 18px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--primary);
+      font-weight: 800;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: var(--slate-900);
+      margin: 40px 0 14px;
+      font-weight: 700;
+      padding-left: 14px;
+      border-left: 5px solid var(--primary);
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      color: var(--primary-dark);
+      margin: 30px 0 10px;
+      font-weight: 700;
+    }
+
+    h4 {
+      font-size: 1rem;
+      color: var(--slate-900);
+      margin: 22px 0 8px;
+      font-weight: 700;
+    }
+
+    p {
+      margin-bottom: 14px;
+      font-size: 1rem;
+      color: #334155;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 16px 26px;
+    }
+
+    li {
+      margin-bottom: 7px;
+      color: #334155;
+    }
+
+    li::marker {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    em {
+      color: var(--slate-600);
+      font-style: italic;
+    }
+
+    strong {
+      color: var(--slate-900);
+    }
+
+    blockquote {
+      margin: 20px 0;
+      padding: 16px 22px;
+      background: var(--primary-light);
+      border-left: 5px solid var(--primary);
+      border-radius: 0 10px 10px 0;
+      color: #1e3a8a;
+    }
+
+    blockquote p {
+      margin: 0;
+      color: #1e3a8a;
+      font-style: italic;
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border-color), transparent);
+      margin: 40px 0;
+    }
+
+    /* ==========================================================
+         Blocs de Code (Style IDE)
+       ========================================================== */
+    pre, code {
+      font-family: 'Fira Code', 'Cascadia Code', Consolas, Monaco, 'Courier New', monospace;
+    }
+
+    pre {
+      position: relative;
+      background-color: var(--code-bg);
+      color: var(--code-text);
+      padding: 20px 22px;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      margin: 22px 0 24px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35);
+      border: 1px solid #1e293b;
+      border-left: 4px solid var(--primary);
+    }
+
+    p code, li code, blockquote code {
+      background-color: #eff4ff;
+      color: var(--primary-dark);
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 0.88em;
+      border: 1px solid #d4dded;
+      white-space: nowrap;
+    }
+
+    /* Coloration syntaxique SQL (JetBrains-like) */
+    pre .token.keyword  { color: #c792ea; font-weight: 600; }
+    pre .token.function { color: #82aaff; }
+    pre .token.number   { color: #f78c6c; }
+    pre .token.string   { color: #c3e88d; }
+    pre .token.comment  { color: #6b7d92; font-style: italic; }
+    pre .token.operator { color: #89ddff; }
+    pre .token.boolean  { color: #ff5874; }
+    pre .token.punctuation { color: #a9b7d3; }
+
+    /* ==========================================================
+         Tableaux
+       ========================================================== */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 26px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--border-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+      background-color: #ffffff;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 16px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: linear-gradient(180deg, #f8fafc, #eef2f7);
+      color: var(--slate-900);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.6px;
+      border-bottom: 2px solid var(--primary);
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #fafcff;
+    }
+
+    tbody tr:hover {
+      background-color: #eff4ff;
+    }
+
+    td code {
+      background-color: var(--slate-100);
+      color: var(--primary-dark);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      white-space: nowrap;
+    }
+
+    /* ==========================================================
+         Pied de document
+       ========================================================== */
+    footer.doc-footer {
+      background: var(--slate-100);
+      border-top: 1px solid var(--border-color);
+      padding: 22px 48px;
+      font-size: 0.88rem;
+      color: var(--slate-600);
+      text-align: center;
+    }
+
+    footer.doc-footer em {
+      color: var(--slate-600);
+    }
+
+    /* ==========================================================
+         Adaptation pour l'Impression Papier / PDF
+       ========================================================== */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .page-container {
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        max-width: 100%;
+      }
+      nav.toc { display: none; }
+      header.doc-header {
+        background: var(--primary-dark) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      pre {
+        background-color: #f1f5f9 !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1;
+        border-left: 4px solid #000;
+        box-shadow: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      pre .token, pre .token * {
+        color: #0f172a !important;
+      }
+      th {
+        background-color: #e2e8f0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .table-wrapper {
+        box-shadow: none;
+        overflow: visible;
+      }
+      h2, h3 { break-after: avoid; }
+      pre, table, blockquote { break-inside: avoid; }
+      a { text-decoration: none; color: inherit; }
+    }
+
+    /* ==========================================================
+         Responsive
+       ========================================================== */
+    @media (max-width: 640px) {
+      body { padding: 12px; }
+      header.doc-header { padding: 28px 22px; }
+      nav.toc { padding: 16px 22px; }
+      main { padding: 26px 22px; }
+      footer.doc-footer { padding: 16px 22px; }
+      header.doc-header h1 { font-size: 1.5rem; }
+      p { text-align: left; }
+    }
+  </style>
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#les-dictionnaires">les dictionnaires:</a>
+<ul>
+<li><a href="#exercice1">Exercice1:</a></li>
+<li><a href="#exercice-2">Exercice 2:</a></li>
+<li><a href="#exercice3">Exercice3:</a></li>
+<li><a href="#exercice4">Exercice4:</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="les-dictionnaires">les dictionnaires:</h1>
+<h2 id="exercice1">Exercice1:</h2>
+<p>L’ARN contient le codage des protéines, composées de chaines d’acides aminés.</p>
+<p>Le dictionnaire ci-dessous donne les correspondances entre les codons, des séquences d’ARN constitués de trois nucléotides, et les acides aminés.</p>
+<p>La séquence AUG, par exemple, correspond à la méthionine, notée M.</p>
+<pre class=" language-python"><code class="prism  language-python">`dico_gen <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">'UUU'</span> <span class="token punctuation">:</span> <span class="token string">'F'</span><span class="token punctuation">,</span> <span class="token string">'UUC'</span> <span class="token punctuation">:</span> <span class="token string">'F'</span><span class="token punctuation">,</span> <span class="token string">'UUG'</span> <span class="token punctuation">:</span> <span class="token string">'L'</span><span class="token punctuation">,</span> <span class="token string">'UUA'</span> <span class="token punctuation">:</span> <span class="token string">'L'</span><span class="token punctuation">,</span> <span class="token string">'UCU'</span> <span class="token punctuation">:</span> <span class="token string">'S'</span><span class="token punctuation">,</span>
+<span class="token string">'UCC'</span> <span class="token punctuation">:</span> <span class="token string">'S'</span><span class="token punctuation">,</span> <span class="token string">'UCG'</span> <span class="token punctuation">:</span> <span class="token string">'S'</span><span class="token punctuation">,</span> <span class="token string">'UCA'</span> <span class="token punctuation">:</span> <span class="token string">'S'</span><span class="token punctuation">,</span> <span class="token string">'UAU'</span> <span class="token punctuation">:</span> <span class="token string">'Y'</span><span class="token punctuation">,</span> <span class="token string">'UAC'</span> <span class="token punctuation">:</span> <span class="token string">'Y'</span><span class="token punctuation">,</span>
+<span class="token string">'UAG'</span> <span class="token punctuation">:</span> <span class="token string">'X'</span><span class="token punctuation">,</span> <span class="token string">'UAA'</span> <span class="token punctuation">:</span> <span class="token string">'X'</span><span class="token punctuation">,</span> <span class="token string">'UGU'</span> <span class="token punctuation">:</span> <span class="token string">'C'</span><span class="token punctuation">,</span> <span class="token string">'UGC'</span> <span class="token punctuation">:</span> <span class="token string">'C'</span><span class="token punctuation">,</span> <span class="token string">'UGG'</span> <span class="token punctuation">:</span> <span class="token string">'W'</span><span class="token punctuation">,</span>
+<span class="token string">'UGA'</span> <span class="token punctuation">:</span> <span class="token string">'X'</span><span class="token punctuation">,</span> <span class="token string">'CUU'</span> <span class="token punctuation">:</span> <span class="token string">'L'</span><span class="token punctuation">,</span> <span class="token string">'CUC'</span> <span class="token punctuation">:</span> <span class="token string">'L'</span><span class="token punctuation">,</span> <span class="token string">'CUG'</span> <span class="token punctuation">:</span> <span class="token string">'L'</span><span class="token punctuation">,</span> <span class="token string">'CUA'</span> <span class="token punctuation">:</span> <span class="token string">'L'</span><span class="token punctuation">,</span>
+<span class="token string">'CCU'</span> <span class="token punctuation">:</span> <span class="token string">'P'</span><span class="token punctuation">,</span> <span class="token string">'CCC'</span> <span class="token punctuation">:</span> <span class="token string">'P'</span><span class="token punctuation">,</span> <span class="token string">'CCG'</span> <span class="token punctuation">:</span> <span class="token string">'P'</span><span class="token punctuation">,</span> <span class="token string">'CCA'</span> <span class="token punctuation">:</span> <span class="token string">'P'</span><span class="token punctuation">,</span> <span class="token string">'CGU'</span> <span class="token punctuation">:</span> <span class="token string">'R'</span><span class="token punctuation">,</span>
+<span class="token string">'CGC'</span> <span class="token punctuation">:</span> <span class="token string">'R'</span><span class="token punctuation">,</span> <span class="token string">'CGG'</span> <span class="token punctuation">:</span> <span class="token string">'R'</span><span class="token punctuation">,</span> <span class="token string">'CGA'</span> <span class="token punctuation">:</span> <span class="token string">'R'</span><span class="token punctuation">,</span> <span class="token string">'CAU'</span> <span class="token punctuation">:</span> <span class="token string">'H'</span><span class="token punctuation">,</span> <span class="token string">'CAC'</span> <span class="token punctuation">:</span> <span class="token string">'H'</span><span class="token punctuation">,</span>
+<span class="token string">'CAG'</span> <span class="token punctuation">:</span> <span class="token string">'Q'</span><span class="token punctuation">,</span> <span class="token string">'CAA'</span> <span class="token punctuation">:</span> <span class="token string">'Q'</span><span class="token punctuation">,</span> <span class="token string">'ACU'</span> <span class="token punctuation">:</span> <span class="token string">'T'</span><span class="token punctuation">,</span> <span class="token string">'ACC'</span> <span class="token punctuation">:</span> <span class="token string">'T'</span><span class="token punctuation">,</span> <span class="token string">'ACG'</span> <span class="token punctuation">:</span> <span class="token string">'T'</span><span class="token punctuation">,</span>
+<span class="token string">'ACA'</span> <span class="token punctuation">:</span> <span class="token string">'T'</span><span class="token punctuation">,</span> <span class="token string">'AUG'</span> <span class="token punctuation">:</span> <span class="token string">'M'</span><span class="token punctuation">,</span> <span class="token string">'AUU'</span> <span class="token punctuation">:</span> <span class="token string">'I'</span><span class="token punctuation">,</span> <span class="token string">'AUC'</span> <span class="token punctuation">:</span> <span class="token string">'I'</span><span class="token punctuation">,</span> <span class="token string">'AUA'</span> <span class="token punctuation">:</span> <span class="token string">'I'</span><span class="token punctuation">,</span>
+<span class="token string">'AAU'</span> <span class="token punctuation">:</span> <span class="token string">'N'</span><span class="token punctuation">,</span> <span class="token string">'AAC'</span> <span class="token punctuation">:</span> <span class="token string">'N'</span><span class="token punctuation">,</span> <span class="token string">'AAG'</span> <span class="token punctuation">:</span> <span class="token string">'K'</span><span class="token punctuation">,</span> <span class="token string">'AAA'</span> <span class="token punctuation">:</span> <span class="token string">'K'</span><span class="token punctuation">,</span> <span class="token string">'AGU'</span> <span class="token punctuation">:</span> <span class="token string">'S'</span><span class="token punctuation">,</span>
+<span class="token string">'AGC'</span> <span class="token punctuation">:</span> <span class="token string">'S'</span><span class="token punctuation">,</span> <span class="token string">'AGG'</span> <span class="token punctuation">:</span> <span class="token string">'R'</span><span class="token punctuation">,</span> <span class="token string">'AGA'</span> <span class="token punctuation">:</span> <span class="token string">'R'</span><span class="token punctuation">,</span> <span class="token string">'GUU'</span> <span class="token punctuation">:</span> <span class="token string">'V'</span><span class="token punctuation">,</span> <span class="token string">'GUC'</span> <span class="token punctuation">:</span> <span class="token string">'V'</span><span class="token punctuation">,</span>
+<span class="token string">'GUG'</span> <span class="token punctuation">:</span> <span class="token string">'V'</span><span class="token punctuation">,</span> <span class="token string">'GUA'</span> <span class="token punctuation">:</span> <span class="token string">'V'</span><span class="token punctuation">,</span> <span class="token string">'GCU'</span> <span class="token punctuation">:</span> <span class="token string">'A'</span><span class="token punctuation">,</span> <span class="token string">'GCC'</span> <span class="token punctuation">:</span> <span class="token string">'A'</span><span class="token punctuation">,</span> <span class="token string">'GCG'</span> <span class="token punctuation">:</span> <span class="token string">'A'</span><span class="token punctuation">,</span>
+<span class="token string">'GCA'</span> <span class="token punctuation">:</span> <span class="token string">'A'</span><span class="token punctuation">,</span> <span class="token string">'GGU'</span> <span class="token punctuation">:</span> <span class="token string">'G'</span><span class="token punctuation">,</span> <span class="token string">'GGC'</span> <span class="token punctuation">:</span> <span class="token string">'G'</span><span class="token punctuation">,</span> <span class="token string">'GGG'</span> <span class="token punctuation">:</span> <span class="token string">'G'</span><span class="token punctuation">,</span> <span class="token string">'GGA'</span> <span class="token punctuation">:</span> <span class="token string">'G'</span><span class="token punctuation">,</span>
+<span class="token string">'GAU'</span> <span class="token punctuation">:</span> <span class="token string">'D'</span><span class="token punctuation">,</span> <span class="token string">'GAC'</span> <span class="token punctuation">:</span> <span class="token string">'D'</span><span class="token punctuation">,</span> <span class="token string">'GAG'</span> <span class="token punctuation">:</span> <span class="token string">'E'</span><span class="token punctuation">,</span> <span class="token string">'GAA'</span> <span class="token punctuation">:</span> <span class="token string">'E'</span><span class="token punctuation">}</span>` 
+</code></pre>
+<p>Écrire une fonction <code>traduction</code> qui traduit une chaine d’ARN en protéine. On suppose que la longueur de la chaine d’ARN est un multiple de trois. Ainsi, <code>traduction('UUCAGUGGG')</code> renverra <code>'FSG'</code>.</p>
+<h2 id="exercice-2">Exercice 2:</h2>
+<p>Une ville souhaite gérer son parc de vélos en location partagée. L’ensemble de la flotte de vélos est stocké dans une table de données représentée en langage Python par un dictionnaire contenant des associations de type <code>id_velo : dict_velo</code> où <code>id_velo</code> est un nombre entier compris entre 1 et 199 qui correspond à l’identifiant unique du vélo et <code>dict_velo</code> est un dictionnaire dont les clés sont : <code>"type"</code>, <code>"etat"</code>, <code>"station"</code>. Les valeurs associées aux clés <code>"type"</code>, <code>"etat"</code>, <code>"station"</code> de <code>dict_velo</code> sont de type chaînes de caractères ou nombre entier :</p>
+<ul>
+<li><code>"type"</code> : chaîne de caractères qui peut prendre la valeur <code>"electrique"</code> ou <code>"classique"</code>;</li>
+<li><code>"état"</code> : nombre entier qui peut prendre la valeur 1 si le vélo est disponible, 0 si le vélo est en déplacement, -1 si le vélo est en panne;</li>
+<li><code>"station"</code> : chaînes de caractères qui identifie la station où est garé le vélo.</li>
+</ul>
+<p>Dans le cas où le vélo est en déplacement ou en panne, <code>"station"</code> correspond à celle où il a été dernièrement stationné. Voici un extrait de la table de données :</p>
+<pre class=" language-python"><code class="prism  language-python">`flotte <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token number">12</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">"type"</span> <span class="token punctuation">:</span> <span class="token string">"electrique"</span><span class="token punctuation">,</span> <span class="token string">"etat"</span> <span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"station"</span> <span class="token punctuation">:</span> <span class="token string">"Prefecture"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token number">80</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">"type"</span> <span class="token punctuation">:</span> <span class="token string">"classique"</span><span class="token punctuation">,</span> <span class="token string">"etat"</span> <span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"station"</span> <span class="token punctuation">:</span> <span class="token string">"Saint-Leu"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token number">45</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">"type"</span> <span class="token punctuation">:</span> <span class="token string">"classique"</span><span class="token punctuation">,</span> <span class="token string">"etat"</span> <span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"station"</span> <span class="token punctuation">:</span> <span class="token string">"Baraban"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token number">41</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">"type"</span> <span class="token punctuation">:</span> <span class="token string">"classique"</span><span class="token punctuation">,</span> <span class="token string">"etat"</span> <span class="token punctuation">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"station"</span> <span class="token punctuation">:</span> <span class="token string">"Citadelle"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token number">26</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">"type"</span> <span class="token punctuation">:</span> <span class="token string">"classique"</span><span class="token punctuation">,</span> <span class="token string">"etat"</span> <span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"station"</span> <span class="token punctuation">:</span> <span class="token string">"Coliseum"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token number">28</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">"type"</span> <span class="token punctuation">:</span> <span class="token string">"electrique"</span><span class="token punctuation">,</span> <span class="token string">"etat"</span> <span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"station"</span> <span class="token punctuation">:</span> <span class="token string">"Coliseum"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token number">74</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">"type"</span> <span class="token punctuation">:</span> <span class="token string">"electrique"</span><span class="token punctuation">,</span> <span class="token string">"etat"</span> <span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"station"</span> <span class="token punctuation">:</span> <span class="token string">"Jacobins"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token number">13</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">"type"</span> <span class="token punctuation">:</span> <span class="token string">"classique"</span><span class="token punctuation">,</span> <span class="token string">"etat"</span> <span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"station"</span> <span class="token punctuation">:</span> <span class="token string">"Citadelle"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token number">83</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">"type"</span> <span class="token punctuation">:</span> <span class="token string">"classique"</span><span class="token punctuation">,</span> <span class="token string">"etat"</span> <span class="token punctuation">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"station"</span> <span class="token punctuation">:</span> <span class="token string">"Saint-Leu"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token number">22</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">"type"</span> <span class="token punctuation">:</span> <span class="token string">"electrique"</span><span class="token punctuation">,</span> <span class="token string">"etat"</span> <span class="token punctuation">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"station"</span> <span class="token punctuation">:</span> <span class="token string">"Joffre"</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>` 
+</code></pre>
+<p><code>flotte</code> étant une variable globale du programme.</p>
+<p>Toutes les questions de cet exercice se réfèrent à l’extrait de la table flotte fourni ci-dessus.</p>
+<ol>
+<li>
+<p><strong>a.</strong> Que renvoie l’instruction <code>flotte[26]</code> ?</p>
+<p><strong>b.</strong> Que renvoie l’instruction <code>flotte[80]["etat"]</code> ?</p>
+<p><strong>c.</strong> Que renvoie l’instruction <code>flotte[99]["etat"]</code> ?</p>
+</li>
+<li>
+<p>Voici le script d’une fonction :</p>
+<pre class=" language-python"><code class="prism  language-python">def</span>  proposition<span class="token punctuation">(</span>choix<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> v <span class="token keyword">in</span> flotte<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> flotte<span class="token punctuation">[</span>v<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"type"</span><span class="token punctuation">]</span> <span class="token operator">==</span> choix <span class="token operator">and</span> flotte<span class="token punctuation">[</span>v<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"etat"</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> flotte<span class="token punctuation">[</span>v<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"station"</span><span class="token punctuation">]</span>` 
+</code></pre>
+<p><strong>a.</strong> Quelles sont les valeurs possibles de la variable <code>choix</code> ?</p>
+<p><strong>b.</strong> Expliquer ce que renvoie la fonction lorsque l’on choisit comme paramètre l’une des valeurs possibles de la variable <code>choix</code>.</p>
+</li>
+<li>
+<p><strong>a.</strong> Écrire un script en langage Python qui affiche les identifiants <code>(id_velo)</code> de tous les vélos disponibles à la station<code>"Citadelle"</code>.</p>
+<p><strong>b.</strong> Écrire un script en langage Python qui permet d’afficher l’identifiant <code>(id_velo)</code> et la station de tous les vélos électriques qui ne sont pas en panne.</p>
+</li>
+<li>
+<p>On dispose d’une table de données des positions GPS de toutes les stations, dont un extrait est donné ci-dessous. Cette table est stockée sous forme d’un dictionnaire. Chaque élément du dictionnaire est du type: <code>'nom de la station' : (latitude, longitude)</code>:</p>
+</li>
+</ol>
+<pre class=" language-python"><code class="prism  language-python">    stations <span class="token operator">=</span> <span class="token punctuation">{</span>
+        <span class="token string">'Prefecture'</span> <span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token number">49.8905</span><span class="token punctuation">,</span> <span class="token number">2.2967</span><span class="token punctuation">)</span> <span class="token punctuation">,</span>
+        <span class="token string">'Saint-Leu'</span> <span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token number">49.8982</span><span class="token punctuation">,</span> <span class="token number">2.3017</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">'Coliseum'</span> <span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token number">49.8942</span><span class="token punctuation">,</span> <span class="token number">2.2874</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">'Jacobins'</span> <span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token number">49.8912</span><span class="token punctuation">,</span> <span class="token number">2.3016</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p>on <strong>admet</strong> que l’on dispose d’une fonction <code>distance</code> permettant de renvoyer la distance en mètres entre deux positions données par leurs coordonnées GPS (latitude et longitude).</p>
+<p>Cette fonction prend en paramètre deux tuples représentant les coordonnées des deux positions GPS et renvoie un nombre entier représentant cette distance en mètres.</p>
+<pre><code>Par exemple, `distance((49.8905, 2.2967), (49.8912, 2.3016))` renvoie `9591`.
+</code></pre>
+<p>Écrire une fonction qui prend en paramètre les coordonnées GPS de l’utilisateur sous forme d’un tuple et qui renvoie, pour chaque station située à moins de 800 mètres de l’utilisateur :</p>
+<pre><code>-   le nom de la station ;
+-   la distance entre l'utilisateur et la station ;
+-   les identifiants des vélos disponibles dans cette station.
+
+Une station où aucun vélo n’est disponible ne doit pas être affichée.
+</code></pre>
+<h2 id="exercice3">Exercice3:</h2>
+<p>La cryptographie est un ensemble de techniques permettant de chiffrer un message.</p>
+<p>Une technique de cryptographie consiste à mélanger les lettres d’un alphabet et à réécrire le message avec ces permutations. En Python, on peut créer un dictionnaire dans lequel les clés sont les lettres de l’alphabet et les valeurs sont celles de l’alphabet mélangé.</p>
+<p>Exemple</p>
+<p>Par exemple, si l’alphabet contient les 4 lettres A, B, C et D, et si le dictionnaire de l’alphabet mélangé est</p>
+<pre class=" language-python"><code class="prism  language-python">`alpha <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"A"</span><span class="token punctuation">:</span> <span class="token string">"B"</span><span class="token punctuation">,</span> <span class="token string">"B"</span><span class="token punctuation">:</span> <span class="token string">"D"</span><span class="token punctuation">,</span> <span class="token string">"C"</span><span class="token punctuation">:</span> <span class="token string">"A"</span><span class="token punctuation">,</span> <span class="token string">"D"</span><span class="token punctuation">:</span> <span class="token string">"C"</span><span class="token punctuation">}</span>` 
+</code></pre>
+<p>la chaine de caractères <code>"BAC"</code> sera chiffrée <code>"DBA"</code>.</p>
+<p>Un tel dictionnaire sera appelé <strong>dictionnaire de chiffrement</strong>.</p>
+<ol>
+<li>
+<p>On souhaite chiffrer un message écrit avec l’alphabet A, B, C, D, E, F, G à l’aide du dictionnaire <code>alpha ={"A": "B", "B": "D", "C": "A", "D": "C", "E": "F", "F": "G", "G": "E"}</code></p>
+<p><strong>a.</strong> Quelle est la valeur associée à la clé <code>"D"</code> ? En Python, comment l’obtenir ?</p>
+<p><strong>b.</strong> Chiffrer la chaine de caractères <code>"BAGAGE"</code> avec le dictionnaire <code>alpha</code>.</p>
+</li>
+<li>
+<p>On considère qu’un mot est une chaine de caractères (un objet de type <code>str</code>) écrite uniquement avec les 26 lettres de l’alphabet en majuscule. Par exemple, <code>"ARBRE"</code> est un mot et <code>"L'ARBRE !"</code> n’est pas un mot à cause des caractères : <code>"'"</code>, <code>" "</code>(espace) et <code>"!"</code>.</p>
+<p>Écrire une fonction <code>chiffre</code> qui prend en paramètres <code>mot</code> un mot et <code>alpha</code> un dictionnaire de chiffrement, telle que <code>chiffre(mot, alpha)</code> renvoie <code>mot</code> sous forme de chaine chiffrée avec le dictionnaire de chiffrement <code>alpha</code>.</p>
+</li>
+<li>
+<p>On souhaite déchiffrer un mot chiffré avec cette méthode.</p>
+<p><strong>a.</strong> Si un mot est chiffré avec le dictionnaire de chiffrement <code>alpha = {"A": "B", "B": "D", "C": "A", "D": "C", "E": "F", "F": "G", "G": "E"}</code>, donner un dictionnaire permettant de le déchiffrer.</p>
+<p><strong>b.</strong> Écrire une fonction en Python appelée <code>dico_dechiffrement</code> qui prend en paramètre <code>dico</code> un dictionnaire de chiffrement et qui renvoie un dictionnaire permettant le déchiffrement. On pourra s’inspirer du code incomplet ci-dessous ou proposer une autre solution :</p>
+</li>
+</ol>
+<pre class=" language-python"><code class="prism  language-python">    `<span class="token keyword">def</span>  dico_dechiffrement<span class="token punctuation">(</span>dico<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        nouveau <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token keyword">for</span> lettre <span class="token keyword">in</span> dico<span class="token punctuation">:</span>
+            code <span class="token operator">=</span> dico<span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span>
+            nouveau<span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+        <span class="token keyword">return</span> nouveau` 
+</code></pre>
+<p><strong>c.</strong> Écrire une fonction telle que <code>dechiffre(mot_chiffre, dico)</code> renvoie le mot décodé, quand <code>mot_chiffre</code> est chiffré par le dictionnaire de chiffrement <code>dico</code>. On utilisera les fonctions écrites dans les questions précédentes.</p>
+<ol start="4">
+<li>
+<p>On souhaite à présent créer un dictionnaire de chiffrement. Écrire une fonction <code>dico_chiffrement</code> qui prend en paramètre <code>alphabet</code> un tableau de lettres et qui renvoie un dictionnaire de chiffrement dont les clés sont les lettres du tableau <code>alphabet</code> et les valeurs sont les lettres du tableau alphabet mélangées.</p>
+<p>On pourra utiliser la fonction <code>shuffle</code> du module <code>random</code> qui mélange en place un tableau. Par exemple, on a :</p>
+</li>
+</ol>
+<pre class=" language-python"><code class="prism  language-python"> <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> tableau <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"A"</span><span class="token punctuation">,</span> <span class="token string">"B"</span><span class="token punctuation">,</span> <span class="token string">"C"</span><span class="token punctuation">,</span> <span class="token string">"D"</span><span class="token punctuation">]</span>
+ <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> shuffle<span class="token punctuation">(</span>tableau<span class="token punctuation">)</span>
+ <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> tableau
+ <span class="token punctuation">[</span><span class="token string">"B"</span><span class="token punctuation">,</span> <span class="token string">"A"</span><span class="token punctuation">,</span> <span class="token string">"D"</span><span class="token punctuation">,</span> <span class="token string">"C"</span><span class="token punctuation">]</span>
+</code></pre>
+<h2 id="exercice4">Exercice4:</h2>
+<p>Afin d’organiser les répertoires et les fichiers sur un disque dur, une structure arborescente est utilisée. Les fichiers sont dans des répertoires qui sont eux-mêmes dans d’autres répertoires, etc.</p>
+<p>Dans une arborescence, chaque répertoire peut contenir des fichiers et des répertoires, qui sont identifiés par leur nom. Le contenu d’un répertoire est modélisé par la structure de données <strong>dictionnaire</strong>. Les clés de ce dictionnaire sont des chaines de caractères donnant le nom des fichiers et des répertoires contenus.</p>
+<p>Un répertoire</p>
+<p>Un répertoire est représenté par un dictionnaire dont chaque clé est :</p>
+<ul>
+<li>soit un nom de sous répertoire : la valeur associée est alors un dictionnaire représentant le contenu de ce sous répertoire.</li>
+<li>soit un nom de fichier : la valeur associée est alors un entier, représentant la taille du fichier en ko.</li>
+</ul>
+<p>Un fichier est donc une clé d’un répertoire(dictionnaire) dont la valeur associée est un entier.</p>
+<p>Exemple illustré</p>
+<p>Le répertoire appelé <code>Téléchargements</code> contient deux fichiers <code>rapport.pdf</code> et <code>jingle.mp3</code> ainsi qu’un répertoire <code>Images</code> contenant simplement le fichier <code>logo.png</code>.</p>
+<p>Il est représenté ci-dessous.</p>
+<p><a href="https://cgouygou.github.io/TNSI/T01_StructuresDonnees/images/22J1G11_ex3.png"><img src="https://cgouygou.github.io/TNSI/T01_StructuresDonnees/images/22J1G11_ex3.png" alt=""></a></p>
+<p>Ce répertoire <code>Téléchargements</code> est modélisé en Python par le dictionnaire suivant :</p>
+<pre class=" language-python"><code class="prism  language-python">`<span class="token punctuation">{</span><span class="token string">"Images"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">"logo.png"</span><span class="token punctuation">:</span> <span class="token number">36</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token string">"rapport.pdf"</span><span class="token punctuation">:</span> <span class="token number">450</span><span class="token punctuation">,</span> <span class="token string">"jingle.mp3"</span><span class="token punctuation">:</span> <span class="token number">4800</span><span class="token punctuation">}</span>
+</code></pre>
+<p>Les valeurs numériques sont exprimées en ko (kilo-octets).</p>
+<p><code>"logo.png": 36</code> signifie que le fichier <code>logo.png</code> occupe un espace mémoire de 36 ko sur le disque dur.</p>
+<p>On rappelle, ci-dessous, quelques commandes sur l’utilisation d’un dictionnaire :</p>
+<ul>
+<li><code>dico = dict()</code> crée un dictionnaire vide appelé <code>dico</code>,</li>
+<li><code>dico[cle] = contenu</code> met la valeur <code>contenu</code> pour la clé <code>cle</code> dans le dictionnaire <code>dico</code>,</li>
+<li><code>dico[cle]</code> renvoie la valeur associée à la clé <code>cle</code> dans le dictionnaire <code>dico</code>,</li>
+<li><code>cle in dico</code> renvoie un booléen indiquant si la clé <code>cle</code> est présente dans le dictionnaire <code>dico</code>.</li>
+<li><code>for cle in dico:</code> permet d’itérer sur les clés d’un dictionnaire.</li>
+<li><code>len(dico)</code> renvoie le nombre de clés d’un dictionnaire.</li>
+</ul>
+<p>L’<strong>adresse</strong> d’un fichier ou d’un répertoire correspond au nom de tous les répertoires à parcourir depuis la racine afin d’accéder au fichier ou au répertoire. Cette adresse est modélisée en Python par la liste des noms de répertoire à parcourir pour y accéder.</p>
+<p>Par exemple, l’adresse du répertoire : <code>/home/pierre/Documents/</code> est modélisée par la liste <code>["home", "pierre", "Documents"]</code>.</p>
+<ol>
+<li>Dessiner l’arbre donné par le dictionnaire <code>docs</code> suivant, qui correspond au répertoire <code>"Documents"</code>.</li>
+</ol>
+<pre class=" language-python"><code class="prism  language-python">    `docs <span class="token operator">=</span> <span class="token punctuation">{</span>
+        <span class="token string">"Administratif"</span><span class="token punctuation">:</span><span class="token punctuation">{</span>
+            <span class="token string">"certificat_JDC.pdf"</span><span class="token punctuation">:</span> <span class="token number">1500</span><span class="token punctuation">,</span>
+            <span class="token string">"attestation_recensement.pdf"</span><span class="token punctuation">:</span> <span class="token number">850</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token string">"Cours"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+            <span class="token string">"NSI"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+                <span class="token string">"TP.html"</span><span class="token punctuation">:</span> <span class="token number">60</span><span class="token punctuation">,</span>
+                <span class="token string">"dm.odt"</span><span class="token punctuation">:</span> <span class="token number">345</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token string">"Philo"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+                <span class="token string">"Tractatus_logico-philosophicus.epub"</span><span class="token punctuation">:</span> <span class="token number">2600</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token string">"liste_de_courses.txt"</span><span class="token punctuation">:</span> <span class="token number">24</span>
+    <span class="token punctuation">}</span> 
+</code></pre>
+<ol start="2">
+<li>
+<p>On donne la fonction <code>parcourt</code> suivante qui prend en paramètres un répertoire racine et une liste représentant une adresse, et qui renvoie le contenu du répertoire cible correspondant à l’adresse.</p>
+<p>Exemple : Si la variable <code>docs</code> contient le dictionnaire de l’exemple de la question 1 alors <code>parcourt(docs, ["Cours", "Philo"])</code> renvoie le dictionnaire <code>{"Tractatus_logico-philosophicus.epub": 2600}</code>.</p>
+<p><strong>a.</strong> Recopier et compléter la ligne 4:</p>
+<pre class=" language-python"><code class="prism  language-python">`<span class="token keyword">def</span>  parcourt<span class="token punctuation">(</span>racine<span class="token punctuation">,</span> adr<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    repertoire <span class="token operator">=</span> racine
+    <span class="token keyword">for</span> nom_repertoire <span class="token keyword">in</span> adr<span class="token punctuation">:</span>
+        repertoire <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">return</span> repertoire` 
+</code></pre>
+<p><strong>b.</strong> Soit la fonction suivante :</p>
+<pre class=" language-python"><code class="prism  language-python">`<span class="token keyword">def</span>  affiche<span class="token punctuation">(</span>racine<span class="token punctuation">,</span> adr<span class="token punctuation">,</span> nom_fichier<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    repertoire <span class="token operator">=</span> parcourt<span class="token punctuation">(</span>racine<span class="token punctuation">,</span> adr<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>repertoire<span class="token punctuation">[</span>nom_fichier<span class="token punctuation">]</span><span class="token punctuation">)</span>` 
+</code></pre>
+</li>
+</ol>
+<p>Qu’affiche l’instruction <code>affiche(docs, ["Cours", "NSI"], "TP.html")</code> sachant que la variable <code>docs</code> contient le dictionnaire de la question 1 ?</p>
+<ol start="3">
+<li>
+<p><strong>a.</strong> La fonction <code>ajoute_fichier</code> suivante, de paramètres <code>racine</code>, <code>adr</code>, <code>nom_fichier</code> et <code>taille</code>, ajoute au dictionnaire <code>racine</code>, à l’adresse <code>adr</code>, la clé <code>nom_fichier</code> associé à la valeur <code>taille</code>.</p>
+<p>Une ligne de la fonction donnée ci-dessous contient une erreur. Laquelle ? Proposer une correction.</p>
+</li>
+</ol>
+<pre class=" language-python"><code class="prism  language-python">    `<span class="token keyword">def</span>  ajoute_fichier<span class="token punctuation">(</span>racine<span class="token punctuation">,</span> adr<span class="token punctuation">,</span> nom_fichier<span class="token punctuation">,</span> taille<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        repertoire <span class="token operator">=</span> parcourt<span class="token punctuation">(</span>racine<span class="token punctuation">,</span> adr<span class="token punctuation">)</span>
+        taille <span class="token operator">=</span> repertoire<span class="token punctuation">[</span>nom_fichier<span class="token punctuation">]</span>` 
+</code></pre>
+<p><strong>b.</strong> Écrire une fonction <code>ajoute_repertoire</code> de paramètres <code>racine</code>, <code>adr</code> et <code>nom_repertoire</code> qui crée un dictionnaire représentant un répertoire vide appelé <code>nom_repertoire</code> dans le dictionnaire <code>racine</code> à l’adresse <code>adr</code>.</p>
+<ol start="4">
+<li>
+<p><strong>a.</strong></p>
+<p><code>isinstance</code> pour vérifier le type d’une variable</p>
+<p><code>isinstance(variable, A)</code> renvoie <code>True</code> si <code>variable</code> est de type <code>A</code> et <code>False</code> sinon.</p>
+<p><code>A</code> peut être le type <code>int</code>, <code>dict</code> ou tout autre type Python.</p>
+<p>Écrire une fonction <code>est_fichier</code> de paramètres <code>repertoire</code> et <code>cle</code>, où <code>cle</code> est une clé du dictionnaire <code>repertoire</code>, qui détermine si <code>cle</code> correspond à un fichier ou non. Si <code>cle</code> n’est pas une clé de <code>repertoire</code>, la fonction doit provoquer une erreur.</p>
+<p>On pourra compléter le code suivant ou en proposer un autre.</p>
+</li>
+</ol>
+<pre class=" language-python"><code class="prism  language-python">  `<span class="token keyword">def</span>  est_fichier<span class="token punctuation">(</span>repertoire<span class="token punctuation">,</span> cle<span class="token punctuation">)</span><span class="token punctuation">:</span>
+      <span class="token keyword">return</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>` 
+</code></pre>
+<p><strong>b.</strong> Écrire une fonction <code>taille</code> de paramètre <code>racine</code> qui prend en paramètre un dictionnaire <code>racine</code> modélisant un répertoire et qui renvoie le total d’espace mémoire occupé par les fichiers contenus dans ce répertoire et ceux qu’il contient, de manière récursive.</p>
+
+    </div>
+  </div>
+</body>
+
+</html>
