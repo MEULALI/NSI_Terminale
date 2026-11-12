@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>activitebd</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#bases-de-données--chapitre-1">Bases de données / Chapitre 1</a>
+<ul>
+<li><a href="#modèle-relationnel">Modèle relationnel</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#modèle-relationnel-1">Modèle relationnel</a></li>
+<li><a href="#relation-attribut-domaine-schéma">Relation, attribut, domaine, schéma</a></li>
+<li><a href="#base-de-données-relationnelle">Base de données relationnelle</a></li>
+<li><a href="#concevoir-la-structure-dune-base-de-données-relationnelle">Concevoir la structure d’une base de données relationnelle</a></li>
+<li><a href="#clé-primaire">Clé primaire</a></li>
+<li><a href="#clé-étrangère">Clé étrangère</a></li>
+<li><a href="#liens-entre-albums-et-artistes">Liens entre albums et artistes</a></li>
+<li><a href="#schéma-final-de-la-base-de-données">Schéma final de la base de données</a></li>
+<li><a href="#bilan">Bilan</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="bases-de-données--chapitre-1">Bases de données / Chapitre 1</h1>
+<h2 id="modèle-relationnel">Modèle relationnel</h2>
+<hr>
+<h2 id="introduction">Introduction</h2>
+<p>Le développement de traitements informatiques nécessite la manipulation de données de plus en plus nombreuses. Leur organisation et leur stockage constituent un enjeu essentiel de performance.</p>
+<blockquote>
+<p><strong>Question centrale :</strong> Comment gérer (mémoriser et traiter) un ensemble volumineux de données ?</p>
+</blockquote>
+<h2 id="modèle-relationnel-1">Modèle relationnel</h2>
+<p>Les bases de données relationnelles sont basées sur ce qu’on appelle le <strong>modèle relationnel</strong>. Il s’agit d’un modèle logique (basé sur des concepts mathématiques) défini en 1970 par l’informaticien britannique Edgar F. Codd (1923-2003), lors de ses travaux chez IBM. Il a reçu le prix Turing en 1981.</p>
+<p>Le modèle relationnel est une manière de modéliser les relations existantes entre plusieurs informations et de les ordonner entre elles. Il est basé sur des <strong>relations</strong>.</p>
+<hr>
+<h2 id="relation-attribut-domaine-schéma">Relation, attribut, domaine, schéma</h2>
+<p>Prenons l’exemple d’un disquaire permettant d’emprunter des albums de musique. L’ensemble de ses albums peut être représenté par l’ensemble :</p>
+<pre class=" language-python"><code class="prism  language-python">Album <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">(</span><span class="token string">"I Still Do"</span><span class="token punctuation">,</span> <span class="token string">"Eric Clapton"</span><span class="token punctuation">,</span> <span class="token number">2016</span><span class="token punctuation">,</span> Vrai<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token string">"Axis: Bold as Love"</span><span class="token punctuation">,</span> <span class="token string">"Jimi Hendrix"</span><span class="token punctuation">,</span> <span class="token number">1967</span><span class="token punctuation">,</span> Faux<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token string">"Continumm"</span><span class="token punctuation">,</span> <span class="token string">"John Mayer"</span><span class="token punctuation">,</span> <span class="token number">2006</span><span class="token punctuation">,</span> Faux<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token string">"Riding With The King"</span><span class="token punctuation">,</span> <span class="token string">"Eric Clapton et B.B. King"</span><span class="token punctuation">,</span> <span class="token number">2000</span><span class="token punctuation">,</span> Faux<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token string">"Don't explain"</span><span class="token punctuation">,</span> <span class="token string">"Joe Bonamassa et Beth Hart"</span><span class="token punctuation">,</span> <span class="token number">2011</span><span class="token punctuation">,</span> Vrai<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Un tel ensemble s’appelle une <strong>relation</strong> (la relation <code>Album</code> en l’occurrence).</p>
+<blockquote>
+<p><strong>Attention :</strong> cette relation <code>Album</code> n’est pour le moment pas satisfaisante ! Nous verrons plus loin pourquoi et comment y remédier.</p>
+</blockquote>
+<p>Les différents éléments d’une relation s’appellent des <strong>enregistrements</strong> (ou <em>tuple</em>, <em>n-uplet</em>, <em>t-uplet</em>, ou <em>vecteur</em>). Les enregistrements d’une relation possèdent les mêmes composantes, que l’on appelle les <strong>attributs</strong> de la relation.</p>
+<p>Une relation se conforme toujours à un <strong>schéma</strong> qui est une description indiquant pour chaque attribut de la relation son nom et son <strong>domaine</strong> (= le « type » de l’attribut : un entier, une chaîne de caractères, une date, etc.).</p>
+<p>Ainsi, pour le moment, la relation <code>Album</code> possède 4 attributs :</p>
+<ul>
+<li><code>titre</code> : le titre de l’album, une chaîne de caractères ;</li>
+<li><code>artiste</code> : le ou les artistes de l’album, une chaîne de caractères ;</li>
+<li><code>annee</code> : l’année de parution de l’album, un entier naturel ;</li>
+<li><code>dispo</code> : disponibilité de l’album, un booléen.</li>
+</ul>
+<p>On note le schéma de la relation <code>Album</code> de la façon suivante :</p>
+<p><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><mover accent="true"><mi>a</mi><mo>ˋ</mo></mover><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>l</mi><mover accent="true"><mi>e</mi><mo>ˊ</mo></mover><mi>t</mi><mi>e</mi><mi>r</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+(à compléter )
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord mathnormal">a</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.25em;"><span class="mord">ˋ</span></span></span></span></span></span></span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal" style="margin-right: 0.01968em;">pl</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord mathnormal">e</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.19444em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right: 0.02778em;">er</span><span class="mclose">)</span></span></span></span></span></span></p>
+<blockquote>
+<p><strong>Remarque :</strong> On a choisi de noter ici le domaine de chaque attribut avec les mots <code>INT</code>, <code>TEXT</code>, <code>BOOL</code> mais on aurait pu également les écrire <code>Entier</code>, <code>Chaine de caractères</code>, <code>Booléen</code> ou <code>Int</code>, <code>String</code>, <code>Bool</code>, etc. Cela n’a pas vraiment d’importance car le modèle relationnel est indépendant de toute considération informatique.</p>
+</blockquote>
+<p>Une relation peut aussi se représenter sous forme d’une table (les deux termes <em>relation</em> et <em>table</em> sont équivalents) :</p>
+
+<table>
+<thead>
+<tr>
+<th>titre</th>
+<th>artiste</th>
+<th>annee</th>
+<th>dispo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I Still Do</td>
+<td>Eric Clapton</td>
+<td>2016</td>
+<td>Vrai</td>
+</tr>
+<tr>
+<td>Axis: Bold as Love</td>
+<td>Jimi Hendrix</td>
+<td>1967</td>
+<td>Faux</td>
+</tr>
+<tr>
+<td>Continuum</td>
+<td>John Mayer</td>
+<td>2006</td>
+<td>Faux</td>
+</tr>
+<tr>
+<td>Riding With The King</td>
+<td>Eric Clapton et B.B. King</td>
+<td>2000</td>
+<td>Faux</td>
+</tr>
+<tr>
+<td>Don’t explain</td>
+<td>Joe Bonamassa et Beth Hart</td>
+<td>2011</td>
+<td>Vrai</td>
+</tr>
+</tbody>
+</table><hr>
+<h2 id="base-de-données-relationnelle">Base de données relationnelle</h2>
+<p>Une base de données relationnelle est un <strong>ensemble de relations</strong>. Par exemple, la base de données de notre disquaire ne contiendra pas uniquement la relation <code>Album</code>. Elle peut par exemple contenir deux autres relations : <code>Client</code> et <code>Emprunt</code> qui correspondent respectivement à l’ensemble des clients du disquaire et à l’ensemble des emprunts en cours.</p>
+<p>Le <strong>schéma</strong>, ou la <strong>structure</strong>, d’une base de données relationnelle est l’ensemble des schémas des relations de la base. Ainsi, pour le moment, la structure de la base de données du disquaire est :</p>
+<ul>
+<li><code>Album(titre TEXT, artiste TEXT, annee INT, dispo BOOL)</code></li>
+<li><code>Client(...)</code></li>
+<li><code>Emprunt(...)</code></li>
+</ul>
+<hr>
+<h2 id="concevoir-la-structure-dune-base-de-données-relationnelle">Concevoir la structure d’une base de données relationnelle</h2>
+<p>La conception de la structure d’une base de données n’est pas toujours aisée mais c’est un travail absolument nécessaire pour obtenir une base ne souffrant d’aucune anomalie et offrant des performances optimales.</p>
+<p>On trouve en général ces trois étapes :</p>
+<ol>
+<li><strong>Déterminer les entités</strong> (objets, actions, personnes, …) que l’on souhaite manipuler.</li>
+<li><strong>Modéliser chaque ensemble d’entités</strong> comme une relation en donnant son schéma : attributs et domaine de chaque attribut.</li>
+<li><strong>Définir les contraintes d’intégrité</strong> (domaine, relation, référence) de la base de données, c’est-à-dire toutes les propriétés logiques vérifiées par les données à chaque instant.</li>
+</ol>
+<h3 id="domaine-dun-attribut-et-contrainte-de-domaine">Domaine d’un attribut et contrainte de domaine</h3>
+<p>Le <strong>domaine</strong> d’un attribut est le « type » de l’attribut. Concrètement, un SGBD doit s’assurer à chaque instant de la validité des valeurs d’un attribut : ce sont les <strong>contraintes de domaine</strong>. Si un attribut a pour domaine <code>INT</code> et que l’on essaie de saisir une valeur de type <code>FLOAT</code>, cela provoquera une erreur.</p>
+<blockquote>
+<p><strong>Attention aux choix de domaines :</strong> Si le domaine d’un attribut correspondant à un code postal est <code>INT</code>, alors l’enregistrement du code postal <code>05000</code> deviendra <code>5000</code> (car <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>05000</mn><mo>=</mo><mn>5000</mn></mrow><annotation encoding="application/x-tex">05000 = 5000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">05000</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">5000</span></span></span></span></span> pour les entiers). Il est donc nécessaire de donner le domaine <code>TEXT</code> à un code postal.</p>
+</blockquote>
+<hr>
+<h2 id="clé-primaire">Clé primaire</h2>
+<blockquote>
+<p><strong>Définition :</strong> Une <strong>clé primaire</strong> est un attribut (ou une réunion d’attributs) qui permet d’identifier de manière unique un enregistrement d’une relation.</p>
+</blockquote>
+<h3 id="la-relation-album">La relation <code>Album</code></h3>
+<p>Dans notre relation <code>Album</code> initiale, aucun attribut ne peut jouer le rôle de clé primaire (plusieurs albums peuvent avoir le même titre, le même artiste, ou la même année de sortie).</p>
+<p>Pour y remédier, on crée « artificiellement » un attribut <code>id_album</code> (de type <code>INT</code>) qui jouera le rôle de clé primaire. Pour symboliser la clé primaire dans le schéma d’une relation, on la souligne (ou on la met en gras) :</p>
+<p><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><mover accent="true"><mi>a</mi><mo>ˋ</mo></mover><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>l</mi><mover accent="true"><mi>e</mi><mo>ˊ</mo></mover><mi>t</mi><mi>e</mi><mi>r</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+(à compléter )
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord mathnormal">a</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.25em;"><span class="mord">ˋ</span></span></span></span></span></span></span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal" style="margin-right: 0.01968em;">pl</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord mathnormal">e</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.19444em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right: 0.02778em;">er</span><span class="mclose">)</span></span></span></span></span></span></p>
+<h3 id="la-relation-client">La relation <code>Client</code></h3>
+<p>Pour les clients, créer une clé primaire sur le nom, le prénom, l’adresse email ou le couple (nom, prénom) pose problème (homonymes, absence d’email, etc.). On crée donc également une clé primaire artificielle <code>id_client</code> :</p>
+<p><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><mover accent="true"><mi>a</mi><mo>ˋ</mo></mover><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>l</mi><mover accent="true"><mi>e</mi><mo>ˊ</mo></mover><mi>t</mi><mi>e</mi><mi>r</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+(à compléter )
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord mathnormal">a</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.25em;"><span class="mord">ˋ</span></span></span></span></span></span></span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal" style="margin-right: 0.01968em;">pl</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord mathnormal">e</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.19444em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right: 0.02778em;">er</span><span class="mclose">)</span></span></span></span></span></span></p>
+<blockquote>
+<p><strong>Mise en œuvre concrète :</strong> Pour créer des clés primaires artificielles, un mécanisme d’<strong>auto-incrément</strong> est souvent mis en œuvre par le SGBD (si la dernière clé créée est 57, la suivante sera 58).</p>
+</blockquote>
+<h3 id="contrainte-de-relation">Contrainte de relation</h3>
+<p>La <strong>contrainte de relation</strong> impose que chaque enregistrement d’une relation soit unique. C’est la présence d’une clé primaire dans chaque relation qui permet de réaliser cette contrainte.</p>
+<hr>
+<h2 id="clé-étrangère">Clé étrangère</h2>
+<h3 id="la-relation-emprunt">La relation <code>Emprunt</code></h3>
+<p>Pour un emprunt, on veut connaître l’album emprunté, le client et la date. Une première idée (non satisfaisante) serait d’associer tous les attributs :</p>
+<p><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><mover accent="true"><mi>a</mi><mo>ˋ</mo></mover><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>l</mi><mover accent="true"><mi>e</mi><mo>ˊ</mo></mover><mi>t</mi><mi>e</mi><mi>r</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+(à compléter)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord mathnormal">a</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.25em;"><span class="mord">ˋ</span></span></span></span></span></span></span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal" style="margin-right: 0.01968em;">pl</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord mathnormal">e</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.19444em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right: 0.02778em;">er</span><span class="mclose">)</span></span></span></span></span></span></p>
+<blockquote>
+<p><strong>Définition :</strong> Une <strong>clé étrangère</strong> d’une relation est un attribut qui est clé primaire d’une autre relation de la base de données.</p>
+</blockquote>
+<p>Dans <code>Emprunt</code>, <code>id_client</code> et <code>id_album</code> sont des clés étrangères (référençant les tables <code>Client</code> et <code>Album</code>).</p>
+<h3 id="redondance-des-données">Redondance des données</h3>
+<p>Une relation ne doit pas contenir d’informations déjà disponibles dans d’autres relations. Dans la première version d’ <code>Emprunt</code>, conserver <code>nom</code>, <code>prenom</code>, <code>email</code>, <code>titre</code>, <code>artiste</code>, etc. crée de la redondance inutile.</p>
+<p>Les clés étrangères suffisent à faire le lien vers d’autres tables. On note les clés étrangères avec le symbole <code>#</code>. Une version satisfaisante de la relation <code>Emprunt</code> est :</p>
+<p><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><mover accent="true"><mi>a</mi><mo>ˋ</mo></mover><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>l</mi><mover accent="true"><mi>e</mi><mo>ˊ</mo></mover><mi>t</mi><mi>e</mi><mi>r</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+(à compléter )
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord mathnormal">a</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.25em;"><span class="mord">ˋ</span></span></span></span></span></span></span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal" style="margin-right: 0.01968em;">pl</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord mathnormal">e</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.19444em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right: 0.02778em;">er</span><span class="mclose">)</span></span></span></span></span></span></p>
+<blockquote>
+<p><strong>Remarque :</strong> Dans cet exemple, la clé <code>id_album</code> est à la fois clé primaire et clé étrangère. <code>id_client</code> est une clé étrangère simple, ce qui permet à un même client de figurer dans plusieurs enregistrements d’emprunts.</p>
+</blockquote>
+<p>Table <code>Emprunt</code> :(à compléter)</p>
+<h3 id="pourquoi-éviter-la-redondance-des-données-">Pourquoi éviter la redondance des données ?</h3>
+<ol>
+<li><strong>Coût en mémoire et performances :</strong> Répéter des chaînes de caractères consomme du stockage et ralentit les requêtes.</li>
+<li><strong>Cohérence des données :</strong> Si un client change de nom ou d’adresse email, la modification s’effectue à un seul endroit (dans la table <code>Client</code>) sans risquer d’incohérences.</li>
+</ol>
+<h3 id="contrainte-de-référence">Contrainte de référence</h3>
+<p>Les clés étrangères permettent d’assurer les <strong>contraintes de référence</strong> :</p>
+<ul>
+<li>Une valeur de clé étrangère doit obligatoirement exister comme clé primaire dans la table référencée.</li>
+<li>Un enregistrement ne peut être effacé de sa table d’origine si sa clé primaire est référencée ailleurs dans une clé étrangère.</li>
+<li>Une clé primaire ne peut être modifiée si elle est utilisée dans d’autres tables.</li>
+</ul>
+<hr>
+<h2 id="liens-entre-albums-et-artistes">Liens entre albums et artistes</h2>
+<p>Pour gérer proprement le cas où un album est créé par plusieurs artistes ou qu’un artiste produit plusieurs albums, on décompose la relation <code>Album</code> initiale en trois relations : <code>Album</code>, <code>Artiste</code> et une table d’association <code>Artiste_de</code>.</p>
+<ol>
+<li>
+<p><strong>Relation <code>Album</code> :</strong><br>
+(à compléter)</p>
+</li>
+<li>
+<p><strong>Relation <code>Artiste</code> :</strong><br>
+(à compléter)</p>
+</li>
+<li>
+<p><strong>Relation <code>Artiste_de</code> :</strong><br>
+(à compléter)</p>
+</li>
+</ol>
+<p>Le couple <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mtext>id_artiste</mtext><mo separator="true">,</mo><mtext>id_album</mtext><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\text{id\_artiste}, \text{id\_album})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1.06em; vertical-align: -0.31em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">id_artiste</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord text"><span class="mord">id_album</span></span><span class="mclose">)</span></span></span></span></span> forme la clé primaire composée de <code>Artiste_de</code>.</p>
+<h3 id="contenu-des-tables-">Contenu des tables :</h3>
+<p><strong>Table <code>Album</code></strong></p>
+<p>(à compléter )</p>
+<p><strong>Table <code>Artiste</code></strong></p>
+<p>(à compléter )</p>
+<p><strong>Table <code>Artiste_de</code></strong></p>
+<p>(à compléter )</p>
+<hr>
+<h2 id="schéma-final-de-la-base-de-données">Schéma final de la base de données</h2>
+<p>Le schéma relationnel complet de la base de données du disquaire est le suivant :</p>
+<p><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><mover accent="true"><mi>a</mi><mo>ˋ</mo></mover><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>l</mi><mover accent="true"><mi>e</mi><mo>ˊ</mo></mover><mi>t</mi><mi>e</mi><mi>r</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+(à  compléter)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord mathnormal">a</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.25em;"><span class="mord">ˋ</span></span></span></span></span></span></span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal" style="margin-right: 0.01968em;">pl</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord mathnormal">e</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.19444em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right: 0.02778em;">er</span><span class="mclose">)</span></span></span></span></span></span></p>
+<h3 id="représentation-sous-forme-de-diagramme-dassociations">Représentation sous forme de diagramme d’associations</h3>
+<pre><code>à compléter
+</code></pre>
+<hr>
+<h2 id="bilan">Bilan</h2>
+<ul>
+<li><strong>Utilisation des BDD :</strong> Les fichiers CSV ou texte simples ne suffisent pas pour des volumes importants. Un <strong>SGBD</strong> permet de gérer, stocker et manipuler des bases de données de façon performante.</li>
+<li><strong>Modèle relationnel :</strong> Basé sur des relations (tables). Une relation comporte des enregistrements (lignes) et des attributs (colonnes), chacun associé à un <strong>domaine</strong> (type).</li>
+<li><strong>Clé primaire :</strong> Permet d’identifier chaque enregistrement de manière unique et garantit la <strong>contrainte de relation</strong>.</li>
+<li><strong>Clé étrangère :</strong> Permet d’associer deux relations et garantit la <strong>contrainte de référence</strong>, tout en évitant la <strong>redondance des données</strong>.</li>
+<li><strong>Conception :</strong> Étape essentielle pour éliminer les anomalies d’insertion, de suppression et de mise à jour.</li>
+</ul>
+<hr>
+
+    </div>
+  </div>
+</body>
+
+</html>
