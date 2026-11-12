@@ -496,3 +496,106 @@ footer {
         font-size: 14px;
     }
 }
+/* ==========================================
+   1. TYPOGRAPHIE ET MISE EN PAGE GÉNÉRALE
+   ================================---------- */
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #2d3748; /* Gris foncé très lisible */
+    background-color: #f8fafc;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Conteneur principal pour centrer le contenu si besoin */
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+p {
+    margin-bottom: 1.2rem;
+}
+
+
+/* ==========================================
+   2. TITRES AVEC COULEURS DISTINCTES
+   ================================---------- */
+h1 {
+    font-size: 2.25rem;
+    color: #1e3a8a; /* Bleu nuit profond */
+    border-bottom: 3px solid #3b82f6;
+    padding-bottom: 0.4rem;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: 1.75rem;
+    color: #2563eb; /* Bleu vif et dynamique */
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.3rem;
+}
+
+h3 {
+    font-size: 1.35rem;
+    color: #0d9488; /* Vert canard / Sarcelle pour contraster avec les h1/h2 */
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+h4 {
+    font-size: 1.1rem;
+    color: #475569; /* Gris ardoise */
+    margin-top: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+
+/* ==========================================
+   3. MISE EN FORME DES TABLEAUX
+   ================================---------- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+    background-color: #1e3a8a; /* Assorti au titre H1 */
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+}
+
+/* Effet zébré (alternance de lignes) pour une meilleure lecture */
+tbody tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+/* Survol de ligne interactif */
+tbody tr:hover {
+    background-color: #f1f5f9;
+    transition: background-color 0.2s ease;
+}
