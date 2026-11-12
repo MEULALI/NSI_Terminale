@@ -1,0 +1,920 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>basedonnee</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#vocabulaire-des-bases-de-données">Vocabulaire des bases de données</a>
+<ul>
+<li><a href="#i.-limites-des-structures-plates">I. Limites des structures plates</a></li>
+<li><a href="#ii.-vocabulaire-des-schémas-relationnels">II. Vocabulaire des schémas relationnels</a></li>
+</ul>
+</li>
+<li><a href="#le-modèle-relationnel">Le modèle relationnel</a>
+<ul>
+<li><a href="#i.-clés-primaires">I. Clés primaires</a></li>
+<li><a href="#ii.-clés-étrangères">II. Clés étrangères</a></li>
+<li><a href="#iii.-contraintes-dintégrité">III. Contraintes d’intégrité</a></li>
+</ul>
+</li>
+<li><a href="#conception-de-bases-de-données">Conception de bases de données</a>
+<ul>
+<li><a href="#i.-exemple-danomalie--redondance-de-données">I. Exemple d’anomalie : redondance de données</a></li>
+<li><a href="#ii.-élaboration-dun-modèle-conceptuel-des-données-mcd">II. Élaboration d’un modèle conceptuel des données (MCD)</a></li>
+<li><a href="#iii.-dun-mcd-au-schéma-relationnel">III. D’un MCD au schéma relationnel</a></li>
+</ul>
+</li>
+<li><a href="#mémo--conception-de-bases-de-données">Mémo : Conception de bases de données</a>
+<ul>
+<li><a href="#structure-dune-base-de-données">Structure d’une base de données</a></li>
+<li><a href="#résumé-des-contraintes-normalisation-et-conception">Résumé des contraintes, normalisation et conception</a></li>
+</ul>
+</li>
+<li><a href="#les-systèmes-de-gestion-de-bases-de-données">Les systèmes de gestion de bases de données</a>
+<ul>
+<li><a href="#i.-les-systèmes-de-gestion-de-bases-de-données">I. Les systèmes de gestion de bases de données</a></li>
+<li><a href="#ii.-sql">II. SQL</a></li>
+<li><a href="#iii.-sqlite">III. SQLite</a></li>
+<li><a href="#iv.-en-pratique">IV. En pratique</a></li>
+</ul>
+</li>
+<li><a href="#le-langage-sql">Le langage SQL</a>
+<ul>
+<li><a href="#i.-création-dune-table-et-insertion-denregistrements">I. Création d’une table et insertion d’enregistrements</a></li>
+<li><a href="#ii.-utilisation-de-sqlite-avec-le-terminal">II. Utilisation de SQLite avec le terminal</a></li>
+<li><a href="#iii.-lextraction-de-données-avec-la-commande-select">III. L’extraction de données avec la commande SELECT</a></li>
+</ul>
+</li>
+<li><a href="#le-langage-sql-avancé">Le langage SQL avancé</a>
+<ul>
+<li><a href="#i.-la-commande-where">I. La commande WHERE</a></li>
+<li><a href="#ii.-modifications">II. Modifications</a></li>
+<li><a href="#iii.-fonctions-de-groupes-agrégation">III. Fonctions de groupes (agrégation)</a></li>
+<li><a href="#iv.-le-tri--order-by">IV. Le tri : ORDER BY</a></li>
+<li><a href="#v.-les-jointures">V. Les jointures</a></li>
+<li><a href="#vi.-un-exemple-de-faille-de-sécurité--linjection-sql">VI. Un exemple de faille de sécurité : l’injection SQL</a></li>
+</ul>
+</li>
+<li><a href="#mémo-visuel--principales-commandes-sql-et-leur-syntaxe">Mémo Visuel : Principales commandes SQL et leur syntaxe</a>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="vocabulaire-des-bases-de-données">Vocabulaire des bases de données</h1>
+<p><strong>En bref</strong> — Nous allons montrer les limites de la représentation d’informations complexes dans des structures de données plates et introduire le vocabulaire des schémas relationnels.</p>
+<hr>
+<h2 id="i.-limites-des-structures-plates">I. Limites des structures plates</h2>
+<h3 id="exemple--représentation-dun-jeu-multi-joueurs">1. Exemple : représentation d’un jeu multi-joueurs</h3>
+<p>Dans un jeu multi-joueurs, chaque joueur possède un pseudonyme, appartient à un peuple et à une alliance. Il dirige par ailleurs un ou plusieurs villages, qui ont chacun un nom qu’il choisit ; ces villages possèdent, entre autres choses, une certaine population et ont des coordonnées spatiales.</p>
+<p>Une représentation en Python pourrait consister en un dictionnaire où les clés sont les joueurs et leurs valeurs associées sont une liste contenant leur peuple, leur alliance et une liste de villages, ceux-ci étant eux-mêmes codés par une liste.</p>
+<p>Par exemple :</p>
+<pre class=" language-python"><code class="prism  language-python">Jeu <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token string">'Astérix'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'Gaulois'</span><span class="token punctuation">,</span> <span class="token string">'Formidables'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token string">'Le Village'</span><span class="token punctuation">,</span> <span class="token number">57</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">34</span><span class="token punctuation">,</span> <span class="token number">22</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'Autre Village'</span><span class="token punctuation">,</span> <span class="token number">123</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">36</span><span class="token punctuation">,</span> <span class="token number">23</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token string">'Obélix'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'Gaulois'</span><span class="token punctuation">,</span> <span class="token string">'Formidables'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token string">'Le Village'</span><span class="token punctuation">,</span> <span class="token number">161</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">38</span><span class="token punctuation">,</span> <span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token string">'César'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'Romain'</span><span class="token punctuation">,</span> <span class="token string">'Pax'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token string">'Rome'</span><span class="token punctuation">,</span> <span class="token number">1668</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">151</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="les-limites-de-la-représentation">2. Les limites de la représentation</h3>
+<p>Le choix de cette représentation n’est pas anodin : il est facile de déterminer l’alliance à laquelle appartient un joueur ou la population totale des villages qu’il contrôle :</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">alliance_joueur</span><span class="token punctuation">(</span>jeu<span class="token punctuation">,</span> j<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> jeu<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+
+<span class="token keyword">def</span> <span class="token function">population_joueur</span><span class="token punctuation">(</span>jeu<span class="token punctuation">,</span> j<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">[</span>village<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token keyword">for</span> village <span class="token keyword">in</span> jeu<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Cependant, il est plus malaisé d’extraire certaines informations comme la population totale des villages contrôlés par un peuple :</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">population_peuple</span><span class="token punctuation">(</span>jeu<span class="token punctuation">,</span> p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    s <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> joueur <span class="token keyword">in</span> jeu<span class="token punctuation">.</span>values<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> joueur<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> p<span class="token punctuation">:</span>
+            s <span class="token operator">+=</span> <span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">[</span>village<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token keyword">for</span> village <span class="token keyword">in</span> joueur<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> s
+</code></pre>
+<p>Dans cette représentation de données, dite <strong>plate</strong>, une appartenance est privilégiée par rapport aux autres (l’appartenance à une alliance, à un peuple, à un joueur, etc.).</p>
+<p>Or, on peut être amené à effectuer des recherches indépendamment de tout lien. Un nouveau modèle s’avère donc nécessaire dans lequel les données sont représentées dans plusieurs tables, sans hiérarchie particulière, et liées entre elles.</p>
+<hr>
+<h2 id="ii.-vocabulaire-des-schémas-relationnels">II. Vocabulaire des schémas relationnels</h2>
+<ul>
+<li>Un <strong>attribut</strong> est un couple (nom, domaine) où le nom (représentant un titre de colonne) prend ses valeurs dans un domaine.</li>
+<li>Un <strong>domaine</strong> est donc un ensemble de valeurs que peut prendre une donnée, à rapprocher de la notion de type en Python, par exemple des entiers (noté <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">N</mi></mrow><annotation encoding="application/x-tex">\mathbb{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68889em; vertical-align: 0em;"></span><span class="mord mathbb">N</span></span></span></span></span>), des chaînes de caractères (noté <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">\mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span></span></span></span></span>), des dates (noté <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">D</mi></mrow><annotation encoding="application/x-tex">\mathcal{D}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathcal" style="margin-right: 0.02778em;">D</span></span></span></span></span>), des booléens (noté <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">B</mi></mrow><annotation encoding="application/x-tex">\mathcal{B}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathcal" style="margin-right: 0.03041em;">B</span></span></span></span></span>), etc.</li>
+<li>On appelle <strong>schéma d’une relation</strong> un ensemble ordonné d’attributs de la forme <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>A</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>A</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>A</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">S = (A_1, A_2, \dots, A_n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.05764em;">S</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.151392em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>, où les <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">A_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.83333em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.311664em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span> sont des attributs deux à deux distincts, le schéma précisant en général les domaines de chaque attribut.</li>
+<li>Une <strong>table</strong>, ou <strong>relation</strong>, de schéma <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>A</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>A</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>A</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">S = (A_1, A_2, \dots, A_n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.05764em;">S</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.151392em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> est un ensemble fini de <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">n</span></span></span></span></span>-uplets <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>x</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x_1, \dots, x_n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.151392em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> où les <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">x_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.58056em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.311664em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span> prennent leurs valeurs dans <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">A_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.83333em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.311664em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span>.</li>
+</ul>
+<p>Les éléments d’une table <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span></span></span></span></span> sont appelés les <strong>enregistrements</strong> de la relation. Leur nombre (fini) est appelé le <strong>cardinal</strong> de <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span></span></span></span></span> et est noté <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">#</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">\#R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord">#</span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span></span></span></span></span>.</p>
+<h3 id="exemple-de-schéma">Exemple de schéma</h3>
+<p>Représentons quelques données relatives aux élèves d’une classe de Terminale.</p>
+
+<table>
+<thead>
+<tr>
+<th>Nom</th>
+<th>Prénom</th>
+<th>Date_de_naissance</th>
+<th>Spé1</th>
+<th>Spé2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Garcin</td>
+<td>Catherine</td>
+<td>13/01/2002</td>
+<td>Maths</td>
+<td>PC</td>
+</tr>
+<tr>
+<td>Thy</td>
+<td>Jean</td>
+<td>11/08/2001</td>
+<td>Maths</td>
+<td>NSI</td>
+</tr>
+<tr>
+<td>Garcin</td>
+<td>Jean</td>
+<td>11/08/2001</td>
+<td>NSI</td>
+<td>PC</td>
+</tr>
+</tbody>
+</table><p>Le schéma de cette relation est :<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><mo stretchy="false">(</mo><mtext>Nom</mtext><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mrow><mtext>Pr</mtext><mover accent="true"><mtext>e</mtext><mo>ˊ</mo></mover><mtext>nom</mtext></mrow><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mtext>Date_de_naissance</mtext><mo separator="true">,</mo><mi mathvariant="script">D</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mrow><mtext>Sp</mtext><mover accent="true"><mtext>e</mtext><mo>ˊ</mo></mover><mtext>1</mtext></mrow><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mrow><mtext>Sp</mtext><mover accent="true"><mtext>e</mtext><mo>ˊ</mo></mover><mtext>2</mtext></mrow><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">((\text{Nom}, \mathcal{S}), (\text{Prénom}, \mathcal{S}), (\text{Date\_de\_naissance}, \mathcal{D}), (\text{Spé1}, \mathcal{S}), (\text{Spé2}, \mathcal{S}))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1.06em; vertical-align: -0.31em;"></span><span class="mopen">((</span><span class="mord text"><span class="mord">Nom</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Pr</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord">e</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.25em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord">nom</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Date_de_naissance</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.02778em;">D</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Sp</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord">e</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.25em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord">1</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Sp</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord">e</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.25em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord">2</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">))</span></span></span></span></span></span></p>
+<p>Il est indépendant de la notion de relation qui lui est associée, qui est représentée par une table (on parlera indifféremment de relation ou de table dans la suite). La relation <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span></span></span></span></span> comporte 3 enregistrements, on a donc <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">#</mi><mi>R</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">\#R = 3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord">#</span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">3</span></span></span></span></span>.</p>
+<blockquote>
+<p><strong>MOT CLÉ</strong></p>
+<p>Lorsqu’une base de données comporte plusieurs tables, l’ensemble des schémas de ces relations s’appelle le <strong>schéma relationnel</strong> de la base de données.</p>
+</blockquote>
+<hr>
+<hr>
+<h1 id="le-modèle-relationnel">Le modèle relationnel</h1>
+<p><strong>En bref</strong> — Les bases de données actuelles gèrent de très grosses quantités d’informations (de l’ordre du pétaoctet). Dans ce cadre, identifier rapidement des informations est d’une importance capitale. Les notions de clé primaire et clé étrangère permettent l’identification simple d’éléments dans une ou plusieurs tables.</p>
+<hr>
+<h2 id="i.-clés-primaires">I. Clés primaires</h2>
+<p>Soit <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.05764em;">S</span></span></span></span></span> le schéma d’une relation <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span></span></span></span></span>, et <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.07153em;">K</span></span></span></span></span> un ensemble d’attributs de <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.05764em;">S</span></span></span></span></span>.</p>
+<p>On dit que <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.07153em;">K</span></span></span></span></span> est une <strong>clé primaire</strong> pour une relation <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span></span></span></span></span> de schéma <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.05764em;">S</span></span></span></span></span> si la connaissance du ou des seuls attributs de <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.07153em;">K</span></span></span></span></span> pour les éléments de <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span></span></span></span></span> permet d’identifier un unique enregistrement de <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span></span></span></span></span>.</p>
+<p>Plus formellement, pour tout couple d’enregistrements <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">t_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.76508em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span> et <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">t_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.76508em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span> de <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span></span></span></span></span>, si <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">t_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.76508em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span> et <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">t_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.76508em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span> coïncident sur <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.07153em;">K</span></span></span></span></span>, alors on a <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>1</mn></msub><mo>=</mo><msub><mi>t</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">t_1 = t_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.76508em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.76508em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span>.</p>
+<p>Dans l’exemple de la relation relative aux élèves d’une classe de Terminale, aucun attribut seul ne peut jouer le rôle de clé primaire : le nom Garcin correspond à deux personnes différentes, et il en est de même pour les prénoms, dates de naissances et spécialités étudiées.</p>
+<p>Plusieurs couples pourraient, dans cet exemple, jouer le rôle de clé primaire, le couple <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mtext>Nom</mtext><mo separator="true">,</mo><mrow><mtext>Pr</mtext><mover accent="true"><mtext>e</mtext><mo>ˊ</mo></mover><mtext>nom</mtext></mrow><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\text{Nom}, \text{Prénom})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Nom</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord text"><span class="mord">Pr</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord">e</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.25em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord">nom</span></span><span class="mclose">)</span></span></span></span></span> paraît naturel. Néanmoins, rien ne garantit que des personnes différentes n’aient pas les mêmes noms et prénoms.</p>
+<p>La solution consiste alors à ajouter une <strong>clé primaire artificielle</strong>, qui est le plus souvent un identifiant entier naturel. Les systèmes de gestion de bases de données proposent de créer des identifiants auto-incrémentés.</p>
+<p>La relation précédente devient alors :</p>
+
+<table>
+<thead>
+<tr>
+<th>id_eleve</th>
+<th>Nom</th>
+<th>Prénom</th>
+<th>Date_de_naissance</th>
+<th>Spé1</th>
+<th>Spé2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Garcin</td>
+<td>Catherine</td>
+<td>13/01/2002</td>
+<td>Maths</td>
+<td>PC</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Thy</td>
+<td>Jean</td>
+<td>11/08/2001</td>
+<td>Maths</td>
+<td>NSI</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Garcin</td>
+<td>Jean</td>
+<td>11/08/2001</td>
+<td>NSI</td>
+<td>PC</td>
+</tr>
+</tbody>
+</table><hr>
+<h2 id="ii.-clés-étrangères">II. Clés étrangères</h2>
+<p>Un attribut dans une relation <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">R'</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.751892em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.751892em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span> de schéma <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>S</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">S'</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.751892em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.05764em;">S</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.751892em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span> qui sert à caractériser un enregistrement dans une relation <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span></span></span></span></span> de schéma <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.05764em;">S</span></span></span></span></span> et qui est une clé primaire de <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.05764em;">S</span></span></span></span></span> est appelé une <strong>clé étrangère</strong> dans la relation <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">R'</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.751892em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.751892em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span>.</p>
+<p>Dans l’exemple précédent, on souhaite désormais stocker dans une autre table leurs résultats aux devoirs d’informatique. Si on le faisait dans la même table, il y aurait soit des attributs pour lesquels des enregistrements n’ont pas de valeur (ce qui est à éviter) soit des attributs dont les données seraient des listes (à éviter aussi, on parle d’<strong>atomicité</strong> des attributs en normalisation des bases de données, c’est-à-dire que les attributs doivent être insécables). Cela nuirait en tout cas aux performances de la base de données.</p>
+<p>On choisit alors de représenter ces données dans une autre relation <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">R'</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.751892em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.751892em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span>, dont le schéma est <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>S</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>=</mo><mo stretchy="false">(</mo><mo stretchy="false">(</mo><mtext>id_eleve</mtext><mo separator="true">,</mo><mi mathvariant="double-struck">N</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mtext>devoir</mtext><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mtext>note</mtext><mo separator="true">,</mo><mi mathvariant="double-struck">R</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">S' = ((\text{id\_eleve}, \mathbb{N}), (\text{devoir}, \mathcal{S}), (\text{note}, \mathbb{R}))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.751892em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.05764em;">S</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.751892em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.06em; vertical-align: -0.31em;"></span><span class="mopen">((</span><span class="mord text"><span class="mord">id_eleve</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathbb">N</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">devoir</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">note</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathbb">R</span><span class="mclose">))</span></span></span></span></span>, où <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">R</mi></mrow><annotation encoding="application/x-tex">\mathbb{R}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68889em; vertical-align: 0em;"></span><span class="mord mathbb">R</span></span></span></span></span> est l’ensemble des décimaux. Un exemple de table pourrait être :</p>
+
+<table>
+<thead>
+<tr>
+<th>id_eleve</th>
+<th>Devoir</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Maths DS1</td>
+<td>14,5</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Maths DS2</td>
+<td>16,5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Maths DS1</td>
+<td>17</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Projet NSI</td>
+<td>18</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Projet NSI</td>
+<td>11</td>
+</tr>
+</tbody>
+</table><p><code>id_eleve</code> est une clé étrangère dans cette relation <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">R'</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.751892em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.751892em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span>. En effet, elle est clé primaire dans la table <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span></span></span></span></span> et sert à caractériser les enregistrements de <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span></span></span></span></span> (les élèves) dans <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">R'</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.751892em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.751892em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span> (leurs notes).</p>
+<p>Cette table ne comporte aucun attribut clé primaire seul, mais le couple <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mtext>id_eleve</mtext><mo separator="true">,</mo><mtext>devoir</mtext><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\text{id\_eleve}, \text{devoir})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1.06em; vertical-align: -0.31em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">id_eleve</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord text"><span class="mord">devoir</span></span><span class="mclose">)</span></span></span></span></span> constitue une clé primaire, en admettant qu’aucun élève ne peut avoir deux notes différentes pour le même devoir.</p>
+<hr>
+<h2 id="iii.-contraintes-dintégrité">III. Contraintes d’intégrité</h2>
+<p>Une <strong>contrainte d’intégrité</strong> est une règle qui définit la cohérence d’une donnée ou d’un ensemble de données d’une base de données.</p>
+<ul>
+<li>Le type de données que l’on cherche à stocker définit une <strong>contrainte de domaine</strong>. Cela est intégré dans le modèle du schéma relationnel.</li>
+<li>Chaque enregistrement d’une relation doit pouvoir être identifié par une clé primaire, unique et non nulle. On parle dans ce cas de <strong>contrainte de relation</strong>.</li>
+<li>Lorsque des relations sont liées, il est indispensable que les trois règles suivantes soient respectées :
+<ol>
+<li>Une clé étrangère ne peut pas prendre une valeur qui n’est pas clé primaire de la table à laquelle elle se réfère.</li>
+<li>Un enregistrement de la table primaire ne peut pas être effacé s’il possède des enregistrements liés.</li>
+<li>La clé primaire ne peut pas être changée dans la table primaire si cet enregistrement possède des enregistrements liés.</li>
+</ol>
+</li>
+</ul>
+<p>Ces trois règles définissent la notion de <strong>contrainte d’intégrité référentielle</strong> d’une base de données. Cet ensemble de règles est au cœur même des bases de données et confère le caractère relationnel au modèle étudié.</p>
+<hr>
+<hr>
+<h1 id="conception-de-bases-de-données">Conception de bases de données</h1>
+<p><strong>En bref</strong> — Le respect des contraintes d’intégrité et de normalisation permet d’éviter la survenue d’anomalies dans les bases de données. Le modèle entité-association conduit à des schémas relationnels respectant ces contraintes.</p>
+<hr>
+<h2 id="i.-exemple-danomalie--redondance-de-données">I. Exemple d’anomalie : redondance de données</h2>
+<p>Lorsque les bases de données n’ont pas été suffisamment normalisées ou lorsqu’elles n’ont pas été conçues de sorte que les contraintes d’intégrité soient respectées après modification des relations, des anomalies peuvent apparaître, comme la <strong>redondance de données</strong>.</p>
+<p>Considérons, par exemple, une base de données modélisant les produits achetés par une entreprise, avec le schéma relationnel :<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>S</mi><mo>=</mo><mo stretchy="false">(</mo><mo stretchy="false">(</mo><mtext>Produit</mtext><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mtext>Fournisseur</mtext><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mtext>Adresse</mtext><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">S = ((\text{Produit}, \mathcal{S}), (\text{Fournisseur}, \mathcal{S}), (\text{Adresse}, \mathcal{S}))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.05764em;">S</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">((</span><span class="mord text"><span class="mord">Produit</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Fournisseur</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Adresse</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">))</span></span></span></span></span></span></p>
+<p>Un exemple de table pour ce schéma :</p>
+
+<table>
+<thead>
+<tr>
+<th>Produit</th>
+<th>Fournisseur</th>
+<th>Adresse</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tomate</td>
+<td>Verger du Sud</td>
+<td>MIN Cavaillon</td>
+</tr>
+<tr>
+<td>Ananas</td>
+<td>Verger du Sud</td>
+<td>MIN Cavaillon</td>
+</tr>
+<tr>
+<td>Origan</td>
+<td>SA Épices</td>
+<td>MIN Rungis</td>
+</tr>
+</tbody>
+</table><p>L’adresse est redondante dans cette relation, celle des Vergers du Sud apparaissant plusieurs fois, ce qui a un coût d’espace et conduit à des performances moindres de la base de données.</p>
+<p>La solution typique consiste à séparer cette relation en deux :</p>
+<ul>
+<li>Une relation <strong>Fabricants</strong> : <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mo stretchy="false">(</mo><mtext>Fournisseur</mtext><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mtext>Adresse</mtext><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">((\text{Fournisseur}, \mathcal{S}), (\text{Adresse}, \mathcal{S}))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">((</span><span class="mord text"><span class="mord">Fournisseur</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Adresse</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">))</span></span></span></span></span></li>
+<li>Une relation <strong>Produits</strong> : <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mo stretchy="false">(</mo><mtext>Produit</mtext><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mtext>Fournisseur</mtext><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">((\text{Produit}, \mathcal{S}), (\text{Fournisseur}, \mathcal{S}))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">((</span><span class="mord text"><span class="mord">Produit</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Fournisseur</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">))</span></span></span></span></span></li>
+</ul>
+<p>L’exemple précédent devient :</p>
+<p><strong>Fabricants</strong></p>
+
+<table>
+<thead>
+<tr>
+<th>Fournisseur</th>
+<th>Adresse</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Verger du Sud</td>
+<td>MIN Cavaillon</td>
+</tr>
+<tr>
+<td>SA Épices</td>
+<td>MIN Rungis</td>
+</tr>
+</tbody>
+</table><p><strong>Produits</strong></p>
+
+<table>
+<thead>
+<tr>
+<th>Produit</th>
+<th>Fournisseur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tomate</td>
+<td>Verger du Sud</td>
+</tr>
+<tr>
+<td>Ananas</td>
+<td>Verger du Sud</td>
+</tr>
+<tr>
+<td>Origan</td>
+<td>SA Épices</td>
+</tr>
+</tbody>
+</table><p>Néanmoins cette solution n’est pas pleinement satisfaisante. Si la société Vergers du Sud change de nom ou est supprimée de la relation Fabricants, la table Produits aura une anomalie de mise à jour (ou de suppression), car les produits Tomate et Ananas ne seront plus référencés. Et si une nouvelle société prend le même nom qu’une déjà existante, on aura une anomalie d’insertion.</p>
+<hr>
+<h2 id="ii.-élaboration-dun-modèle-conceptuel-des-données-mcd">II. Élaboration d’un modèle conceptuel des données (MCD)</h2>
+<h3 id="le-modèle-entité-association">1. Le modèle entité-association</h3>
+<p>La première étape pour aboutir à un modèle permettant de stocker les données dans une base consiste à identifier les objets à représenter ainsi que leurs liens. Cela aboutit à un <strong>modèle conceptuel des données (MCD)</strong>, comme le modèle entité-association présenté ici.</p>
+<ul>
+<li>Une <strong>entité</strong> est une unité de base du système modélisé. Il peut s’agir d’individus, d’objets qui ont en commun les mêmes propriétés.</li>
+<li>Une <strong>association</strong> représente un lien entre entités. Elle peut être binaire et représenter un lien entre deux entités A et B, nommée par un verbe. Si chaque occurrence de l’entité A est liée à au plus une occurrence de l’entité B, on parle de <strong>relation binaire fonctionnelle</strong>, sinon on parle d’<strong>association non fonctionnelle</strong>.</li>
+</ul>
+<h3 id="un-exemple">2. Un exemple</h3>
+<p>Prenons comme exemple l’étude simplifiée de la gestion d’un parc immobilier. Des propriétaires possèdent, éventuellement collectivement, un ou plusieurs appartements, un locataire occupant un appartement.</p>
+<p>Trois entités se dégagent ici : les <strong>propriétaires</strong>, les <strong>locataires</strong> et les <strong>appartements</strong>.</p>
+<p>Il y a un lien représenté par le verbe « habiter » entre l’entité locataire et l’entité appartement. Ce lien est une relation binaire fonctionnelle dans la mesure où on admet qu’un locataire n’occupe qu’un seul appartement. Il y a un lien représenté par le verbe « posséder » entre l’entité propriétaire et l’entité appartement. Cette association n’est pas fonctionnelle car un propriétaire peut posséder plusieurs appartements et, réciproquement, il peut exister des co-propriétaires.</p>
+<hr>
+<h2 id="iii.-dun-mcd-au-schéma-relationnel">III. D’un MCD au schéma relationnel</h2>
+<p>D’un MCD, on en déduit un schéma relationnel en utilisant les règles suivantes :</p>
+<ol>
+<li>Toute entité donne lieu à une table dont la clé primaire est l’identifiant de l’entité.</li>
+<li>Toute association binaire fonctionnelle est implémentée par la présence d’une clé étrangère dans la table qui représente l’entité origine de la dépendance fonctionnelle.</li>
+<li>Toute association non fonctionnelle génère une table dont la clé primaire est l’ensemble des clés primaires des tables qu’elle relie.</li>
+<li>Les entités qui n’existent qu’en référence à d’autres entités ont comme clé primaire l’identifiant de l’entité dont elles dépendent et leur propre identifiant.</li>
+</ol>
+<p>L’exemple précédent donne (clés primaires en <strong>gras</strong>, clés étrangères en <em>italique</em>) :</p>
+<ul>
+<li><strong>Propriétaires</strong> ((\textbf{id_proprio}, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">N</mi></mrow><annotation encoding="application/x-tex">\mathbb{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68889em; vertical-align: 0em;"></span><span class="mord mathbb">N</span></span></span></span></span>), (nom, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">\mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span></span></span></span></span>), (prenom, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">\mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span></span></span></span></span>))</li>
+<li><strong>Locataire</strong> ((\textbf{id_locataire}, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">N</mi></mrow><annotation encoding="application/x-tex">\mathbb{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68889em; vertical-align: 0em;"></span><span class="mord mathbb">N</span></span></span></span></span>), (<em>id_appart</em>, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">N</mi></mrow><annotation encoding="application/x-tex">\mathbb{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68889em; vertical-align: 0em;"></span><span class="mord mathbb">N</span></span></span></span></span>))</li>
+<li><strong>Appartement</strong> ((\textbf{id_appart}, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">N</mi></mrow><annotation encoding="application/x-tex">\mathbb{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68889em; vertical-align: 0em;"></span><span class="mord mathbb">N</span></span></span></span></span>), (adresse, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">\mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span></span></span></span></span>), (<em>id_locataire</em>, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">N</mi></mrow><annotation encoding="application/x-tex">\mathbb{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68889em; vertical-align: 0em;"></span><span class="mord mathbb">N</span></span></span></span></span>))</li>
+<li><strong>ProprioAppart</strong> ((\textbf{id_proprio}, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">N</mi></mrow><annotation encoding="application/x-tex">\mathbb{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68889em; vertical-align: 0em;"></span><span class="mord mathbb">N</span></span></span></span></span>), (\textbf{id_appart}, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">N</mi></mrow><annotation encoding="application/x-tex">\mathbb{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68889em; vertical-align: 0em;"></span><span class="mord mathbb">N</span></span></span></span></span>))</li>
+</ul>
+<p>L’association « habiter » est représentée par une clé étrangère dans la relation <em>Locataire</em>, l’association « posséder » par la relation <em>ProprioAppart</em>.</p>
+<hr>
+<hr>
+<h1 id="mémo--conception-de-bases-de-données">Mémo : Conception de bases de données</h1>
+<h2 id="structure-dune-base-de-données">Structure d’une base de données</h2>
+<ul>
+<li><strong>Schéma d’une relation</strong> : <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mtext>attributs</mtext><mo separator="true">,</mo><mtext>domaines</mtext><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\text{attributs}, \text{domaines})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">attributs</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord text"><span class="mord">domaines</span></span><span class="mclose">)</span></span></span></span></span>
+<ul>
+<li><em>Exemple</em> : <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mo stretchy="false">(</mo><mtext>id_eleve</mtext><mo separator="true">,</mo><mi mathvariant="double-struck">N</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mtext>Nom</mtext><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mrow><mtext>Pr</mtext><mover accent="true"><mtext>e</mtext><mo>ˊ</mo></mover><mtext>nom</mtext></mrow><mo separator="true">,</mo><mi mathvariant="script">S</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><mtext>Date</mtext><mo separator="true">,</mo><mi mathvariant="script">D</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">((\text{id\_eleve}, \mathbb{N}), (\text{Nom}, \mathcal{S}), (\text{Prénom}, \mathcal{S}), (\text{Date}, \mathcal{D}))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1.06em; vertical-align: -0.31em;"></span><span class="mopen">((</span><span class="mord text"><span class="mord">id_eleve</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathbb">N</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Nom</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Pr</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord">e</span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.25em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord">nom</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Date</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord mathcal" style="margin-right: 0.02778em;">D</span><span class="mclose">))</span></span></span></span></span></li>
+</ul>
+</li>
+<li><strong>Schéma relationnel d’une base de données</strong> : schéma de toutes les relations.</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>id_eleve</th>
+<th>Nom</th>
+<th>Prénom</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Table</strong> / <strong>Relation</strong></td>
+<td>1</td>
+<td>Dupond</td>
+<td>Jean</td>
+<td>05/01/2002</td>
+</tr>
+<tr>
+<td></td>
+<td>2</td>
+<td>Dupond</td>
+<td>Michel</td>
+<td>05/01/2002</td>
+</tr>
+<tr>
+<td></td>
+<td>3</td>
+<td>Thomas</td>
+<td>Jean</td>
+<td>07/08/2003</td>
+</tr>
+</tbody>
+</table><ul>
+<li><strong>Colonne</strong> = Attribut (les attributs prennent leurs valeurs dans un domaine : <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">\mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathcal" style="margin-right: 0.075em;">S</span></span></span></span></span> chaînes de caractères, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">N</mi></mrow><annotation encoding="application/x-tex">\mathbb{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68889em; vertical-align: 0em;"></span><span class="mord mathbb">N</span></span></span></span></span> entiers, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">D</mi></mrow><annotation encoding="application/x-tex">\mathcal{D}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathcal" style="margin-right: 0.02778em;">D</span></span></span></span></span> dates…).</li>
+<li><strong>Ligne</strong> = Enregistrement / <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">n</span></span></span></span></span>-uplet.</li>
+<li><strong>Cardinal</strong> = Nombre d’enregistrements.</li>
+<li><strong>Clé primaire</strong> : Attribut dont la connaissance permet de caractériser un enregistrement de manière unique.</li>
+</ul>
+<hr>
+<h3 id="relation-référençant-une-autre-relation">Relation référençant une autre relation</h3>
+
+<table>
+<thead>
+<tr>
+<th>id_note</th>
+<th>id_eleve</th>
+<th>devoir</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>Maths</td>
+<td>14</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>Info</td>
+<td>17</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2</td>
+<td>Info</td>
+<td>16</td>
+</tr>
+</tbody>
+</table><ul>
+<li><code>id_note</code> = Clé primaire.</li>
+<li><code>id_eleve</code> = <strong>Clé étrangère</strong> (attribut qui permet de faire référence à un enregistrement dans une autre table où il y est clé primaire).</li>
+</ul>
+<hr>
+<h2 id="résumé-des-contraintes-normalisation-et-conception">Résumé des contraintes, normalisation et conception</h2>
+<h3 id="contraintes-dintégrité">Contraintes d’intégrité</h3>
+<ol>
+<li><strong>Contrainte de domaine</strong> : Les données appartiennent à un domaine (type).</li>
+<li><strong>Contrainte de relation</strong> : Chaque enregistrement d’une relation doit pouvoir être identifié par une clé primaire unique.</li>
+<li><strong>Contrainte d’intégrité référentielle</strong> :
+<ul>
+<li>Une clé étrangère ne peut pas être une valeur qui n’est pas clé primaire de la table à laquelle elle se réfère.</li>
+<li>Un enregistrement de la table primaire ne peut pas être effacé s’il possède des enregistrements liés.</li>
+<li>La clé primaire ne peut pas être changée dans la table primaire si cet enregistrement possède des enregistrements liés.</li>
+</ul>
+</li>
+</ol>
+<h3 id="normalisation-dune-base-de-données">Normalisation d’une base de données</h3>
+<ul>
+<li>Les attributs doivent être <strong>atomiques</strong> : un attribut ne doit pas pouvoir être subdivisé, et les attributs doivent posséder une valeur unique pour chaque enregistrement.</li>
+</ul>
+<h3 id="associations-fonctionnelles-et-non-fonctionnelles">Associations fonctionnelles et non fonctionnelles</h3>
+<ul>
+<li>Une association entre une entité A et une entité B est dite <strong>fonctionnelle</strong> de A vers B lorsque chaque occurrence de A est liée au plus à une occurrence de B. La connaissance de A détermine celle de B.</li>
+</ul>
+<hr>
+<hr>
+<h1 id="les-systèmes-de-gestion-de-bases-de-données">Les systèmes de gestion de bases de données</h1>
+<p><strong>En bref</strong> — Nous présentons ici les généralités sur les SGBD et les outils qui sont employés pour les mettre en œuvre.</p>
+<hr>
+<h2 id="i.-les-systèmes-de-gestion-de-bases-de-données">I. Les systèmes de gestion de bases de données</h2>
+<p>Un <strong>système de gestion de bases de données</strong> (SGBD, <em>DBMS</em> en anglais) regroupe des outils logiciels permettant de gérer, manipuler, stocker et sécuriser des informations organisées dans une base de données.</p>
+<p>Sous l’impulsion d’informaticiens comme Charles Bachman, des SGBD sont mis au point avant même l’apparition du modèle relationnel de E. F. Codd en 1970. La plupart suivent ce modèle (MySQL, PostgreSQL, MariaDB…) mais il existe des alternatives (de type NoSQL — <em>Not Only SQL</em> — comme MongoDB, Cassandra…).</p>
+<p>La gestion d’une base de données (BDD) est complexe du fait de sa taille, du nombre de ses utilisateurs, de la nécessité d’assurer la cohérence et la sécurité des informations.</p>
+<blockquote>
+<p>Un SGBD doit être indépendant des BDD qu’il gère.</p>
+</blockquote>
+<hr>
+<h2 id="ii.-sql">II. SQL</h2>
+<blockquote>
+<p><strong>MOT CLÉ</strong></p>
+<p><strong>SQL</strong> : <em>Structured Query Language</em> (langage de requête structurée).</p>
+</blockquote>
+<p>Le langage le plus communément utilisé pour dialoguer (effectuer des requêtes) avec le SGBD est le SQL. C’est celui que nous allons utiliser pour créer des tables, ajouter, supprimer, mettre à jour des données. Il a été créé en 1979 et normalisé en 1986. Les requêtes s’apparentent le plus possible à des phrases en anglais. Il est <strong>déclaratif</strong>.</p>
+<hr>
+<h2 id="iii.-sqlite">III. SQLite</h2>
+<p>La plupart des SGBD fonctionnent sur des machines distantes selon le modèle client-serveur bien adapté à un langage de requêtes. <strong>SQLite</strong>, comme son nom l’indique, est un SGBD qui a un fonctionnement plus simple et s’apparente à une bibliothèque logicielle (écrite en langage C) qui est directement intégrée à l’application qui l’utilise. Une base de données est entièrement représentée dans un fichier. Cela peut présenter des inconvénients pour de gros systèmes mais suffira pour notre découverte.</p>
+<p>SQLite est sous licence publique, ce qui en fait un outil de choix pour l’éducation, et il est largement utilisé (plus de 1000 milliards de bases de données SQLite en activité), notamment par Mozilla, Google, Apple…</p>
+<p>SQLite est disponible sur tous les systèmes d’exploitation. Il existe une bibliothèque Python, <code>sqlite3</code>, qui permet de gérer la BDD à partir de commandes écrites en Python.</p>
+<hr>
+<h2 id="iv.-en-pratique">IV. En pratique</h2>
+<ul>
+<li>On travaille via le terminal Unix en lançant <code>$ sqlite3</code> ou <code>C:\&gt;sqlite3</code> sous Windows. <code>sqlite3</code> est l’interface en ligne de commande associée à SQLite. On peut commencer par créer un fichier d’extension <code>.sql</code> qui contiendra les instructions pour créer les tables.</li>
+<li>On peut aussi travailler avec Python et sa bibliothèque qui s’appelle aussi <code>sqlite3</code> ou en utilisant le framework <strong>Bottle</strong>.</li>
+<li>On peut installer l’outil graphique <strong>SQLiteBrowser</strong> disponible au téléchargement pour tout système d’exploitation (<a href="https://sqlitebrowser.org/dl/">sqlitebrowser.org</a>). Après avoir lancé SQLiteBrowser, on ouvre une base de données existante ou on crée une nouvelle base. Apparaît alors un outil graphique permettant de créer des tables de manière assez simple.</li>
+</ul>
+<hr>
+<hr>
+<h1 id="le-langage-sql">Le langage SQL</h1>
+<p><strong>En bref</strong> — Nous allons voir les principales commandes SQL permettant d’interagir avec une base de données. Nous travaillons avec <code>sqlite3</code>.</p>
+<hr>
+<h2 id="i.-création-dune-table-et-insertion-denregistrements">I. Création d’une table et insertion d’enregistrements</h2>
+<p>À titre d’exemple, nous allons créer la table suivante :</p>
+
+<table>
+<thead>
+<tr>
+<th>Nom</th>
+<th>Maths</th>
+<th>Anglais</th>
+<th>Info</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Joe</td>
+<td>16</td>
+<td>17</td>
+<td>18</td>
+</tr>
+<tr>
+<td>Zoe</td>
+<td>19</td>
+<td>15</td>
+<td>17</td>
+</tr>
+</tbody>
+</table><blockquote>
+<p><strong>À NOTER</strong> : SQLite n’est pas sensible à la casse.</p>
+</blockquote>
+<p>On commence par créer la table avec <code>CREATE TABLE</code> en indiquant ici la clé primaire :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token keyword">IF</span> <span class="token operator">NOT</span> <span class="token keyword">EXISTS</span> Table_notes <span class="token punctuation">(</span>
+    Nom <span class="token keyword">TEXT</span> <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+    Maths <span class="token keyword">INTEGER</span><span class="token punctuation">,</span>
+    Anglais <span class="token keyword">INTEGER</span><span class="token punctuation">,</span>
+    Info <span class="token keyword">INTEGER</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>On insère ensuite les valeurs avec :<br>
+<code>INSERT INTO [la table] ([les attributs]) VALUES [les tuples correspondant aux lignes à insérer]</code></p>
+<p>On peut enregistrer une valeur à la fois ou plusieurs séparées par des virgules :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> Table_notes <span class="token punctuation">(</span>Nom<span class="token punctuation">,</span> Maths<span class="token punctuation">,</span> Anglais<span class="token punctuation">,</span> Info<span class="token punctuation">)</span>
+<span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token string">'Joe'</span><span class="token punctuation">,</span> <span class="token number">14</span><span class="token punctuation">,</span> <span class="token number">17</span><span class="token punctuation">,</span> <span class="token number">18</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token string">'Zoe'</span><span class="token punctuation">,</span> <span class="token number">19</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">17</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>Il se peut que certains enregistrements n’existent pas. Par exemple Anne peut avoir été absente lors du devoir d’anglais. On met alors <code>NULL</code> :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> Table_notes <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token string">'Anne'</span><span class="token punctuation">,</span> <span class="token number">18</span><span class="token punctuation">,</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> <span class="token number">19</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>Si l’on essaye d’insérer une valeur pour une clé déjà existante, ce qui va à l’encontre des contraintes d’intégrité, on obtient alors une erreur de type <code>IntegrityError</code>.</p>
+<p>On peut créer un fichier d’extension <code>.sql</code> pour plus de confort. Il doit commencer par <code>BEGIN TRANSACTION;</code> et finir par <code>COMMIT;</code>. On enregistre ce fichier par exemple sous le nom <code>notes.sql</code>.</p>
+<hr>
+<h2 id="ii.-utilisation-de-sqlite-avec-le-terminal">II. Utilisation de SQLite avec le terminal</h2>
+<p>On rappelle qu’avec SQLite les bases de données sont stockées en un seul fichier. On ouvre un terminal pour créer une BDD dans le fichier <code>les_notes.db</code> à partir du fichier <code>notes.sql</code> créé à l’exemple précédent en lançant <code>sqlite3</code> avec ces arguments :</p>
+<pre class=" language-bash"><code class="prism  language-bash">$ sqlite3 les_notes.db <span class="token operator">&lt;</span> notes.sql
+</code></pre>
+<blockquote>
+<p><strong>À NOTER</strong> : Il faut bien différencier les rôles de ces deux fichiers. Le fichier <code>.sql</code> contient des instructions écrites en langage SQL et est lisible par un humain. Le fichier <code>.db</code> est créé par SQLite et contient les données, les tables, les indices sous une forme peu lisible.</p>
+</blockquote>
+<p>On peut ensuite travailler avec SQLite. On lance cette fois <code>sqlite3</code> avec comme argument le fichier contenant la base de données :</p>
+<pre class=" language-bash"><code class="prism  language-bash">$ sqlite3 les_notes.db
+sqlite<span class="token operator">&gt;</span> 
+</code></pre>
+<p><code>sqlite&gt;</code> est l’invite de commande indiquant que SQLite est en attente des requêtes de l’utilisateur.</p>
+<hr>
+<h2 id="iii.-lextraction-de-données-avec-la-commande-select">III. L’extraction de données avec la commande <code>SELECT</code></h2>
+<p>La commande <code>SELECT</code> permet, comme son nom le suggère, de sélectionner des colonnes d’une ou de plusieurs tables données en paramètres. Comme souvent, l’étoile <code>*</code> indique que l’on sélectionne toutes les colonnes. La syntaxe est :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">SELECT</span> colonne<span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token keyword">FROM</span> nom_table<span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>Pour obtenir l’en-tête des colonnes et un affichage plus lisible, on commence par indiquer en préambule :</p>
+<pre class=" language-sql"><code class="prism  language-sql">sqlite<span class="token operator">&gt;</span> <span class="token punctuation">.</span>headers <span class="token keyword">ON</span>
+sqlite<span class="token operator">&gt;</span> <span class="token punctuation">.</span>mode <span class="token keyword">column</span>
+</code></pre>
+<blockquote>
+<p><strong>À NOTER</strong> : Les commandes commençant par un point (<em>dot commands</em>) sont spécifiques au CLI (interface en ligne de commande).</p>
+</blockquote>
+<p>Puis on demande toute la table <code>Table_notes</code> :</p>
+<pre class=" language-sql"><code class="prism  language-sql">sqlite<span class="token operator">&gt;</span> <span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> Table_notes<span class="token punctuation">;</span>
+</code></pre>
+<p>On obtient :</p>
+
+<table>
+<thead>
+<tr>
+<th>Nom</th>
+<th>Maths</th>
+<th>Anglais</th>
+<th>Info</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Joe</td>
+<td>14</td>
+<td>17</td>
+<td>18</td>
+</tr>
+<tr>
+<td>Zoe</td>
+<td>19</td>
+<td>15</td>
+<td>17</td>
+</tr>
+</tbody>
+</table><p>Si l’on ne veut que certaines colonnes :</p>
+<pre class=" language-sql"><code class="prism  language-sql">sqlite<span class="token operator">&gt;</span> <span class="token keyword">SELECT</span> Maths<span class="token punctuation">,</span> Nom <span class="token keyword">FROM</span> Table_notes<span class="token punctuation">;</span>
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Maths</th>
+<th>Nom</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>14</td>
+<td>Joe</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Zoe</td>
+</tr>
+</tbody>
+</table><hr>
+<hr>
+<h1 id="le-langage-sql-avancé">Le langage SQL avancé</h1>
+<p><strong>En bref</strong> — Nous continuons à explorer les commandes SQL avec des requêtes plus élaborées avec l’exemple de base de données précédent.</p>
+<hr>
+<h2 id="i.-la-commande-where">I. La commande <code>WHERE</code></h2>
+<p>La commande <code>WHERE</code> permet de spécifier des critères de sélection. Par exemple, pour savoir quels sont les élèves qui ont plus de 14 en maths ou plus de 18 en informatique :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">SELECT</span> Nom
+<span class="token keyword">FROM</span> Table_notes
+<span class="token keyword">WHERE</span> Maths <span class="token operator">&gt;</span> <span class="token number">14</span> <span class="token operator">OR</span> Info <span class="token operator">&gt;</span> <span class="token number">18</span><span class="token punctuation">;</span>
+</code></pre>
+<p>On obtient :</p>
+
+<table>
+<thead>
+<tr>
+<th>Nom</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zoe</td>
+</tr>
+</tbody>
+</table><hr>
+<h2 id="ii.-modifications">II. Modifications</h2>
+<h3 id="mise-à-jour-de-données-update">1. Mise à jour de données (<code>UPDATE</code>)</h3>
+<p>On peut modifier des valeurs dans une table avec <code>UPDATE</code> :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">UPDATE</span> <span class="token punctuation">[</span><span class="token keyword">Table</span><span class="token punctuation">]</span> <span class="token keyword">SET</span> <span class="token punctuation">[</span>attribut <span class="token operator">=</span> valeur<span class="token punctuation">]</span> <span class="token keyword">WHERE</span> <span class="token punctuation">[</span>attribut <span class="token operator">=</span> valeur<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+<p>Par exemple, pour donner 16 en maths à Joe :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">UPDATE</span> Table_notes
+<span class="token keyword">SET</span> Maths <span class="token operator">=</span> <span class="token number">16</span>
+<span class="token keyword">WHERE</span> Nom <span class="token operator">=</span> <span class="token string">'Joe'</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="suppression-de-lignes-delete">2. Suppression de lignes (<code>DELETE</code>)</h3>
+<p>On peut supprimer une ligne avec <code>DELETE</code> :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> <span class="token punctuation">[</span><span class="token keyword">Table</span><span class="token punctuation">]</span> <span class="token keyword">WHERE</span> <span class="token punctuation">[</span>condition<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+<p>Par exemple, pour enlever les lignes dont les notes de maths sont inférieures ou égales à 14 :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> Table_notes
+<span class="token keyword">WHERE</span> Maths <span class="token operator">&lt;=</span> <span class="token number">14</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="ajout-dune-colonne-alter-table">3. Ajout d’une colonne (<code>ALTER TABLE</code>)</h3>
+<p>On peut ajouter une colonne avec <code>ALTER TABLE</code> :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> <span class="token punctuation">[</span><span class="token keyword">Table</span><span class="token punctuation">]</span> <span class="token keyword">ADD</span> <span class="token keyword">COLUMN</span> <span class="token punctuation">[</span><span class="token number">d</span>éfinition <span class="token number">de</span> la colonne<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+<p>Par exemple, pour ajouter une colonne pour enregistrer la classe de l’élève :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> Table_notes <span class="token keyword">ADD</span> <span class="token keyword">COLUMN</span> Classe <span class="token keyword">TEXT</span><span class="token punctuation">;</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> Table_notes<span class="token punctuation">;</span>
+</code></pre>
+<p>On obtient :</p>
+
+<table>
+<thead>
+<tr>
+<th>Nom</th>
+<th>Maths</th>
+<th>Anglais</th>
+<th>Info</th>
+<th>Classe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Joe</td>
+<td>14</td>
+<td>17</td>
+<td>18</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>Zoe</td>
+<td>19</td>
+<td>15</td>
+<td>17</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>Anne</td>
+<td>18</td>
+<td>NULL</td>
+<td>19</td>
+<td>NULL</td>
+</tr>
+</tbody>
+</table><h3 id="autre-modification-sur-la-structure">4. Autre modification sur la structure</h3>
+<p>On peut renommer une table :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> <span class="token punctuation">[</span><span class="token keyword">Table</span><span class="token punctuation">]</span> <span class="token keyword">RENAME</span> <span class="token keyword">TO</span> <span class="token punctuation">[</span>nouveau_nom_de_la_table<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+<p>On peut supprimer une table avec <code>DROP TABLE</code> :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">DROP</span> <span class="token keyword">TABLE</span> Table_notes<span class="token punctuation">;</span>
+</code></pre>
+<hr>
+<h2 id="iii.-fonctions-de-groupes-agrégation">III. Fonctions de groupes (agrégation)</h2>
+<p>Les fonctions de groupe permettent d’obtenir des informations sur un ensemble de lignes en travaillant sur les colonnes et non pas sur les lignes comme avec <code>WHERE</code>. Par exemple :</p>
+<ul>
+<li><code>AVG</code> calcule la moyenne d’une colonne ;</li>
+<li><code>SUM</code> calcule la somme d’une colonne ;</li>
+<li><code>MIN</code>, <code>MAX</code> calculent le minimum et le maximum d’une colonne ;</li>
+<li><code>COUNT</code> donne le nombre de lignes d’une colonne.</li>
+</ul>
+<p><em>Exemple</em> : Comptons combien d’élèves ont plus de 15 en maths.</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">SELECT</span> <span class="token function">COUNT</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token keyword">FROM</span> Table_notes <span class="token keyword">WHERE</span> Maths <span class="token operator">&gt;</span> <span class="token number">15</span><span class="token punctuation">;</span>
+</code></pre>
+<p>On obtient : <strong>2</strong></p>
+<hr>
+<h2 id="iv.-le-tri--order-by">IV. Le tri : <code>ORDER BY</code></h2>
+<p>Trions les lignes par ordre croissant des notes de maths et, en cas d’égalité, des notes d’informatique :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">SELECT</span> Nom<span class="token punctuation">,</span> Maths<span class="token punctuation">,</span> Info
+<span class="token keyword">FROM</span> Table_notes
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> Maths<span class="token punctuation">,</span> Info <span class="token keyword">ASC</span><span class="token punctuation">;</span>
+</code></pre>
+<p>On obtient :</p>
+
+<table>
+<thead>
+<tr>
+<th>Nom</th>
+<th>Maths</th>
+<th>Info</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Joe</td>
+<td>14</td>
+<td>18</td>
+</tr>
+<tr>
+<td>Anne</td>
+<td>18</td>
+<td>19</td>
+</tr>
+<tr>
+<td>Zoe</td>
+<td>19</td>
+<td>17</td>
+</tr>
+</tbody>
+</table><hr>
+<h2 id="v.-les-jointures">V. Les jointures</h2>
+<p>Une <strong>jointure</strong> permet d’associer plusieurs tables dans une même requête.</p>
+<p>Par exemple, supposons que nous disposions d’une table associant à chaque note sa mention, alors que nous avons déjà une table associant à chaque élève ses notes. Nous voudrions créer une table liant le nom des élèves à leur mention correspondant à leur note de maths.</p>
+<p>Voici un extrait d’une table <code>Table_mentions</code> :</p>
+
+<table>
+<thead>
+<tr>
+<th>Note</th>
+<th>Mention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>14</td>
+<td>cool</td>
+</tr>
+<tr>
+<td>17</td>
+<td>la star</td>
+</tr>
+<tr>
+<td>18</td>
+<td>la folie</td>
+</tr>
+<tr>
+<td>19</td>
+<td>trop ouf</td>
+</tr>
+</tbody>
+</table><p>Nous allons joindre la table <code>Table_notes</code> et la table <code>Table_mentions</code> en reliant les lignes telles que la note de maths de la <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>1</mn><mtext>re</mtext></msup></mrow><annotation encoding="application/x-tex">1^{\text{re}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.664392em; vertical-align: 0em;"></span><span class="mord"><span class="mord">1</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.664392em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">re</span></span></span></span></span></span></span></span></span></span></span></span></span></span> table soit égale à la note de la <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mtext>e</mtext></msup></mrow><annotation encoding="application/x-tex">2^{\text{e}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.664392em; vertical-align: 0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.664392em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">e</span></span></span></span></span></span></span></span></span></span></span></span></span></span> table :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">SELECT</span> Nom<span class="token punctuation">,</span> Mention <span class="token keyword">AS</span> Mention_maths
+<span class="token keyword">FROM</span> Table_notes <span class="token keyword">AS</span> n
+<span class="token keyword">JOIN</span> Table_mentions <span class="token keyword">AS</span> m <span class="token keyword">ON</span> n<span class="token punctuation">.</span>Maths <span class="token operator">=</span> m<span class="token punctuation">.</span>Note<span class="token punctuation">;</span>
+</code></pre>
+<p>On obtient :</p>
+
+<table>
+<thead>
+<tr>
+<th>Nom</th>
+<th>Mention_maths</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Joe</td>
+<td>cool</td>
+</tr>
+<tr>
+<td>Zoe</td>
+<td>trop ouf</td>
+</tr>
+<tr>
+<td>Anne</td>
+<td>la folie</td>
+</tr>
+</tbody>
+</table><p>Si on veut créer une table à partir de cette sélection et la réutiliser, on emploie la syntaxe :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Appreciations <span class="token keyword">AS</span> 
+<span class="token keyword">SELECT</span> Nom<span class="token punctuation">,</span> Mention 
+<span class="token keyword">FROM</span> Table_notes <span class="token keyword">AS</span> n
+<span class="token keyword">JOIN</span> Table_mentions <span class="token keyword">AS</span> m <span class="token keyword">ON</span> n<span class="token punctuation">.</span>Maths <span class="token operator">=</span> m<span class="token punctuation">.</span>Note<span class="token punctuation">;</span>
+</code></pre>
+<hr>
+<h2 id="vi.-un-exemple-de-faille-de-sécurité--linjection-sql">VI. Un exemple de faille de sécurité : l’injection SQL</h2>
+<p>Il est très important de sécuriser ses bases de données qui peuvent contenir des données sensibles. Or il est courant de demander aux utilisateurs des données (nom, mot de passe…) qui sont introduites dans la base. Un utilisateur malveillant pourrait alors entrer du code SQL au lieu de son nom et détruire la base ou bien récupérer des données.</p>
+<p>Par exemple, on peut demander à un utilisateur d’entrer un pseudo sans précaution via ce code en Python avec la bibliothèque <code>bottle-sqlite</code> :</p>
+<pre class=" language-python"><code class="prism  language-python">p <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">'Quel est votre pseudo? '</span><span class="token punctuation">)</span>
+db<span class="token punctuation">.</span>execute<span class="token punctuation">(</span>f<span class="token string">"SELECT * FROM inscrits WHERE pseudo = '{p}'"</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Si l’utilisateur entre le pseudo : <code>'Joe'; DROP TABLE inscrits;</code></p>
+<p>Alors la requête exécutée devient :</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> inscrits <span class="token keyword">WHERE</span> pseudo <span class="token operator">=</span> <span class="token string">'Joe'</span><span class="token punctuation">;</span> <span class="token keyword">DROP</span> <span class="token keyword">TABLE</span> inscrits<span class="token punctuation">;</span>
+</code></pre>
+<p>Joe sera bien cherché, mais une nouvelle requête est exécutée qui va détruire la table à l’insu de l’administrateur !</p>
+<p>Il est recommandé de faire vérifier les entrées avant de lancer la requête, par exemple à l’aide d’expressions régulières ou en utilisant des <strong>requêtes préparées</strong> (paramètres SQL) comme ici :</p>
+<pre class=" language-python"><code class="prism  language-python">db<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">'SELECT * FROM inscrits WHERE pseudo = ?'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>pseudo<span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>SQLite va vérifier que le paramètre <code>pseudo</code> ne contient aucun code créant une seconde requête avant d’exécuter la commande <code>SELECT</code> et remplacera le <code>?</code> par la valeur de <code>pseudo</code> nettoyée/sécurisée.</p>
+<hr>
+<hr>
+<h1 id="mémo-visuel--principales-commandes-sql-et-leur-syntaxe">Mémo Visuel : Principales commandes SQL et leur syntaxe</h1>
+<h3 id="requêtes-de-base">1. Requêtes de base</h3>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">SELECT</span> colonne1 <span class="token punctuation">[</span><span class="token keyword">AS</span> alias1<span class="token punctuation">]</span><span class="token punctuation">,</span> colonne2 <span class="token punctuation">[</span><span class="token keyword">AS</span> alias2<span class="token punctuation">]</span>
+<span class="token keyword">FROM</span> table1 <span class="token punctuation">[</span><span class="token keyword">AS</span> t1<span class="token punctuation">]</span><span class="token punctuation">,</span> table2 <span class="token punctuation">[</span><span class="token keyword">AS</span> t2<span class="token punctuation">]</span>
+<span class="token keyword">WHERE</span> <span class="token punctuation">[</span>critères <span class="token number">de</span> jointure et sélection<span class="token punctuation">]</span>
+<span class="token keyword">GROUP</span> <span class="token keyword">BY</span> colonne_i
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> colonne_j <span class="token punctuation">[</span><span class="token keyword">ASC</span> <span class="token operator">|</span> <span class="token keyword">DESC</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="jointure">2. Jointure</h3>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">SELECT</span> colonne1 <span class="token punctuation">[</span><span class="token keyword">AS</span> <span class="token number">c1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> colonne2 <span class="token punctuation">[</span><span class="token keyword">AS</span> <span class="token number">c2</span><span class="token punctuation">]</span>
+<span class="token keyword">FROM</span> table1 <span class="token keyword">AS</span> t1 
+<span class="token keyword">JOIN</span> table2 <span class="token keyword">AS</span> t2 <span class="token keyword">ON</span> t1<span class="token punctuation">.</span>cle_a <span class="token operator">=</span> t2<span class="token punctuation">.</span>cle_a <span class="token operator">AND</span> t1<span class="token punctuation">.</span>cle_b <span class="token operator">=</span> t2<span class="token punctuation">.</span>cle_b<span class="token punctuation">;</span>
+</code></pre>
+<h3 id="insertion">3. Insertion</h3>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> table1 <span class="token keyword">VALUES</span>
+<span class="token punctuation">(</span>valeur1_1<span class="token punctuation">,</span> valeur1_2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">(</span>valeur2_1<span class="token punctuation">,</span> valeur2_2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="modifier-des-cellules">4. Modifier des cellules</h3>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">UPDATE</span> <span class="token keyword">table</span> 
+<span class="token keyword">SET</span> col1 <span class="token operator">=</span> val1 
+<span class="token keyword">WHERE</span> <span class="token punctuation">[</span>sélection<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="supprimer-des-lignes">5. Supprimer des lignes</h3>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> table1 
+<span class="token keyword">WHERE</span> <span class="token punctuation">[</span>sélection<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="listes-et-intervalles">6. Listes et intervalles</h3>
+<pre class=" language-sql"><code class="prism  language-sql">Dept <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">44</span><span class="token punctuation">,</span> <span class="token number">35</span><span class="token punctuation">,</span> <span class="token number">22</span><span class="token punctuation">,</span> <span class="token number">56</span><span class="token punctuation">,</span> <span class="token number">29</span><span class="token punctuation">)</span>
+Dept <span class="token operator">BETWEEN</span> <span class="token number">03</span> <span class="token operator">AND</span> <span class="token number">06</span>
+</code></pre>
+<h3 id="filtres-de-texte-like">7. Filtres de texte (<code>LIKE</code>)</h3>
+<ul>
+<li><code>nom LIKE 'AN%'</code> : qui commence par <strong>AN</strong>.</li>
+<li><code>nom LIKE 'ANN_'</code> : qui commence par <strong>ANN</strong> suivi par un seul caractère.</li>
+<li><code>nom LIKE '%E'</code> : qui finit par un <strong>E</strong>.</li>
+<li><code>nom LIKE '%CHOC%'</code> : qui contient le groupe de caractères <strong>CHOC</strong>.</li>
+</ul>
+
+    </div>
+  </div>
+</body>
+
+</html>
