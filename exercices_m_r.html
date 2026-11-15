@@ -1,0 +1,540 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>exercices</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li>
+<ul>
+<li><a href="#exercice-1">Exercice 1</a></li>
+<li><a href="#exercice-2">Exercice 2</a></li>
+<li><a href="#exercice-3">Exercice 3</a></li>
+<li><a href="#exercice-4">Exercice 4</a></li>
+<li><a href="#exercice-5">Exercice 5</a></li>
+<li><a href="#exercice-6">Exercice 6</a></li>
+<li><a href="#références">Références</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h2 id="exercice-1">Exercice 1</h2>
+<p>Deux relations modélisent la flotte de voitures d’un réseau de location de voitures.</p>
+<h3 id="relation-agence">Relation Agence</h3>
+
+<table>
+<thead>
+<tr>
+<th align="left">id_agence</th>
+<th align="left">ville</th>
+<th align="left">département</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">1</td>
+<td align="left">Paris</td>
+<td align="left">75</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">Lyon</td>
+<td align="left">69</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">Marseille</td>
+<td align="left">13</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">Aubagne</td>
+<td align="left">13</td>
+</tr>
+</tbody>
+</table><h3 id="relation-voiture">Relation Voiture</h3>
+
+<table>
+<thead>
+<tr>
+<th align="left">id_voiture</th>
+<th align="left">marque</th>
+<th align="left">modèle</th>
+<th align="left">kilométrage</th>
+<th align="left">couleur</th>
+<th align="left">id_agence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">1</td>
+<td align="left">Renault</td>
+<td align="left">Clio</td>
+<td align="left">12000</td>
+<td align="left">Rouge</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">Peugeot</td>
+<td align="left">205</td>
+<td align="left">22000</td>
+<td align="left">Noir</td>
+<td align="left">3</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">Toyota</td>
+<td align="left">Yaris</td>
+<td align="left">33000</td>
+<td align="left">Noir</td>
+<td align="left">3</td>
+</tr>
+</tbody>
+</table><h3 id="questions">Questions</h3>
+<ol>
+<li>Combien la relation Voiture comporte-t-elle d’attributs ?</li>
+<li>Que vaut son cardinal (= le nombre d’enregistrements) ?</li>
+<li>Quel est le domaine de l’attribut <code>id_agence</code> dans la relation Voiture ?</li>
+<li>Quel est le schéma relationnel de la relation Agence ?</li>
+<li>Quelle est la clé primaire de la relation Agence ?</li>
+<li>Quelle est la clé primaire de la relation Voiture ?</li>
+<li>Quelle est la clé étrangère de la relation Voiture ?</li>
+<li>Quel est le schéma relationnel de la relation Voiture ?</li>
+</ol>
+<hr>
+<h2 id="exercice-2">Exercice 2</h2>
+<p>Considérons la base de données Tour de France 2020, contenant les relations suivantes :</p>
+<h3 id="relation-equipe">Relation Equipe</h3>
+
+<table>
+<thead>
+<tr>
+<th align="left">code_equipe</th>
+<th align="left">nom_equipe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">ALM</td>
+<td align="left">AG2R La Mondiale</td>
+</tr>
+<tr>
+<td align="left">AST</td>
+<td align="left">Astana Pro Team</td>
+</tr>
+<tr>
+<td align="left">TBM</td>
+<td align="left">Bahrain - McLaren</td>
+</tr>
+<tr>
+<td align="left">BOH</td>
+<td align="left">BORA - hansgrohe</td>
+</tr>
+<tr>
+<td align="left">CCC</td>
+<td align="left">CCC Team</td>
+</tr>
+<tr>
+<td align="left">COF</td>
+<td align="left">Cofidis, Solutions Crédits</td>
+</tr>
+<tr>
+<td align="left">DQT</td>
+<td align="left">Deceuninck - Quick Step</td>
+</tr>
+<tr>
+<td align="left">EF1</td>
+<td align="left">EF Pro Cycling</td>
+</tr>
+<tr>
+<td align="left">GFC</td>
+<td align="left">Groupama - FDJ</td>
+</tr>
+<tr>
+<td align="left">LTS</td>
+<td align="left">Lotto Soudal</td>
+</tr>
+<tr>
+<td align="left">…</td>
+<td align="left">…</td>
+</tr>
+</tbody>
+</table><h3 id="relation-coureur">Relation Coureur</h3>
+
+<table>
+<thead>
+<tr>
+<th align="left">dossard</th>
+<th align="left">nom_coureur</th>
+<th align="left">prenom_coureur</th>
+<th align="left">code_equipe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">141</td>
+<td align="left">LÓPEZ</td>
+<td align="left">Miguel Ángel</td>
+<td align="left">AST</td>
+</tr>
+<tr>
+<td align="left">142</td>
+<td align="left">FRAILE</td>
+<td align="left">Omar</td>
+<td align="left">AST</td>
+</tr>
+<tr>
+<td align="left">143</td>
+<td align="left">HOULE</td>
+<td align="left">Hugo</td>
+<td align="left">AST</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left">ROGLIČ</td>
+<td align="left">Primož</td>
+<td align="left">TJV</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left">BENNETT</td>
+<td align="left">George</td>
+<td align="left">TJV</td>
+</tr>
+<tr>
+<td align="left">41</td>
+<td align="left">ALAPHILIPPE</td>
+<td align="left">Julian</td>
+<td align="left">DQT</td>
+</tr>
+<tr>
+<td align="left">44</td>
+<td align="left">CAVAGNA</td>
+<td align="left">Rémi</td>
+<td align="left">DQT</td>
+</tr>
+<tr>
+<td align="left">45</td>
+<td align="left">DECLERCQ</td>
+<td align="left">Tim</td>
+<td align="left">DQT</td>
+</tr>
+<tr>
+<td align="left">121</td>
+<td align="left">MARTIN</td>
+<td align="left">Guillaume</td>
+<td align="left">COF</td>
+</tr>
+<tr>
+<td align="left">122</td>
+<td align="left">CONSONNI</td>
+<td align="left">Simone</td>
+<td align="left">COF</td>
+</tr>
+<tr>
+<td align="left">123</td>
+<td align="left">EDET</td>
+<td align="left">Nicolas</td>
+<td align="left">COF</td>
+</tr>
+<tr>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+</tr>
+</tbody>
+</table><h3 id="relation-etape">Relation Etape</h3>
+
+<table>
+<thead>
+<tr>
+<th align="left">num_etape</th>
+<th align="left">ville_depart</th>
+<th align="left">ville_arrivee</th>
+<th align="left">km</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">1</td>
+<td align="left">Nice</td>
+<td align="left">Nice</td>
+<td align="left">156</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">Nice</td>
+<td align="left">Nice</td>
+<td align="left">185</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">Nice</td>
+<td align="left">Sisteron</td>
+<td align="left">198</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">Sisteron</td>
+<td align="left">Orcières-Merlette</td>
+<td align="left">160</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">Gap</td>
+<td align="left">Privas</td>
+<td align="left">198</td>
+</tr>
+<tr>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+</tr>
+</tbody>
+</table><h3 id="relation-temps">Relation Temps</h3>
+
+<table>
+<thead>
+<tr>
+<th align="left">dossard</th>
+<th align="left">num_etape</th>
+<th align="left">temps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">41</td>
+<td align="left">2</td>
+<td align="left">04:55:27</td>
+</tr>
+<tr>
+<td align="left">121</td>
+<td align="left">4</td>
+<td align="left">04:07:47</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left">5</td>
+<td align="left">04:21:22</td>
+</tr>
+<tr>
+<td align="left">122</td>
+<td align="left">5</td>
+<td align="left">04:21:22</td>
+</tr>
+<tr>
+<td align="left">…</td>
+<td align="left">…</td>
+<td align="left">…</td>
+</tr>
+</tbody>
+</table><h3 id="questions-1">Questions</h3>
+<ol>
+<li>Donner le schéma de la base de données.</li>
+<li>Quel temps a réalisé Guillaume MARTIN sur l’étape Sisteron / Orcières-Merlette ?</li>
+<li>À l’arrivée à Privas, qui est arrivé le premier entre Primož ROGLIČ et Simone CONSONNI ?</li>
+<li>Comment modifier le schéma de la base pour connaître le vainqueur de chaque étape ?</li>
+</ol>
+<hr>
+<h2 id="exercice-3">Exercice 3</h2>
+<p>On considère une base de données permettant de gérer des réservations dans une compagnie d’hôtels. Voici le schéma de cette base :</p>
+<ul>
+<li><strong>Client</strong> (<strong><u>nom</u></strong>, <strong><u>prenom</u></strong>)</li>
+<li><strong>Reservation</strong> (<strong><u>id_reservation</u></strong> INT, num_chambre INT, nom_hotel TEXT)</li>
+<li><strong>Hotel</strong> (<strong><u>id_hotel</u></strong> TEXT, nom_hotel TEXT, adresse TEXT)</li>
+<li><strong>Chambre</strong> (<strong><u>num_chambre</u></strong> INT, nom_hotel TEXT, prix INT)</li>
+</ul>
+<p>Repérez, expliquez et corrigez toutes les anomalies dans le schéma relationnel de cette base.</p>
+<hr>
+<h2 id="exercice-4">Exercice 4</h2>
+<p>Une sandwicherie effectuant des livraisons à domicile dispose d’une base de données dont certains extraits de tables sont reproduits ici.</p>
+<p>La table <strong>Sandwich</strong> comporte les informations relatives aux sandwichs proposés à la vente :</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">nom_sandwich</th>
+<th align="left">prix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Cheesburger</td>
+<td align="left">3,90</td>
+</tr>
+<tr>
+<td align="left">Double cheese</td>
+<td align="left">4,90</td>
+</tr>
+<tr>
+<td align="left">Italien</td>
+<td align="left">4,90</td>
+</tr>
+<tr>
+<td align="left">Foie gras</td>
+<td align="left">15,00</td>
+</tr>
+</tbody>
+</table><p>La table <strong>Client</strong> comporte les informations relatives aux clients :</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">nom</th>
+<th align="left">prenom</th>
+<th align="left">adresse</th>
+<th align="left">numero_client</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Bernard</td>
+<td align="left">Alain</td>
+<td align="left">9, rue Bienvenue, 13008 MARSEILLE</td>
+<td align="left">42</td>
+</tr>
+<tr>
+<td align="left">Bernard</td>
+<td align="left">Yves</td>
+<td align="left">2, rue Vive la joie, 13400 AUBAGNE</td>
+<td align="left">51</td>
+</tr>
+</tbody>
+</table><p>La table <strong>Commande</strong> comporte les informations relatives aux commandes passées :</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">numero_client</th>
+<th align="left">nom_sandwich</th>
+<th align="left">quantite</th>
+<th align="left">numero_commande</th>
+<th align="left">date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">42</td>
+<td align="left">Italien</td>
+<td align="left">2</td>
+<td align="left">12452</td>
+<td align="left">2020-12-11</td>
+</tr>
+<tr>
+<td align="left">42</td>
+<td align="left">Foie gras</td>
+<td align="left">1</td>
+<td align="left">12452</td>
+<td align="left">2020-12-11</td>
+</tr>
+<tr>
+<td align="left">51</td>
+<td align="left">Cheesburger</td>
+<td align="left">4</td>
+<td align="left">13301</td>
+<td align="left">2020-12-23</td>
+</tr>
+</tbody>
+</table><h3 id="questions-2">Questions</h3>
+<ol>
+<li>Une commande peut-elle comporter plusieurs sandwichs de types différents ?</li>
+<li>Quel est le schéma des relations Sandwich et Client ? Vous identifierez les clés primaires et étrangères de ces deux tables.</li>
+<li>La relation Commande possède-t-elle un attribut pouvant être clé primaire ? En l’absence d’un attribut clé primaire, un couple ou un triplet d’attributs peut-il jouer ce rôle ? Expliquer.</li>
+<li>Cette base de données semble-t-elle bien modélisée ? Si ce n’est pas le cas, proposer des modifications.</li>
+</ol>
+<hr>
+<h2 id="exercice-5">Exercice 5</h2>
+<p>Donner la modélisation relationnelle d’un bulletin scolaire. Cette dernière doit permettre de mentionner :</p>
+<ul>
+<li>des élèves, possédant un numéro d’étudiant alphanumérique unique ;</li>
+<li>un ensemble de matières fixées, mais qui ne sont pas données ;</li>
+<li>au plus une note sur 20, par élève et par matière.</li>
+</ul>
+<hr>
+<h2 id="exercice-6">Exercice 6</h2>
+<p>On considère dans cet exercice une base de données stockant des informations sur les élèves d’un lycée. En voici un extrait :</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">nom</th>
+<th align="left">prenom</th>
+<th align="left">date_naissance</th>
+<th align="left">classe</th>
+<th align="left">option1</th>
+<th align="left">option2</th>
+<th align="left">option3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Armand</td>
+<td align="left">Léa</td>
+<td align="left">12/02/05</td>
+<td align="left">1G1</td>
+<td align="left">Maths</td>
+<td align="left">NSI</td>
+<td align="left">LLCE Anglais</td>
+</tr>
+<tr>
+<td align="left">Joulain</td>
+<td align="left">Marie</td>
+<td align="left">13/01/06</td>
+<td align="left">2de3</td>
+<td align="left">DNL Anglais</td>
+<td align="left">NULL</td>
+<td align="left">NULL</td>
+</tr>
+<tr>
+<td align="left">Marchand</td>
+<td align="left">Anthony</td>
+<td align="left">12/12/05</td>
+<td align="left">1G1</td>
+<td align="left">HGGSP</td>
+<td align="left">SES</td>
+<td align="left">Maths</td>
+</tr>
+<tr>
+<td align="left">Marchand</td>
+<td align="left">Sophie</td>
+<td align="left">06/04/04</td>
+<td align="left">TG2</td>
+<td align="left">Maths</td>
+<td align="left">Physique</td>
+<td align="left">NULL</td>
+</tr>
+</tbody>
+</table><h3 id="questions-3">Questions</h3>
+<ol>
+<li>Quel est le schéma relationnel de cette base ?</li>
+<li>Quel défaut de conception majeur présente cette base de données ?</li>
+<li>Certains attributs n’existent pas pour certains enregistrements. Scindez cette table en deux tables pour éviter ce problème. Vous donnerez les enregistrements des deux tables.</li>
+</ol>
+<hr>
+<h2 id="références">Références</h2>
+<ul>
+<li><strong>Exercices 1 et 2</strong> : d’après la page GitHub de Gilles Lassus.</li>
+<li><strong>Exercices 4 et 6</strong> : d’après <em>Prépabac NSI, Terminale</em>, G. CONNAN, V. PETROV, G. ROZSAVOLGYI, L. SIGNAC, éditions HATIER.</li>
+<li><strong>Exercice 5</strong> : d’après <em>Numérique et Sciences Informatiques, 24 leçons, Terminale</em>, T. BALABONSKI, S. CONCHON, J.-C. FILLIATRE, K. NGUYEN, éditions ELLIPSES[cite: 1, 2, 3, 4].</li>
+</ul>
+
+    </div>
+  </div>
+</body>
+
+</html>
