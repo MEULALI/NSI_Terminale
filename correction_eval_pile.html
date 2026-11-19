@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>correction</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#asie---2024---sujet-2---correction">Asie - 2024 - sujet 2 - Correction</a>
+<ul>
+<li><a href="#exercice-1-10-points">Exercice 1 (10 points)</a></li>
+<li><a href="#partie-a---comptage">Partie A - Comptage</a></li>
+<li><a href="#partie-b---avec-une-pile">Partie B - Avec une pile</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="asie---2024---sujet-2---correction">Asie - 2024 - sujet 2 - Correction</h1>
+<h2 id="exercice-1-10-points">Exercice 1 (10 points)</h2>
+<h3 id="analyse-de-lexpression">1. Analyse de l’expression</h3>
+<p><strong>L’expression <code>'[2*(i+1)-3)' for i in range(3, 10)]</code> est-elle bien parenthésée ?</strong></p>
+<p>Non. On lit les parenthèses dans l’ordre : <code>[</code> ouvre, <code>(</code> ouvre, <code>)</code> ferme la parenthèse de <code>(i+1)</code>. La parenthèse suivante, <code>)</code> après <code>-3</code>, devrait fermer la dernière parenthèse ouverte non fermée, qui est <code>[</code> : les types ne correspondent pas.</p>
+<blockquote>
+<p><strong>Commentaire :</strong> L’expression a pourtant autant de parenthèses ouvrantes (3) que de fermantes (3) : c’est l’idée de la partie A, et c’est aussi sa limite.</p>
+</blockquote>
+<hr>
+<h2 id="partie-a---comptage">Partie A - Comptage</h2>
+<h3 id="fonction-compte_ouvrante">2. Fonction <code>compte_ouvrante</code></h3>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">compte_ouvrante</span><span class="token punctuation">(</span>txt<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    nb <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> c <span class="token keyword">in</span> txt<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> c <span class="token operator">==</span> <span class="token string">'('</span> <span class="token operator">or</span> c <span class="token operator">==</span> <span class="token string">'['</span> <span class="token operator">or</span> c <span class="token operator">==</span> <span class="token string">'{'</span><span class="token punctuation">:</span>
+            nb <span class="token operator">=</span> nb <span class="token operator">+</span> <span class="token number">1</span>
+    <span class="token keyword">return</span> nb
+</code></pre>
+<blockquote>
+<p><strong>Commentaire :</strong> On peut aussi écrire <code>if c in '([{':</code>.</p>
+</blockquote>
+<h3 id="fonction-compte_fermante">3. Fonction <code>compte_fermante</code></h3>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">compte_fermante</span><span class="token punctuation">(</span>txt<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    nb <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> c <span class="token keyword">in</span> txt<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> c <span class="token operator">==</span> <span class="token string">')'</span> <span class="token operator">or</span> c <span class="token operator">==</span> <span class="token string">']'</span> <span class="token operator">or</span> c <span class="token operator">==</span> <span class="token string">'}'</span><span class="token punctuation">:</span>
+            nb <span class="token operator">=</span> nb <span class="token operator">+</span> <span class="token number">1</span>
+    <span class="token keyword">return</span> nb
+</code></pre>
+<h3 id="fonction-bon_compte">4. Fonction <code>bon_compte</code></h3>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">bon_compte</span><span class="token punctuation">(</span>txt<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> compte_ouvrante<span class="token punctuation">(</span>txt<span class="token punctuation">)</span> <span class="token operator">==</span> compte_fermante<span class="token punctuation">(</span>txt<span class="token punctuation">)</span>
+</code></pre>
+<h3 id="une-chaîne-qui-trompe-bon_compte">5. Une chaîne qui trompe <code>bon_compte</code></h3>
+<p>Par exemple <code>')('</code> : une ouvrante et une fermante, donc <code>bon_compte</code> renvoie <code>True</code>, mais la parenthèse est fermée avant d’être ouverte. De même <code>'(]'</code> : les types ne correspondent pas.</p>
+<blockquote>
+<p><strong>Commentaire :</strong> Le comptage ne vérifie ni l’ordre ni le type des parenthèses. L’expression de la question 1 est un autre exemple.</p>
+</blockquote>
+<hr>
+<h2 id="partie-b---avec-une-pile">Partie B - Avec une pile</h2>
+<h3 id="méthodes-empiler-et-depiler-lignes-9-et-14">6. Méthodes <code>empiler</code> et <code>depiler</code> (lignes 9 et 14)</h3>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">empiler</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> elt<span class="token punctuation">)</span><span class="token punctuation">:</span>      <span class="token comment"># ligne 9</span>
+    self<span class="token punctuation">.</span>contenu<span class="token punctuation">.</span>append<span class="token punctuation">(</span>elt<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">depiler</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>           <span class="token comment"># ligne 14</span>
+    <span class="token keyword">if</span> self<span class="token punctuation">.</span>est_vide<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">"La pile est vide."</span>
+    <span class="token keyword">return</span> self<span class="token punctuation">.</span>contenu<span class="token punctuation">.</span>pop<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<blockquote>
+<p><strong>Commentaire :</strong> Le sommet de la pile est la fin de la liste : <code>append</code> ajoute à la fin et <code>pop()</code> enlève et renvoie le dernier élément.</p>
+</blockquote>
+<h3 id="nombre-de-comparaisons">7. Nombre de comparaisons</h3>
+<p>Il faut se fixer une façon de compter. Ici, pour chaque caractère, on teste s’il est ouvrant (1 comparaison), puis, s’il ne l’est pas, s’il est fermant (1 comparaison). Pour chaque parenthèse fermante, <code>depiler</code> teste si la pile est vide (1 comparaison) et on vérifie que les deux parenthèses forment un couple (1 comparaison). À la fin, on teste si la pile est vide (1 comparaison).</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">Caractères de <code>'tab[2*(i+4)]-tab[3]'</code></th>
+<th align="left">Nombre</th>
+<th align="left">Comparaisons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Parenthèses ouvrantes</td>
+<td align="left">3</td>
+<td align="left"><span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>1</mn><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">3 \times 1 = 3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">3</span></span></span></span></span></td>
+</tr>
+<tr>
+<td align="left">Parenthèses fermantes</td>
+<td align="left">3</td>
+<td align="left"><span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mo stretchy="false">(</mo><mn>2</mn><mo>+</mo><mn>2</mn><mo stretchy="false">)</mo><mo>=</mo><mn>12</mn></mrow><annotation encoding="application/x-tex">3 \times (2 + 2) = 12</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">2</span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">12</span></span></span></span></span></td>
+</tr>
+<tr>
+<td align="left">Autres caractères</td>
+<td align="left">17</td>
+<td align="left"><span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>17</mn><mo>×</mo><mn>2</mn><mo>=</mo><mn>34</mn></mrow><annotation encoding="application/x-tex">17 \times 2 = 34</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">17</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">2</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">34</span></span></span></span></span></td>
+</tr>
+<tr>
+<td align="left">Test final de la pile</td>
+<td align="left"></td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left"><strong>Total (23 caractères)</strong></td>
+<td align="left"></td>
+<td align="left"><strong>50</strong></td>
+</tr>
+</tbody>
+</table><p>Pour une chaîne de taille <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">n</span></span></span></span></span>, chaque caractère coûte au plus 4 comparaisons (une parenthèse fermante), plus le test final : au maximum <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mi>n</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">4n + 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">4</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">1</span></span></span></span></span> comparaisons. Le coût est <strong>linéaire en <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">n</span></span></span></span></span></strong>.</p>
+<blockquote>
+<p><strong>Commentaire :</strong> Selon la façon d’écrire le test (par exemple <code>c in "([{"</code> compte pour 3 comparaisons), le nombre exact change, mais il reste proportionnel à <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">n</span></span></span></span></span> : c’est cela qu’il faut retenir.</p>
+</blockquote>
+<h3 id="fonction-est_bien_parenthesee">8. Fonction <code>est_bien_parenthesee</code></h3>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">est_bien_parenthesee</span><span class="token punctuation">(</span>txt<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    couples <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">")"</span><span class="token punctuation">:</span> <span class="token string">"("</span><span class="token punctuation">,</span> <span class="token string">"]"</span><span class="token punctuation">:</span> <span class="token string">"["</span><span class="token punctuation">,</span> <span class="token string">"}"</span><span class="token punctuation">:</span> <span class="token string">"{"</span><span class="token punctuation">}</span>
+    p <span class="token operator">=</span> Pile<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> c <span class="token keyword">in</span> txt<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> c <span class="token keyword">in</span> <span class="token string">"([{"</span><span class="token punctuation">:</span>
+            p<span class="token punctuation">.</span>empiler<span class="token punctuation">(</span>c<span class="token punctuation">)</span>
+        <span class="token keyword">elif</span> c <span class="token keyword">in</span> <span class="token string">")]}"</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> p<span class="token punctuation">.</span>est_vide<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">return</span> <span class="token boolean">False</span>
+            <span class="token keyword">if</span> p<span class="token punctuation">.</span>depiler<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> couples<span class="token punctuation">[</span>c<span class="token punctuation">]</span><span class="token punctuation">:</span>
+                <span class="token keyword">return</span> <span class="token boolean">False</span>
+    <span class="token keyword">return</span> p<span class="token punctuation">.</span>est_vide<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<blockquote>
+<p><strong>Commentaire :</strong> Il faut tester si la pile est vide avant de dépiler : sinon <code>depiler</code> renvoie la chaîne <code>"La pile est vide."</code>, qui n’est pas une parenthèse (le résultat serait juste, mais par chance). À la fin, la pile doit être vide : sinon une parenthèse ouvrante n’a jamais été fermée, comme dans <code>"(("</code>.</p>
+</blockquote>
+
+    </div>
+  </div>
+</body>
+
+</html>
