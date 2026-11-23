@@ -1528,6 +1528,55 @@ Il existe de plus en plus de SGBD non relationnels, spécialement adaptés à de
 <li>Site <a href="https://sql.sh/">https://sql.sh/</a> sur le langage SQL.</li>
 </ul>
 <hr>
+      <ul>
+<li><a href="#principales-commandes-sql-et-leur-syntaxe">Principales commandes SQL et leur syntaxe</a>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+
+  
+      <h1 id="principales-commandes-sql-et-leur-syntaxe">Principales commandes SQL et leur syntaxe</h1>
+<h3 id="requêtes-de-base">Requêtes de base</h3>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">SELECT</span> colonne1 <span class="token punctuation">[</span><span class="token keyword">AS</span> alias1<span class="token punctuation">]</span><span class="token punctuation">,</span>
+       colonne2 <span class="token punctuation">[</span><span class="token keyword">AS</span> alias2<span class="token punctuation">]</span>
+<span class="token keyword">FROM</span> table1 <span class="token punctuation">[</span><span class="token keyword">AS</span> t1<span class="token punctuation">]</span><span class="token punctuation">,</span> table2 <span class="token punctuation">[</span><span class="token keyword">AS</span> t2<span class="token punctuation">]</span>
+<span class="token keyword">WHERE</span> <span class="token punctuation">[</span>critères <span class="token number">de</span> jointure et sélection<span class="token punctuation">]</span>
+<span class="token keyword">GROUP</span> <span class="token keyword">BY</span> colonnei
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> colonnej <span class="token punctuation">[</span><span class="token keyword">ASC</span><span class="token operator">|</span><span class="token keyword">DESC</span><span class="token punctuation">]</span>
+</code></pre>
+<h3 id="jointure">Jointure</h3>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">SELECT</span> colonne1 <span class="token punctuation">[</span><span class="token keyword">AS</span> <span class="token number">c1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+       colonne2 <span class="token punctuation">[</span><span class="token keyword">AS</span> <span class="token number">c2</span><span class="token punctuation">]</span>
+<span class="token keyword">FROM</span> table1 <span class="token keyword">AS</span> t1 
+<span class="token keyword">JOIN</span> table2 <span class="token keyword">AS</span> t2 <span class="token keyword">ON</span> t1<span class="token punctuation">.</span>clea <span class="token operator">=</span> t2<span class="token punctuation">.</span>clea <span class="token operator">AND</span> t1<span class="token punctuation">.</span>cleb <span class="token operator">=</span> t2<span class="token punctuation">.</span>cleb
+</code></pre>
+<h3 id="insertion">Insertion</h3>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> table1 <span class="token keyword">VALUES</span>
+<span class="token punctuation">(</span>valeur1<span class="token number">-1</span><span class="token punctuation">,</span> sur toutes les colonnes<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">(</span>valeur2<span class="token number">-1</span><span class="token punctuation">,</span> sur toutes les colonnes<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span>
+</code></pre>
+<h3 id="modifier-des-cellules">Modifier des cellules</h3>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">UPDATE</span> <span class="token keyword">table</span> 
+<span class="token keyword">SET</span> col1 <span class="token operator">=</span> val1
+<span class="token keyword">WHERE</span> <span class="token punctuation">[</span>sélection<span class="token punctuation">]</span>
+</code></pre>
+<h3 id="supprimer-des-lignes">Supprimer des lignes</h3>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> table1 
+<span class="token keyword">WHERE</span> <span class="token punctuation">[</span>sélection<span class="token punctuation">]</span>
+</code></pre>
+<h3 id="listes">Listes</h3>
+<pre class=" language-sql"><code class="prism  language-sql">Dept <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">44</span><span class="token punctuation">,</span> <span class="token number">35</span><span class="token punctuation">,</span> <span class="token number">22</span><span class="token punctuation">,</span> <span class="token number">56</span><span class="token punctuation">,</span> <span class="token number">29</span><span class="token punctuation">)</span>
+Dept <span class="token operator">BETWEEN</span> <span class="token number">03</span> <span class="token operator">AND</span> <span class="token number">06</span>
+</code></pre>
+<h3 id="filtres-like">Filtres (<code>LIKE</code>)</h3>
+<ul>
+<li><code>nom LIKE 'AN%'</code> : qui commence par <code>AN</code></li>
+<li><code>nom LIKE 'ANN_'</code> : qui commence par <code>ANN</code> suivi par un seul caractère</li>
+<li><code>nom LIKE '%E'</code> : qui finit par un <code>E</code></li>
+<li><code>nom LIKE '%CHOC%'</code> : qui contient le groupe de caractères <code>CHOC</code></li>
+</ul>
 
     </div>
   </div>
