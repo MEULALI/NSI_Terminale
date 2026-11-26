@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>oral</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#correction-détaillée--la-récursivité-terminale-nsi">Correction détaillée : La récursivité (Terminale NSI)</a>
+<ul>
+<li><a href="#question-1-—-pourquoi-la-première-version-échoue">Question 1 — Pourquoi la première version échoue</a></li>
+<li><a href="#question-2-—-la-version-correcte">Question 2 — La version correcte</a></li>
+<li><a href="#question-3-—-la-factorielle">Question 3 — La factorielle</a></li>
+<li><a href="#questions-supplémentaires">Questions supplémentaires</a></li>
+<li><a href="#durée-optimale-recommandée">Durée optimale recommandée</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="correction-détaillée--la-récursivité-terminale-nsi">Correction détaillée : La récursivité (Terminale NSI)</h1>
+<h2 id="question-1-—-pourquoi-la-première-version-échoue">Question 1 — Pourquoi la première version échoue</h2>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">somme</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> n <span class="token operator">+</span> somme<span class="token punctuation">(</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+</code></pre>
+<p><strong>Problème :</strong> il n’y a <strong>pas de cas de base</strong> (cas d’arrêt). La fonction s’appelle elle-même indéfiniment avec des valeurs décroissantes (<code>n-1</code>, <code>n-2</code>, … jusqu’à des entiers négatifs) sans jamais s’arrêter. Python interrompt alors l’exécution avec l’erreur :</p>
+<pre><code>RecursionError: maximum recursion depth exceeded
+</code></pre>
+<p>Chaque appel ajoute un <strong>cadre (frame)</strong> sur la pile d’appels ; la pile finit par dépasser la profondeur maximale autorisée (environ 1000 appels par défaut). C’est ce qu’on appelle une <strong>récursion infinie</strong>.</p>
+<h2 id="question-2-—-la-version-correcte">Question 2 — La version correcte</h2>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">somme</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> n <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>          <span class="token comment"># ← lignes 2 et 3</span>
+        <span class="token keyword">return</span> <span class="token number">0</span>        <span class="token comment"># ← cas de base</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> n <span class="token operator">+</span> somme<span class="token punctuation">(</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>Les lignes qui résolvent le problème sont les <strong>lignes 2 et 3</strong> : <code>if n == 0: return 0</code>.</li>
+<li>Ce cas s’appelle le <strong>cas de base</strong> (ou cas d’arrêt / cas trivial) : il stoppe la descente des appels récursifs. Sans lui, la récursion ne termine jamais.</li>
+</ul>
+<h3 id="déroulé-de-lexécution-à-montrer-au-tableau">Déroulé de l’exécution (à montrer au tableau)</h3>
+<pre><code>somme(4)
+= 4 + somme(3)
+= 4 + (3 + somme(2))
+= 4 + (3 + (2 + somme(1)))
+= 4 + (3 + (2 + (1 + somme(0))))
+= 4 + (3 + (2 + (1 + 0)))      ← le cas de base renvoie 0
+= 10
+</code></pre>
+<p>La descente s’arrête au cas de base, puis les résultats « remontent » (phase de dépliage / repliement).</p>
+<h2 id="question-3-—-la-factorielle">Question 3 — La factorielle</h2>
+<p>⚠️ <strong>Attention :</strong> l’énoncé contient une coquille, <code>fact(n) = n × fact(n)</code> est circulaire. La bonne définition est <strong>fact(n) = n × fact(n−1)</strong>, avec fact(1) = 1 (et par convention fact(0) = 1).</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">fact</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> n <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">or</span> n <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>    <span class="token comment"># cas de base</span>
+        <span class="token keyword">return</span> <span class="token number">1</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> n <span class="token operator">*</span> fact<span class="token punctuation">(</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+</code></pre>
+<p><strong>Vérifications :</strong> <code>fact(5) = 5×4×3×2×1 = 120</code>, <code>fact(0) = 1</code>, <code>fact(1) = 1</code>.</p>
+<p><strong>Remarque de rigueur :</strong> cette version n’est pas robuste pour <code>n &lt; 0</code> (récursion infinie). Une version plus rigoureuse :</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">fact</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> n <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        <span class="token keyword">raise</span> ValueError<span class="token punctuation">(</span><span class="token string">"n doit être positif"</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token number">1</span> <span class="token keyword">if</span> n <span class="token operator">&lt;=</span> <span class="token number">1</span> <span class="token keyword">else</span> n <span class="token operator">*</span> fact<span class="token punctuation">(</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+</code></pre>
+<hr>
+<h2 id="questions-supplémentaires">Questions supplémentaires</h2>
+<h3 id="compréhension">Compréhension</h3>
+<ol>
+<li>Citez les deux ingrédients obligatoires de toute fonction récursive.</li>
+<li>Que se passe-t-il en mémoire (pile d’appels) lors d’un appel récursif ?</li>
+<li>Que vaut <code>somme(0)</code> ? <code>somme(-3)</code> ? Que se passe-t-il dans le second cas et pourquoi ? (→ le cas de base n’est jamais atteint, récursion infinie : le test devrait être <code>n &lt;= 0</code>)</li>
+<li>Tracez à la main l’exécution de <code>somme(3)</code> en notant chaque appel et chaque retour.</li>
+<li>Que se passe-t-il si on inverse les deux branches (<code>else</code> d’abord) ? Le code reste-t-il correct ?</li>
+</ol>
+<h3 id="aller-plus-loin">Aller plus loin</h3>
+<ol start="6">
+<li>Transformez <code>somme</code> en fonction itérative (boucle <code>for</code>). Comparez : laquelle consomme le plus de mémoire ? (→ la récursive, à cause de la pile)</li>
+<li>Écrivez une fonction récursive <code>puissance(x, n)</code> puis <code>fibo(n)</code>.</li>
+<li><code>fibo</code> récursive naïve recalcule beaucoup de valeurs : quel est le problème ? (→ complexité exponentielle)</li>
+<li>Vrai/faux : une fonction récursive est toujours plus lente qu’une fonction itérative. (→ faux en général, mais souvent vraie en Python : pas d’optimisation de la récursion terminale)</li>
+</ol>
+<h3 id="question-type-bac-bonus">Question type bac (bonus)</h3>
+<ol start="10">
+<li>On appelle <code>somme(1000)</code> : le programme fonctionne. Avec <code>somme(10000)</code>, il lève une <code>RecursionError</code>. Expliquez pourquoi et proposez une solution.</li>
+</ol>
+<hr>
+<h2 id="durée-optimale-recommandée">Durée optimale recommandée</h2>
+<p>Pour un élève de Terminale NSI, sur ce sujet précis :</p>
+
+<table>
+<thead>
+<tr>
+<th>Partie</th>
+<th>Durée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q1 + Q2 (lecture et analyse du code)</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>Q3 (écriture de <code>fact</code>)</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>Trace au tableau + questions de compréhension</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td><strong>Total épreuve écrite seule</strong></td>
+<td><strong>~25–30 min</strong></td>
+</tr>
+</tbody>
+</table>
+    </div>
+  </div>
+</body>
+
+</html>
